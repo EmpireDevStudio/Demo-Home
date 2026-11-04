@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A curated editorial video archive organizing media, research, lectures, and entertainment.">
+  <title>The Video Library — Curated Archive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#mainContent" class="skip-link">Skip to video archive</a>
+
+  <div class="site-wrapper">
+
+    <!-- Editorial Masthead Header -->
+    <header class="editorial-header" role="banner">
+      <div class="header-inner">
+        <div class="header-masthead">
+          <div class="editorial-stamp">
+            <span class="stamp-line"></span>
+            <span class="stamp-text">ARCHIVE &amp; CURATION</span>
+            <span class="stamp-line"></span>
+          </div>
+          <h1 class="library-title">THE VIDEO LIBRARY</h1>
+          <p class="library-tagline">A curated collection of knowledge, ideas and entertainment.</p>
+        </div>
+
+        <!-- Top Utility Bar: Counter & Live Search -->
+        <div class="header-utilities">
+          <div class="collection-meter" id="collectionMeter" aria-live="polite">
+            <span class="meter-label">CATALOGUE</span>
+            <span class="meter-count" id="totalCountDisplay">0</span>
+            <span class="meter-suffix">VIDEOS</span>
+          </div>
+
+          <div class="search-widget" role="search">
+            <label for="librarySearch" class="visually-hidden">Search video collection</label>
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input 
+                type="search" 
+                id="librarySearch" 
+                placeholder="Search collection by title or topic…" 
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button type="button" id="searchClearBtn" class="search-clear-btn" aria-label="Clear search query" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Category Strip & Filter Controls -->
+    <section class="navigation-shelf" aria-label="Category Navigation">
+      <div class="shelf-inner">
+        <nav class="category-nav-wrapper" aria-label="Categories">
+          <ul class="category-tabs" id="categoryTabs" role="tablist">
+            <!-- Dynamically populated from data.csv columns -->
+          </ul>
+        </nav>
+
+        <!-- Sort Control Bar -->
+        <div class="shelf-controls">
+          <div class="sort-widget">
+            <label for="sortSelector" class="sort-label">
+              <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="4" y1="6" x2="20" y2="6"></line>
+                <line x1="4" y1="12" x2="14" y2="12"></line>
+                <line x1="4" y1="18" x2="8" y2="18"></line>
+              </svg>
+              <span>SORT:</span>
+            </label>
+            <div class="select-wrapper">
+              <select id="sortSelector" aria-label="Sort videos">
+                <option value="default">Catalogue Order</option>
+                <option value="liked">Most Liked</option>
+                <option value="views">Most Viewed</option>
+                <option value="alpha">Alphabetical (A–Z)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main id="mainContent" class="main-stage">
+      
+      <!-- Current Section Editorial Info Bar -->
+      <div class="curator-bar">
+        <div class="curator-info">
+          <span class="active-badge" id="activeCategoryBadge">All Archives</span>
+          <span class="active-status" id="resultsCountNotice" aria-live="polite">Accessing dataset...</span>
+        </div>
+        <div class="curator-rule" aria-hidden="true"></div>
+      </div>
+
+      <!-- State Containers -->
+      <div id="statusRegion" aria-live="polite">
+        <!-- Initial Skeleton Loading Grid -->
+        <div id="loadingSkeleton" class="video-grid skeleton-grid" aria-hidden="true">
+          <div class="skeleton-card">
+            <div class="skeleton-thumb"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line full"></div>
+              <div class="skeleton-line mid"></div>
+              <div class="skeleton-line short"></div>
+            </div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton-thumb"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line full"></div>
+              <div class="skeleton-line mid"></div>
+              <div class="skeleton-line short"></div>
+            </div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton-thumb"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line full"></div>
+              <div class="skeleton-line mid"></div>
+              <div class="skeleton-line short"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure / Local File System Notice Banner -->
+        <div id="errorBanner" class="system-message error-message" hidden>
+          <div class="message-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="message-content">
+            <h2 class="message-title">Catalogue Access Interrupted</h2>
+            <p id="errorMessageText">Unable to fetch <code>data.csv</code> automatically. If you opened this file directly from your local filesystem, browsers block automatic file loading.</p>
+            <div class="local-file-prompt">
+              <label for="csvFileInput" class="editorial-btn">
+                Select data.csv Manually
+                <input type="file" id="csvFileInput" accept=".csv,text/csv" class="visually-hidden">
+              </label>
+              <p class="file-hint">Or host these files on a local server or GitHub Pages.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty Query State -->
+        <div id="emptyState" class="system-message empty-message" hidden>
+          <div class="message-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="3" ry="3"></rect>
+              <path d="M7 10h10M7 14h6"></path>
+            </svg>
+          </div>
+          <div class="message-content">
+            <h2 class="message-title">No Matching Documents</h2>
+            <p>No video entries match your current search query. Try modifying your search or choosing another category.</p>
+            <button type="button" id="resetFiltersBtn" class="editorial-btn">Reset All Filters</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Video Card Gallery -->
+      <section class="video-grid" id="videoGrid" aria-label="Video Cards Grid">
+        <!-- Rendered dynamically -->
+      </section>
+
+    </main>
+
+    <!-- Editorial Footer -->
+    <footer class="editorial-footer" role="contentinfo">
+      <div class="footer-inner">
+        <div class="footer-colophon">
+          <span class="colophon-title">THE VIDEO ARCHIVE</span>
+          <p>Curated media and educational collection. All links direct to original creators on YouTube.</p>
+        </div>
+        <div class="footer-meta">
+          <span>Source: <code>data.csv</code></span>
+          <span id="apiStatusBadge">Standard Curation Mode</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Curated Archive & Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Background Lighting -->
+  <div class="ambient-glow glow-top" aria-hidden="true"></div>
+  <div class="ambient-glow glow-bottom" aria-hidden="true"></div>
+
+  <!-- Primary Floating Glass Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="editorial-tag">Folio Vol. IV</span>
+        <h1 class="brand-title">Archive <em>&</em> Index</h1>
+      </div>
+
+      <div class="header-actions">
+        <!-- Local Picker Fallback for file:// protocol -->
+        <label id="localPickerBtn" class="glass-pill-btn hidden" title="Select root assets folder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span class="btn-text">Select Assets</span>
+          <input type="file" id="folderInput" webkitdirectory directory multiple class="hidden">
+        </label>
+
+        <button id="refreshBtn" class="glass-icon-btn" aria-label="Rescan assets" title="Rescan Assets">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+            <path d="M16 21h5v-5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Quick Format Filter Bar -->
+    <div class="controls-band">
+      <div class="search-field">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="search" id="searchInput" placeholder="Search title, category, format…" autocomplete="off" spellcheck="false">
+        <button id="clearSearchBtn" class="btn-clear hidden" aria-label="Clear Search">&times;</button>
+      </div>
+
+      <!-- Quick Format Filter Chips -->
+      <div class="format-chips-wrapper">
+        <div class="format-chips" id="formatChips">
+          <button type="button" class="chip active" data-format="ALL">All Types</button>
+          <button type="button" class="chip" data-format="document">Docs</button>
+          <button type="button" class="chip" data-format="sheet">Sheets</button>
+          <button type="button" class="chip" data-format="slides">Slides</button>
+          <button type="button" class="chip" data-format="media">Media</button>
+          <button type="button" class="chip" data-format="code">Code</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horizontal Category Subnav -->
+    <nav class="category-nav">
+      <div class="category-track" id="categoryTrack">
+        <button type="button" class="tab-pill active" data-category="ALL">All Assets</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Notification Banner -->
+  <div id="statusBanner" class="status-banner hidden">
+    <div class="status-content">
+      <span class="status-dot"></span>
+      <p id="statusMsg">Scanning assets directory…</p>
+    </div>
+  </div>
+
+  <!-- Main Viewport -->
+  <main class="main-stage">
+    <!-- Catalog Header & Sort/View Utilities -->
+    <div class="catalog-bar">
+      <div class="catalog-meta">
+        <h2 id="currentCategoryTitle" class="editorial-heading">Collection</h2>
+        <span id="docCountBadge" class="meta-counter">0 items available</span>
+      </div>
+
+      <div class="catalog-controls">
+        <!-- Sort Dropdown -->
+        <div class="glass-select-wrapper">
+          <select id="sortSelect" class="glass-select" aria-label="Sort documents">
+            <option value="name-asc">Title (A → Z)</option>
+            <option value="name-desc">Title (Z → A)</option>
+            <option value="size-desc">Size (Largest)</option>
+            <option value="size-asc">Size (Smallest)</option>
+            <option value="category">Category</option>
+            <option value="ext">Format</option>
+          </select>
+          <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+
+        <!-- Apple Segmented Layout Switcher -->
+        <div class="segmented-control" role="group" aria-label="Display View">
+          <button id="viewGridBtn" class="seg-btn active" title="Grid View" aria-label="Grid layout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+            </svg>
+          </button>
+          <button id="viewListBtn" class="seg-btn" title="List View" aria-label="List layout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <circle cx="4" cy="6" r="1.5" fill="currentColor"></circle>
+              <circle cx="4" cy="12" r="1.5" fill="currentColor"></circle>
+              <circle cx="4" cy="18" r="1.5" fill="currentColor"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Document Containers -->
+    <div id="documentGrid" class="document-grid view-grid"></div>
+
+    <!-- Empty State -->
+    <div id="emptyView" class="empty-state hidden">
+      <div class="empty-glass-card">
+        <div class="empty-glyph">✧</div>
+        <h3 class="editorial-heading">No Records Discovered</h3>
+        <p id="emptyMsg">Review your <code>assets/</code> directory path or use the directory selector above.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Apple-Style Translucent Preview Overlay -->
+  <div id="readerModal" class="glass-modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="glass-modal-sheet">
+      <header class="sheet-header">
+        <div class="sheet-title-group">
+          <div class="sheet-badges">
+            <span id="modalCategory" class="badge-accent">Folder</span>
+            <span id="modalExtBadge" class="badge-format">PDF</span>
+          </div>
+          <h3 id="modalTitle" class="sheet-title">Document Viewer</h3>
+        </div>
+
+        <div class="sheet-actions">
+          <button id="modalCopyLink" class="glass-btn-secondary" title="Copy File URL">Copy Link</button>
+          <a id="modalDownload" href="#" download class="glass-btn-primary">Download</a>
+          <button id="modalClose" class="sheet-close-btn" aria-label="Close Preview">&times;</button>
+        </div>
+      </header>
+
+      <div id="modalStage" class="sheet-viewport"></div>
+      
+      <footer class="sheet-footer">
+        <span id="modalMetaSize">Size: 0 MB</span>
+        <span id="modalMetaPath" class="truncate">assets/...</span>
+      </footer>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

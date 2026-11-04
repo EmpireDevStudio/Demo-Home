@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+  <meta name="description" content="System Directory — Minimalist Glass Portal Navigation with Central Spinning Vinyl Core">
+  <meta name="theme-color" content="#050608">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>System Directory</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="intro-active">
+
+  <!-- Ambient Backdrop Lighting Canvas -->
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="canvas-noise"></div>
+  </div>
+
+  <!-- Intro Screen Overlay -->
+  <aside class="intro-screen" id="introScreen" aria-label="Welcome Portal" role="dialog" aria-modal="true">
+    <div class="intro-wrap">
+      <div class="intro-monogram" aria-hidden="true">
+        <svg viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="20" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3.5"/>
+          <circle cx="22" cy="22" r="10" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.4"/>
+          <circle cx="22" cy="22" r="4.5" fill="currentColor"/>
+        </svg>
+      </div>
+      <h1 class="intro-title" id="introTitle">SYSTEM DIRECTORY</h1>
+      <div class="intro-hairline" aria-hidden="true"></div>
+      <p class="intro-subtitle" id="introSubtitle">Archives &bull; Broadcasts &bull; Simulations &bull; Protocols</p>
+      <span class="intro-hint">Tap anywhere to enter</span>
+    </div>
+  </aside>
+
+  <!-- Top Masthead Header -->
+  <header class="top-masthead" role="banner">
+    <span class="masthead-title">SYSTEM DIRECTORY</span>
+    <span class="masthead-dot" aria-hidden="true"></span>
+    <span class="masthead-label" id="systemStatus">ONLINE</span>
+  </header>
+
+  <!-- Centered Interactive Stage Container -->
+  <div class="stage-container">
+    <main class="square-stage" id="squareStage" role="navigation" aria-label="Sector Directory Navigation">
+
+      <!-- Sector 01: Top-Left (Library) -->
+      <a href="library.html" 
+         class="square-tile tile-tl tile-library" 
+         data-target="library"
+         role="button"
+         aria-label="Sector 01: Library — Curated records and system documentation"
+         tabindex="0">
+        <div class="tile-glass"></div>
+        <div class="tile-shine-border" aria-hidden="true"></div>
+        <div class="tile-spotlight" aria-hidden="true"></div>
+        
+        <div class="tile-inner">
+          <div class="tile-header-group">
+            <div class="tile-meta-line">
+              <span class="tile-index">01</span>
+              <span class="tile-divider">/</span>
+              <span class="tile-category">ARCHIVE</span>
+            </div>
+            <div class="tile-emblem" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 38V12C16 10 20 12 24 15V41C20 38 16 36 10 38Z"/>
+                <path d="M38 38V12C32 10 28 12 24 15V41C28 38 32 36 38 38Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="tile-content-group">
+            <h2 class="tile-name">LIBRARY</h2>
+            <p class="tile-desc">Curated records &amp; system documentation</p>
+            <div class="tile-cue" aria-hidden="true">
+              <span>ACCESS</span>
+              <span class="cue-arrow">&nearr;</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Sector 02: Top-Right (Videos) -->
+      <a href="videos.html" 
+         class="square-tile tile-tr tile-videos" 
+         data-target="videos"
+         role="button"
+         aria-label="Sector 02: Videos — Visual broadcasts and cinematic releases"
+         tabindex="0">
+        <div class="tile-glass"></div>
+        <div class="tile-shine-border" aria-hidden="true"></div>
+        <div class="tile-spotlight" aria-hidden="true"></div>
+        
+        <div class="tile-inner">
+          <div class="tile-header-group">
+            <div class="tile-meta-line">
+              <span class="tile-category">CINEMA</span>
+              <span class="tile-divider">/</span>
+              <span class="tile-index">02</span>
+            </div>
+            <div class="tile-emblem" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="8" y="12" width="32" height="24" rx="5"/>
+                <polygon points="21,18 31,24 21,30" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="tile-content-group">
+            <h2 class="tile-name">VIDEOS</h2>
+            <p class="tile-desc">Visual broadcasts &amp; cinematic releases</p>
+            <div class="tile-cue" aria-hidden="true">
+              <span class="cue-arrow">&nwarr;</span>
+              <span>ACCESS</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Sector 03: Bottom-Left (Games) -->
+      <a href="https://tileworksgamesstudio.github.io/86/" 
+         class="square-tile tile-bl tile-games" 
+         data-target="games"
+         role="button"
+         aria-label="Sector 03: Games — Interactive chambers and combat sandboxes"
+         tabindex="0">
+        <div class="tile-glass"></div>
+        <div class="tile-shine-border" aria-hidden="true"></div>
+        <div class="tile-spotlight" aria-hidden="true"></div>
+        
+        <div class="tile-inner">
+          <div class="tile-content-group">
+            <div class="tile-emblem" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 16H34L40 30C41 34 38 37 34 36L28 34L24 38L20 34L14 36C10 37 7 34 8 30L14 16Z"/>
+                <line x1="16" y1="24" x2="22" y2="24"/>
+                <line x1="19" y1="21" x2="19" y2="27"/>
+                <circle cx="32" cy="24" r="1.75" fill="currentColor"/>
+              </svg>
+            </div>
+            <h2 class="tile-name">GAMES</h2>
+            <p class="tile-desc">Interactive chambers &amp; combat sandboxes</p>
+            <div class="tile-cue" aria-hidden="true">
+              <span>LAUNCH</span>
+              <span class="cue-arrow">&searr;</span>
+            </div>
+          </div>
+
+          <div class="tile-header-group">
+            <div class="tile-meta-line">
+              <span class="tile-index">03</span>
+              <span class="tile-divider">/</span>
+              <span class="tile-category">SIMULATION</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Sector 04: Bottom-Right (Checklists) -->
+      <a href="checklists.html" 
+         class="square-tile tile-br tile-checklists" 
+         data-target="checklists"
+         role="button"
+         aria-label="Sector 04: Checklists — Operational protocols and readiness workflows"
+         tabindex="0">
+        <div class="tile-glass"></div>
+        <div class="tile-shine-border" aria-hidden="true"></div>
+        <div class="tile-spotlight" aria-hidden="true"></div>
+        
+        <div class="tile-inner">
+          <div class="tile-content-group">
+            <div class="tile-emblem" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="12" y="10" width="24" height="30" rx="3.5"/>
+                <path d="M18 20.5L21.5 24L28 17.5"/>
+                <line x1="18" y1="29.5" x2="30" y2="29.5"/>
+              </svg>
+            </div>
+            <h2 class="tile-name">CHECKLISTS</h2>
+            <p class="tile-desc">Operational protocols &amp; readiness workflows</p>
+            <div class="tile-cue" aria-hidden="true">
+              <span class="cue-arrow">&swarr;</span>
+              <span>INSPECT</span>
+            </div>
+          </div>
+
+          <div class="tile-header-group">
+            <div class="tile-meta-line">
+              <span class="tile-category">AUDIT</span>
+              <span class="tile-divider">/</span>
+              <span class="tile-index">04</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Center Rotational Vinyl Core Dock -->
+      <div class="center-record-wrap" id="centerRecordWrap">
+        <div class="cutout-bezel-ring" aria-hidden="true"></div>
+        <div class="cutout-ambient-glow" aria-hidden="true"></div>
+        <div class="record-contour-rim" aria-hidden="true"></div>
+
+        <button type="button" 
+                class="record-disc" 
+                id="recordDisc" 
+                aria-label="System Vinyl Core. Press to inspect and toggle expanded view"
+                title="System Vinyl Core">
+          <div class="vinyl-body">
+            <div class="groove groove-1" aria-hidden="true"></div>
+            <div class="groove groove-2" aria-hidden="true"></div>
+            <div class="groove groove-3" aria-hidden="true"></div>
+            <div class="vinyl-light-sheen" aria-hidden="true"></div>
+
+            <!-- Root Logo Image Artwork Layer -->
+            <div class="vinyl-art-layer">
+              <img src="logo.jpg" 
+                   alt="System Core Artwork" 
+                   class="record-art-image" 
+                   id="vinylCoreImg"
+                   loading="eager"
+                   decoding="async">
+              <div class="record-center-spindle" aria-hidden="true"></div>
+            </div>
+          </div>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Bottom Accessibility / Shortcut Cue for Mobile and Desktop -->
+  <footer class="bottom-dock" role="contentinfo">
+    <span class="dock-note">DIR // SEC 01-04</span>
+    <span class="dock-hint">Use arrow keys or tap quadrant to navigate</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
