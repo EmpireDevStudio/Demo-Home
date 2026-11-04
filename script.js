@@ -12,10 +12,10 @@
    -------------------------------------------------------------------------- */
 const CONFIG = {
   routes: {
-    library: "./demo-library/",
-    videos: "./demo-videos/",
-    games: "./demo-games/",
-    checklists: "./demo-checklists/"
+    library: "./Demo-Library/",
+    videos: "./Demo-Videos/",
+    games: "./Demo-Games/",
+    checklists: "./Demo-Checklists/"
   },
   timings: {
     navDelayMs: 380,
