@@ -10,7 +10,7 @@
       name: 'Hangman — Cocktail Lounge Nocturne',
       storageKey: 'hangman_cocktail_lounge_v5',
       legacyStorageKeys: ['hangman_universal_hangman_lounge_v4', 'universal_hangman_v3', 'universal_hangman_v2', 'universal_hangman_v1'],
-      homeUrl: './Demo-Games/',
+      homeUrl: '../Demo-Games/',
       maxStrikes: 6
     },
     data: {

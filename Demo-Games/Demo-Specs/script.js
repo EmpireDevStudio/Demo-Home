@@ -8,7 +8,7 @@
     app: {
       name: "Sequence",
       storageKey: "cocktail_tileworks_sequence_state_v2",
-      homeUrl: "./Demo-Games/",
+      homeUrl: "../Demo-Games/",
       maxAttempts: 4,
       slotsCount: 5
     },

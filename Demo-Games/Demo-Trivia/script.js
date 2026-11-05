@@ -15,8 +15,8 @@
     app: {
       name: 'Daily Quiz',
       version: '2.1.0',
-      homeUrl: './Demo-Games/',
-      plusUrl: './Demo-Games/',
+      homeUrl: '../Demo-Games/',
+      plusUrl: '../Demo-Games/',
       storageKey: 'cocktail_universal_daily_quiz_state',
       storageVersion: 3
     },

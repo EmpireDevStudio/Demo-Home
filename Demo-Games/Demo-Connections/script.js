@@ -8,7 +8,7 @@
     app: {
       title: 'Connections',
       storageKey: 'cocktail_connections_app_state_v2',
-      homeUrl: './Demo-Games/',
+      homeUrl: '../Demo-Games/',
       maxMistakes: 4
     },
     data: {

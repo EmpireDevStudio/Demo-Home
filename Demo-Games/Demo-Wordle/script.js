@@ -15,7 +15,7 @@
       edition: "Cocktail Lounge Edition",
       storageKey: "cocktail_word_guess_data_v1",
       settingsKey: "cocktail_word_guess_settings_v1",
-      homeHubUrl: "./Demo-Games/"
+      homeHubUrl: "../Demo-Games/"
     },
 
     data: {

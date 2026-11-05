@@ -9,7 +9,7 @@
       name: 'Cocktail Lounge Crossword',
       version: '1.2.0',
       storageKey: 'cocktail_crossword_lounge_universal_v1',
-      portalUrl: './Demo-Games/'
+      portalUrl: '../Demo-Games/'
     },
     data: {
       csvUrl: './puzzles.csv',

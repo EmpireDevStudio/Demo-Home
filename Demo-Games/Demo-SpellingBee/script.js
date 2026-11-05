@@ -15,7 +15,7 @@
       name: 'Spelling Bee',
       version: '6.0.0',
       plusButtonAction: {
-        url: '',
+        url: '../Demo-Games/',
         fallbackMessage: 'Spelling Bee • High-Proof Hive Edition'
       }
     },

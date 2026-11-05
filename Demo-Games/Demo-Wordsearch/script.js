@@ -8,7 +8,7 @@
     app: {
       title: 'Word Search',
       storageKey: 'cocktail_wordsearch_state_v3',
-      homeUrl: 'https://tileworksgamesstudio.github.io/86/',
+      homeUrl: '../Demo-Games/',
       externalFeaturesUrl: '#'
     },
     data: {
