@@ -3,222 +3,293 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Word Guess — Cocktail Lounge Edition</title>
+  <title>Word Guess — Artisanal Lexicon & Daily Salon Puzzle</title>
+  <meta name="description" content="Decipher the five-letter mystery word in six attempts. A refined, tactile paper word game.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Ambient Atmospheric Layers: Macro, Meso & Micro Dotted Grain -->
-  <div class="bg-layer bg-micro-glow" aria-hidden="true"></div>
-  <div class="bg-layer bg-caustics" aria-hidden="true"></div>
-  <div class="bg-layer bg-texture" aria-hidden="true"></div>
-  
-  <!-- Continuous Bottom-to-Top Floating Botanical Garnish Field (Strictly Layered Behind UI) -->
+  <!-- Ambient Atmospheric Lighting Layers & Subtle Floating Botanicals -->
+  <div class="bg-layer bg-canvas" aria-hidden="true"></div>
+  <div class="bg-layer bg-light-pool" aria-hidden="true"></div>
+  <div class="bg-layer bg-paper-grain" aria-hidden="true"></div>
   <div id="bg-icons" class="bg-layer bg-garnishes" aria-hidden="true"></div>
 
   <div id="app" class="app-shell">
 
-    <!-- TOP HEADER (Shared Anchor) -->
-    <header class="site-header" role="banner">
-      <div class="header-left">
-        <a id="btn-home" class="icon-btn home-btn" href="#" role="button" aria-label="Return to Game Hub" title="Home Hub">
-          <svg class="nav-svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-            <path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-6h-6v6H4.5A1.5 1.5 0 0 1 3 20v-9.5z" fill="currentColor"/>
+    <!-- UNIVERSAL STANDARDIZED PAGE HEADER -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__controls">
+        <a id="btn-home-hub" class="btn-back-nav interactive-tactile" href="../Demo-Games/" role="button" aria-label="Return to Game Suite Hub">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-6h-6v6H4.5A1.5 1.5 0 0 1 3 20v-9.5z"/>
           </svg>
+          <span class="btn-back-nav__label" id="headerHomeLabel">Hub</span>
         </a>
-        <div class="logo-group">
-          <span class="logo-eyebrow">NOCTURNE SALON</span>
-          <h1 class="game-logo">WORD GUESS</h1>
+
+        <!-- Contextual Action Controls (rules & stats on game screens) -->
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <button id="btn-header-rules" class="interactive-tactile header-action-btn" type="button" aria-label="Instructions & rules" title="Rules">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01"/>
+            </svg>
+          </button>
+          <button id="btn-header-stats" class="interactive-tactile header-action-btn" type="button" aria-label="View ledger statistics" title="Stats">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="12" width="4" height="9" rx="1"/>
+              <rect x="10" y="7" width="4" height="14" rx="1"/>
+              <rect x="17" y="3" width="4" height="18" rx="1"/>
+            </svg>
+          </button>
         </div>
       </div>
 
-      <div id="header-game-controls" class="header-right hidden" aria-label="Game Screen Controls">
-        <button id="btn-game-rules" class="icon-btn" aria-label="How to play" title="Instructions">
-          <svg class="nav-svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>
-            <path d="M9.5 9.2a2.5 2.5 0 0 1 5 0c0 1.5-2 2-2 3v1m0 2.8h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <button id="btn-game-stats" class="icon-btn" aria-label="View statistics" title="Stats">
-          <svg class="nav-svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <rect x="4" y="13" width="3.5" height="7" rx="0.5" fill="currentColor"/>
-            <rect x="10.25" y="8" width="3.5" height="12" rx="0.5" fill="currentColor"/>
-            <rect x="16.5" y="3" width="3.5" height="17" rx="0.5" fill="currentColor"/>
-          </svg>
-        </button>
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">NOCTURNE SALON</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">WORD GUESS</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Decipher the 5-letter vintage mystery in six attempts.
+        </p>
       </div>
     </header>
 
-    <!-- VIEW 1: MAIN MENU (Centered Optical Focus) -->
-    <main id="view-menu" class="view view-menu" aria-label="Main Menu">
-      <div class="menu-container">
-        
-        <header class="menu-title-block">
-          <span class="menu-eyebrow">HIGH-PROOF VOCABULARY</span>
-          <h2 class="menu-display-title">The Parlour Guess</h2>
-          <div class="gold-accent-line" aria-hidden="true"></div>
-          <p class="menu-tagline">Decipher the 5-letter vintage mystery in six attempts.</p>
-        </header>
+    <!-- MAIN INTERACTIVE CONTENT AREA -->
+    <div class="app-body-area">
 
-        <!-- Primary 4 Menu Actions -->
-        <nav class="primary-nav" aria-label="Main Actions">
-          <button id="nav-daily" class="menu-btn menu-btn-primary">
-            <div class="menu-btn-content">
-              <span class="menu-btn-badge" id="menu-daily-badge">TODAY</span>
-              <span class="menu-btn-title">Play Word Guess</span>
-              <span id="menu-daily-status" class="menu-btn-desc">Ready to play</span>
+      <!-- VIEW 1: MAIN MENU (CENTERED ERGONOMIC HUB) -->
+      <main id="view-menu" class="view view-menu" aria-label="Main Menu">
+        <div class="menu-container">
+          
+          <div class="hero-card paper-card">
+            <div class="hero-seal-badge" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3 3"/>
+              </svg>
             </div>
-            <span class="menu-btn-affordance" aria-hidden="true">→</span>
-          </button>
-
-          <button id="nav-vault" class="menu-btn">
-            <div class="menu-btn-content">
-              <span class="menu-btn-title">Vault</span>
-              <span id="menu-vault-count" class="menu-btn-desc">All available puzzles</span>
+            <div class="hero-card__meta">
+              <span class="hero-card__date" id="heroCalendarDate">Today</span>
+              <h2 class="hero-card__heading">The Daily Edition</h2>
+              <p class="hero-card__sub" id="heroCardDesc">Fresh edition minted daily at midnight local time.</p>
             </div>
-            <span class="menu-btn-affordance" aria-hidden="true">→</span>
-          </button>
+            <button id="nav-daily" class="interactive-tactile btn-primary btn-large" type="button">
+              <span id="menuDailyActionText">Play Word Guess</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
 
-          <button id="nav-settings" class="menu-btn">
-            <div class="menu-btn-content">
-              <span class="menu-btn-title">Settings</span>
-              <span class="menu-btn-desc">Preferences & animation</span>
-            </div>
-            <span class="menu-btn-affordance" aria-hidden="true">→</span>
-          </button>
+          <!-- Secondary Menu Actions -->
+          <nav class="primary-nav-grid" aria-label="Primary Navigation Options">
+            <button id="nav-vault" class="interactive-tactile menu-action-card" type="button">
+              <div class="menu-action-card__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="16" rx="2"/>
+                  <path d="M7 8h10M7 12h10M7 16h6"/>
+                </svg>
+              </div>
+              <div class="menu-action-card__body">
+                <h3 class="menu-action-card__title">The Vault</h3>
+                <span id="menu-vault-count" class="menu-action-card__caption">Explore complete archive</span>
+              </div>
+            </button>
 
-          <button id="nav-rules" class="menu-btn">
-            <div class="menu-btn-content">
-              <span class="menu-btn-title">How to Play</span>
-              <span class="menu-btn-desc">Rules & feedback guide</span>
-            </div>
-            <span class="menu-btn-affordance" aria-hidden="true">→</span>
-          </button>
-        </nav>
+            <button id="nav-rules" class="interactive-tactile menu-action-card" type="button">
+              <div class="menu-action-card__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" r="10"/>
+                  <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+              </div>
+              <div class="menu-action-card__body">
+                <h3 class="menu-action-card__title">How to Play</h3>
+                <span class="menu-action-card__caption">Rules, colors & mechanics</span>
+              </div>
+            </button>
 
-        <!-- Centered Bottom Utility Row -->
-        <div class="utility-row" aria-label="Quick Actions">
-          <button id="btn-utility-stats" class="utility-btn" aria-label="Player Statistics" title="Player Stats">
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <rect x="4" y="13" width="3.5" height="7" rx="0.5" fill="currentColor"/>
-              <rect x="10.25" y="8" width="3.5" height="12" rx="0.5" fill="currentColor"/>
-              <rect x="16.5" y="3" width="3.5" height="17" rx="0.5" fill="currentColor"/>
+            <button id="nav-settings" class="interactive-tactile menu-action-card" type="button">
+              <div class="menu-action-card__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </div>
+              <div class="menu-action-card__body">
+                <h3 class="menu-action-card__title">Preferences</h3>
+                <span class="menu-action-card__caption">Garnish animations & haptics</span>
+              </div>
+            </button>
+          </nav>
+
+          <!-- Quick Utility Bar -->
+          <div class="utility-row" aria-label="Utility Options">
+            <button id="btn-utility-stats" class="interactive-tactile utility-btn" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="12" width="4" height="9" rx="1"/>
+                <rect x="10" y="7" width="4" height="14" rx="1"/>
+                <rect x="17" y="3" width="4" height="18" rx="1"/>
+              </svg>
+              <span>Ledger Stats</span>
+            </button>
+
+            <button id="btn-utility-share" class="interactive-tactile utility-btn" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              <span>Share App</span>
+            </button>
+          </div>
+
+        </div>
+      </main>
+
+      <!-- VIEW 2: VAULT (ARCHIVE CATALOGUE) -->
+      <section id="view-vault" class="view view-sub hidden" aria-label="Puzzle Vault Catalogue">
+        <div class="sub-view-bar">
+          <button id="btn-vault-back" class="btn-back-nav interactive-tactile" type="button">
+            <svg class="icon-back" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
-            <span class="utility-btn-label">Stats</span>
+            <span class="btn-back-nav__label">Menu</span>
           </button>
-
-          <button id="btn-utility-share" class="utility-btn" aria-label="Share Game" title="Share Game">
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
-              <circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
-              <circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="1.8"/>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="1.8"/>
-            </svg>
-            <span class="utility-btn-label">Share</span>
-          </button>
-
-          <button id="btn-utility-plus" class="utility-btn" aria-label="Additional Games" title="More Information">
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <span class="utility-btn-label">More</span>
-          </button>
+          <div class="sub-view-title-wrap">
+            <span class="sub-view-tag">HISTORICAL ARCHIVE</span>
+            <h2 class="sub-view-title">Puzzle Vault</h2>
+          </div>
+          <div class="bar-spacer" aria-hidden="true"></div>
         </div>
 
-      </div>
-    </main>
-
-    <!-- VIEW 2: VAULT (COMPLETE COLLECTION) -->
-    <section id="view-vault" class="view view-sub hidden" aria-label="Puzzle Vault">
-      <div class="sub-view-bar">
-        <button id="btn-vault-back" class="text-nav-btn" aria-label="Back to Menu">
-          <span aria-hidden="true">←</span> Back
-        </button>
-        <h2 class="sub-view-title">PUZZLE VAULT</h2>
-        <div class="bar-spacer" aria-hidden="true"></div>
-      </div>
-      
-      <div class="sub-view-scroll">
-        <p class="section-note">Browse the entire vintage catalog preserved in the lounge register:</p>
-        <div id="vault-list" class="vault-grid" role="list"></div>
-      </div>
-    </section>
-
-    <!-- VIEW 3: GAMEPLAY -->
-    <section id="view-game" class="view view-game hidden" aria-label="Gameplay Screen">
-      <div class="sub-view-bar">
-        <button id="btn-game-back" class="text-nav-btn" aria-label="Back to Main Menu">
-          <span aria-hidden="true">←</span> Menu
-        </button>
-        <div class="game-meta-group">
-          <span id="game-puzzle-title" class="sub-view-title">DAILY PUZZLE</span>
-          <span id="game-puzzle-date" class="game-date-badge">Today</span>
-        </div>
-        <span id="game-status-pill" class="status-pill hidden">COMPLETED</span>
-      </div>
-
-      <div class="gameplay-area">
-        <!-- Centered Responsive Word Board -->
-        <div class="board-frame">
-          <div id="board" class="board" role="grid" aria-label="5 letter guess grid with 6 attempts">
-            <!-- 6 rows x 5 tiles generated in JS -->
+        <div class="sub-view-scroll card-feed-container">
+          <p class="section-note">Solve any vintage catalog puzzle at your own pace:</p>
+          <div id="vault-list" class="vault-grid" role="list">
+            <!-- Dynamically populated from dataset -->
           </div>
         </div>
+      </section>
 
-        <!-- Virtual Keyboard -->
-        <div class="keyboard-wrap">
-          <div id="keyboard" class="keyboard" role="group" aria-label="Virtual on-screen keyboard">
-            <!-- Generated dynamically in JS -->
+      <!-- VIEW 3: GAMEPLAY -->
+      <section id="view-game" class="view view-game hidden" aria-label="Puzzle Gameplay Area">
+        <div class="sub-view-bar">
+          <button id="btn-game-back" class="btn-back-nav interactive-tactile" type="button">
+            <svg class="icon-back" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span class="btn-back-nav__label">Menu</span>
+          </button>
+          <div class="game-meta-group">
+            <span id="game-puzzle-title" class="sub-view-title">DAILY PUZZLE</span>
+            <span id="game-puzzle-date" class="game-date-badge">Today</span>
+          </div>
+          <span id="game-status-pill" class="status-pill status-pill--sage hidden">SOLVED</span>
+        </div>
+
+        <div class="gameplay-area">
+          <!-- Centered Paper Word Grid -->
+          <div class="board-frame">
+            <div id="board" class="board" role="grid" aria-label="5 letter guess grid with 6 attempts">
+              <!-- 6 rows x 5 tiles generated in script -->
+            </div>
+          </div>
+
+          <!-- Tactile Virtual Keyboard -->
+          <div class="keyboard-wrap">
+            <div id="keyboard" class="keyboard" role="group" aria-label="On-screen physical keyboard">
+              <!-- Generated in script -->
+            </div>
           </div>
         </div>
+      </section>
+
+    </div>
+
+    <!-- UNIFORM BOTTOM THUMB-ZONE NAVIGATION (MOBILE DOCK) -->
+    <nav class="app-bottom-dock" aria-label="Quick Switch Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <button id="dock-btn-menu" class="nav-tab-item nav-tab-item--active" type="button" aria-label="Return to Overview">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-6h-6v6H4.5A1.5 1.5 0 0 1 3 20v-9.5z"/>
+          </svg>
+          <span>Home</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button id="dock-btn-play" class="nav-tab-item" type="button" aria-label="Play Active Puzzle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span>Play</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button id="dock-btn-vault" class="nav-tab-item" type="button" aria-label="Open Vault Archive">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="16" rx="2"/>
+            <path d="M7 8h10M7 12h10M7 16h6"/>
+          </svg>
+          <span>Vault</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button id="dock-btn-stats" class="nav-tab-item" type="button" aria-label="Open Player Statistics">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="12" width="4" height="9" rx="1"/>
+            <rect x="10" y="7" width="4" height="14" rx="1"/>
+            <rect x="17" y="3" width="4" height="18" rx="1"/>
+          </svg>
+          <span>Stats</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
       </div>
-    </section>
+    </nav>
 
   </div>
 
-  <!-- HOW TO PLAY PANEL (RIGHT-TO-LEFT DIRECT SLIDE SHEET) -->
+  <!-- HOW TO PLAY PANEL (RIGHT-TO-LEFT DIRECT SHEET) -->
   <div id="panel-rules-overlay" class="panel-overlay" aria-hidden="true">
-    <aside id="panel-rules" class="slide-panel" role="dialog" aria-modal="true" aria-labelledby="rules-panel-heading">
+    <aside id="panel-rules" class="slide-panel paper-card" role="dialog" aria-modal="true" aria-labelledby="rules-panel-heading">
       <header class="panel-header">
         <div>
           <span class="panel-eyebrow">HOUSE REGULATIONS</span>
-          <h2 id="rules-panel-heading" class="panel-title">HOW TO PLAY</h2>
+          <h2 id="rules-panel-heading" class="panel-title">How to Play</h2>
         </div>
-        <button id="btn-rules-close" class="panel-close-btn" aria-label="Close Instructions">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button id="btn-rules-close" class="panel-close-btn interactive-tactile" aria-label="Close regulations panel">&times;</button>
       </header>
+
       <div class="panel-body">
         <section class="rules-section">
           <p class="rules-lead">Guess the mystery 5-letter word in <strong>6 attempts</strong>.</p>
-          <p class="rules-text">Each guess must be an authentic 5-letter English word. Press <strong>Enter</strong> to register your attempt.</p>
+          <p class="rules-text">Each guess must be an authentic five-letter English word. Press <strong>Enter</strong> to register your attempt.</p>
         </section>
         
         <section class="rules-section">
           <h3 class="rules-subtitle">Tasting Note Feedback Colors</h3>
           <div class="rule-examples">
             <div class="rule-item">
-              <span class="sample-tile tile-correct" aria-label="Botanical Emerald">W</span>
+              <span class="sample-tile tile-correct" aria-label="Sage Green">W</span>
               <div class="rule-desc">
-                <strong>Botanical Emerald</strong>
-                <span>Correct letter in the exact correct spot.</span>
+                <strong>Sage Green (Correct)</strong>
+                <span>Correct letter in the exact correct position.</span>
               </div>
             </div>
             <div class="rule-item">
-              <span class="sample-tile tile-present" aria-label="Burnt Amber">O</span>
+              <span class="sample-tile tile-present" aria-label="Warm Ochre">O</span>
               <div class="rule-desc">
-                <strong>Burnt Amber</strong>
-                <span>Letter is in the word, but in a different spot.</span>
+                <strong>Warm Ochre (Present)</strong>
+                <span>Letter appears in the target word, but in another position.</span>
               </div>
             </div>
             <div class="rule-item">
-              <span class="sample-tile tile-absent" aria-label="Smoked Obsidian">R</span>
+              <span class="sample-tile tile-absent" aria-label="Sunken Paper">R</span>
               <div class="rule-desc">
-                <strong>Smoked Obsidian</strong>
+                <strong>Sunken Paper (Absent)</strong>
                 <span>Letter does not appear anywhere in the target word.</span>
               </div>
             </div>
@@ -226,53 +297,65 @@
         </section>
 
         <section class="rules-section">
-          <h3 class="rules-subtitle">Daily Release Cycle</h3>
-          <p class="rules-text">The Daily Challenge advances sequentially each calendar day. The entire catalog remains accessible at any time in the Vault.</p>
+          <h3 class="rules-subtitle">Daily Release Schedule</h3>
+          <p class="rules-text">A fresh daily challenge unlocks each midnight local time. The complete catalog remains accessible anytime in the Vault.</p>
         </section>
       </div>
+
       <footer class="panel-footer">
-        <button id="btn-rules-done" class="dialog-action-btn primary-action">Understood</button>
+        <button id="btn-rules-done" class="interactive-tactile btn-primary" type="button">Understood</button>
       </footer>
     </aside>
   </div>
 
   <!-- SETTINGS MODAL DIALOG -->
   <dialog id="modal-settings" class="unified-dialog">
-    <div class="dialog-shell">
+    <div class="dialog-shell paper-card">
       <header class="dialog-header">
         <div>
           <span class="panel-eyebrow">PREFERENCES</span>
-          <h2 class="dialog-title">SETTINGS</h2>
+          <h2 class="dialog-title">Settings</h2>
         </div>
-        <button class="panel-close-btn" data-close="modal-settings" aria-label="Close settings">&times;</button>
+        <button class="panel-close-btn interactive-tactile" data-close="modal-settings" aria-label="Close settings">&times;</button>
       </header>
       <div class="dialog-body">
         <div class="setting-row">
           <div class="setting-meta">
-            <span class="setting-label">Atmospheric Garnishes</span>
-            <span class="setting-hint">Floating illuminated cocktail botanicals in the lounge air</span>
+            <span class="setting-label">Atmospheric Botanicals</span>
+            <span class="setting-hint">Subtle floating botanicals behind the paper canvas</span>
           </div>
           <div class="toggle-switch-group" role="radiogroup" aria-label="Background Animation Setting">
-            <button id="setting-anim-on" class="toggle-btn" role="radio" aria-checked="true">On</button>
-            <button id="setting-anim-off" class="toggle-btn" role="radio" aria-checked="false">Off</button>
+            <button id="setting-anim-on" class="toggle-btn interactive-tactile" role="radio" aria-checked="true" type="button">On</button>
+            <button id="setting-anim-off" class="toggle-btn interactive-tactile" role="radio" aria-checked="false" type="button">Off</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-meta">
+            <span class="setting-label">Tactile Haptic Pulses</span>
+            <span class="setting-hint">Gentle 12ms mechanical pulse on supported mobile devices</span>
+          </div>
+          <div class="toggle-switch-group" role="radiogroup" aria-label="Haptic Feedback Setting">
+            <button id="setting-haptic-on" class="toggle-btn interactive-tactile" role="radio" aria-checked="true" type="button">On</button>
+            <button id="setting-haptic-off" class="toggle-btn interactive-tactile" role="radio" aria-checked="false" type="button">Off</button>
           </div>
         </div>
       </div>
       <footer class="dialog-footer">
-        <button class="dialog-action-btn primary-action" data-close="modal-settings">Done</button>
+        <button class="interactive-tactile btn-primary" data-close="modal-settings" type="button">Done</button>
       </footer>
     </div>
   </dialog>
 
   <!-- STATISTICS MODAL DIALOG -->
   <dialog id="modal-stats" class="unified-dialog">
-    <div class="dialog-shell">
+    <div class="dialog-shell paper-card">
       <header class="dialog-header">
         <div>
           <span class="panel-eyebrow">LEDGER RECORD</span>
-          <h2 class="dialog-title">STATISTICS</h2>
+          <h2 class="dialog-title">Statistics</h2>
         </div>
-        <button class="panel-close-btn" data-close="modal-stats" aria-label="Close statistics">&times;</button>
+        <button class="panel-close-btn interactive-tactile" data-close="modal-stats" aria-label="Close statistics">&times;</button>
       </header>
       <div class="dialog-body">
         <div class="stats-metric-grid">
@@ -298,30 +381,30 @@
         <div id="distribution-chart" class="dist-chart" role="img" aria-label="Guess Distribution Histogram"></div>
       </div>
       <footer class="dialog-footer">
-        <button class="dialog-action-btn primary-action" data-close="modal-stats">Close</button>
+        <button class="interactive-tactile btn-primary" data-close="modal-stats" type="button">Close</button>
       </footer>
     </div>
   </dialog>
 
   <!-- RESULT MODAL DIALOG -->
   <dialog id="modal-result" class="unified-dialog">
-    <div class="dialog-shell">
+    <div class="dialog-shell paper-card">
       <header class="dialog-header">
         <div>
           <span class="panel-eyebrow">FINAL VERDICT</span>
           <h2 id="result-title" class="dialog-title">PUZZLE COMPLETE</h2>
         </div>
-        <button class="panel-close-btn" data-close="modal-result" aria-label="Close summary">&times;</button>
+        <button class="panel-close-btn interactive-tactile" data-close="modal-result" aria-label="Close summary">&times;</button>
       </header>
       <div class="dialog-body result-center">
         <span class="result-lead-label">The target vintage was</span>
-        <span id="result-word" class="result-big-word">SHAKE</span>
+        <span id="result-word" class="result-big-word">WORDS</span>
         <p id="result-definition" class="result-def-text"></p>
         <p id="result-summary" class="result-score-text">Solved in 4 of 6 guesses.</p>
       </div>
       <footer class="dialog-footer result-footer-grid">
-        <button id="btn-share-result" class="dialog-action-btn primary-action">Share Result</button>
-        <button id="btn-result-vault" class="dialog-action-btn secondary-action">Browse Vault</button>
+        <button id="btn-share-result" class="interactive-tactile btn-primary" type="button">Share Result</button>
+        <button id="btn-result-vault" class="interactive-tactile btn-secondary" type="button">Browse Vault</button>
       </footer>
     </div>
   </dialog>

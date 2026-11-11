@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Spelling Bee • Intelligent CSV Studio</title>
+  <meta name="description" content="Production-ready honeycomb puzzle generator, online dictionary auto-solver, and CSV compiler for Spelling Bee engines.">
+  
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Polite Live Region for Screen Readers -->
+  <div id="srAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Physical Top-Down Ambient Light Glow -->
+  <div class="canvas-ambient-lighting" aria-hidden="true"></div>
+
+  <!-- Hidden File Input for CSV Uploads -->
+  <input type="file" id="fileCsvInput" accept=".csv,text/csv" class="sr-only" aria-label="Upload CSV File">
+
+  <div class="app-shell">
+    <!-- STANDARDIZED ACCESSIBLE HEADER -->
+    <header class="app-page-header">
+      <div class="app-page-header__controls">
+        <button type="button" class="btn-back-nav interactive-tactile" id="btnHeaderBack" aria-label="Navigate to previous view">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="btnBackNavLabel">Home</span>
+        </button>
+
+        <!-- Status & Telemetry Pill Strip -->
+        <div class="header-telemetry-tray">
+          <div class="telemetry-pill" title="Total active honeycombs in memory">
+            <span class="telemetry-label">Puzzles:</span>
+            <span class="telemetry-val" id="topStatPuzzles">0</span>
+          </div>
+          <div class="telemetry-pill" title="Total verified vocabulary words">
+            <span class="telemetry-label">Words:</span>
+            <span class="telemetry-val" id="topStatWords">0</span>
+          </div>
+          <div class="telemetry-pill" title="Live Lexicon Connection Status">
+            <span class="telemetry-label">Lexicon:</span>
+            <span class="telemetry-status status--sage" id="topStatLexicon">Ready</span>
+          </div>
+        </div>
+
+        <!-- Global Quick Actions -->
+        <div class="app-page-header__actions">
+          <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btnHeaderReset" title="Reset current session">New Session</button>
+          <button type="button" class="interactive-tactile btn-primary btn-sm" id="btnHeaderExport" title="Export CSV file">Export CSV</button>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">HIVE ARCHITECT</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Spelling Bee Studio</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Craft, auto-solve with live online dictionaries, validate, and compile pristine CSV datasets for Spelling Bee engines.
+        </p>
+      </div>
+    </header>
+
+    <!-- Contextual Flash Notification Toast -->
+    <div id="flashBanner" class="flash-banner" hidden role="alert">
+      <span id="flashMessage">Notification</span>
+      <button type="button" class="btn-flash-close" id="btnFlashClose" aria-label="Dismiss message">&times;</button>
+    </div>
+
+    <!-- MAIN APPLICATION WORKSPACE -->
+    <main class="app-content-body">
+      <!-- VIEW 1: WELCOME ONBOARDING SCREEN -->
+      <section id="welcomeView" class="view-panel welcome-view" aria-labelledby="welcomeHeading">
+        <div class="welcome-hero-card paper-card">
+          <span class="status-badge status-badge--terracotta">STANDARDIZED DATA COMPILER</span>
+          <h2 id="welcomeHeading" class="welcome-heading">Honeycomb Engineering With Mechanical Precision</h2>
+          <p class="welcome-lead">
+            Design honeycombs, automatically extract every valid anagram using authoritative Scrabble or TWL06 dictionaries via CDN, audit pangram distribution, and export production-ready datasets.
+          </p>
+        </div>
+
+        <div class="starting-options-grid">
+          <!-- Option A: Create From Scratch -->
+          <article class="paper-card option-card option-card--featured" id="cardOptionNew">
+            <div class="option-card__badge">RECOMMENDED</div>
+            <div class="option-icon" aria-hidden="true">✨</div>
+            <div class="option-content">
+              <h3 class="option-title">Create Fresh Dataset</h3>
+              <p class="option-desc">Start with an empty workbench. The step-by-step wizard guides letter placement, computes high scores, and formats columns perfectly.</p>
+            </div>
+            <button type="button" class="interactive-tactile btn-primary w-full" id="btnChooseStartFresh">Start From Scratch</button>
+          </article>
+
+          <!-- Option B: Append to Existing File -->
+          <article class="paper-card option-card" id="cardOptionAppend">
+            <div class="option-icon" aria-hidden="true">📥</div>
+            <div class="option-content">
+              <h3 class="option-title">Append to Existing CSV</h3>
+              <p class="option-desc">Upload your live <code>puzzles.csv</code>. The engine parses existing honeycombs and allows seamless appending of new entries without data loss.</p>
+            </div>
+            <button type="button" class="interactive-tactile btn-secondary w-full" id="btnChooseUploadAppend">Upload & Append</button>
+          </article>
+
+          <!-- Option C: Audit & Fix CSV -->
+          <article class="paper-card option-card" id="cardOptionInspect">
+            <div class="option-icon" aria-hidden="true">🔍</div>
+            <div class="option-content">
+              <h3 class="option-title">Inspect & Audit CSV</h3>
+              <p class="option-desc">Verify letter lengths, deduplicate vocabulary, isolate missing pangrams, and purge broken words from previously deployed CSV files.</p>
+            </div>
+            <button type="button" class="interactive-tactile btn-secondary w-full" id="btnChooseUploadInspect">Upload & Audit</button>
+          </article>
+        </div>
+      </section>
+
+      <!-- VIEW 2: ACTIVE WORKSPACE -->
+      <div id="workspaceView" class="workspace-wrapper" hidden>
+        <!-- DESKTOP / TABLET SECTION TABS -->
+        <nav class="workspace-desktop-tabs" aria-label="Workbench Sections">
+          <button type="button" class="workspace-tab-btn active interactive-tactile" id="tabBtnWizard" data-target="panelWizard">
+            <span class="tab-icon" aria-hidden="true">✏️</span> Guided Creator
+          </button>
+          <button type="button" class="workspace-tab-btn interactive-tactile" id="tabBtnManager" data-target="panelManager">
+            <span class="tab-icon" aria-hidden="true">📋</span> Hive Library (<span id="libraryCount">0</span>)
+          </button>
+          <button type="button" class="workspace-tab-btn interactive-tactile" id="tabBtnPreview" data-target="panelPreview">
+            <span class="tab-icon" aria-hidden="true">👁️</span> Live Serialization
+          </button>
+          <button type="button" class="workspace-tab-btn interactive-tactile" id="tabBtnSettings" data-target="panelSettings">
+            <span class="tab-icon" aria-hidden="true">🌐</span> Lexicon Source
+          </button>
+        </nav>
+
+        <!-- TAB PANEL 1: GUIDED CREATOR WIZARD -->
+        <section id="panelWizard" class="tab-panel active" aria-labelledby="tabBtnWizard">
+          <div class="paper-card wizard-card">
+            <!-- Stepper Progress Tracker -->
+            <div class="wizard-stepper" role="tablist" aria-label="Creation Steps">
+              <button type="button" class="step-node active interactive-tactile" id="stepNode1" data-step="1" role="tab" aria-selected="true" aria-controls="wizardPane1">
+                <span class="step-num">1</span>
+                <span class="step-label">Hive Configuration</span>
+              </button>
+              <div class="step-line" aria-hidden="true"></div>
+              <button type="button" class="step-node interactive-tactile" id="stepNode2" data-step="2" role="tab" aria-selected="false" aria-controls="wizardPane2">
+                <span class="step-num">2</span>
+                <span class="step-label">Vocabulary & Pangrams</span>
+              </button>
+              <div class="step-line" aria-hidden="true"></div>
+              <button type="button" class="step-node interactive-tactile" id="stepNode3" data-step="3" role="tab" aria-selected="false" aria-controls="wizardPane3">
+                <span class="step-num">3</span>
+                <span class="step-label">Quality Audit</span>
+              </button>
+            </div>
+
+            <div class="wizard-body">
+              <!-- STEP 1: HIVE CONFIGURATION -->
+              <fieldset class="wizard-pane active" id="wizardPane1" role="tabpanel" aria-labelledby="stepNode1">
+                <legend class="sr-only">Step 1: Hive Configuration</legend>
+                <div class="pane-header">
+                  <span class="pane-kicker">PHASE 01 OF 03</span>
+                  <h2 class="pane-title">Define Honeycomb Letters</h2>
+                  <p class="pane-description">
+                    Spelling Bee rules demand exactly <strong>7 unique letters</strong>: 1 mandatory Center Letter and 6 Outer Letters.
+                  </p>
+                </div>
+
+                <div class="step1-grid">
+                  <div class="step1-inputs">
+                    <!-- Center Letter -->
+                    <div class="paper-input-group">
+                      <label for="inputCenterLetter" class="paper-label">
+                        <span>Center Letter</span>
+                        <span class="label-badge label-badge--terracotta">Mandatory</span>
+                      </label>
+                      <input type="text" id="inputCenterLetter" class="paper-input input-center" maxlength="1" placeholder="F" autocomplete="off" spellcheck="false" aria-describedby="centerLetterHelp centerLetterError">
+                      <p id="centerLetterHelp" class="field-hint">Must appear in <em>every single valid word</em>.</p>
+                      <p id="centerLetterError" class="field-error" aria-live="assertive"></p>
+                    </div>
+
+                    <!-- Outer Letters -->
+                    <div class="paper-input-group">
+                      <label for="inputOuterLetters" class="paper-label">
+                        <span>6 Outer Letters</span>
+                        <span class="label-badge label-badge--terracotta">Mandatory</span>
+                      </label>
+                      <input type="text" id="inputOuterLetters" class="paper-input input-outer" maxlength="10" placeholder="ADERST" autocomplete="off" spellcheck="false" aria-describedby="outerLettersHelp outerLettersError">
+                      <p id="outerLettersHelp" class="field-hint">Enter 6 unique letters. None can match the center letter.</p>
+                      <p id="outerLettersError" class="field-error" aria-live="assertive"></p>
+                    </div>
+
+                    <!-- Action Helpers -->
+                    <div class="helper-actions-tray">
+                      <button type="button" class="interactive-tactile btn-secondary btn-xs" id="btnAlphabetSortLetters">Alphabetize Outer</button>
+                      <button type="button" class="interactive-tactile btn-secondary btn-xs" id="btnClearHiveLetters">Clear Inputs</button>
+                      <button type="button" class="interactive-tactile btn-primary btn-xs" id="btnAutoSolveStep1" title="Connect to online lexicon and solve honeycomb">⚡ Auto-Solve from Dictionary</button>
+                    </div>
+
+                    <div class="checkbox-option-wrap">
+                      <label class="paper-checkbox-label">
+                        <input type="checkbox" id="chkAutoFillOnNext" checked>
+                        <span>Auto-solve and populate words when advancing to Step 2</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Mini Honeycomb Visualiser -->
+                  <div class="step1-visualizer" aria-label="Live Honeycomb Preview">
+                    <span class="visualizer-caption">Physical Honeycomb Geometry</span>
+                    <div class="tactile-hive" aria-hidden="true">
+                      <div class="tactile-hive-row">
+                        <div class="tactile-hex" id="previewHex0">-</div>
+                        <div class="tactile-hex" id="previewHex1">-</div>
+                      </div>
+                      <div class="tactile-hive-row mid">
+                        <div class="tactile-hex" id="previewHex2">-</div>
+                        <div class="tactile-hex tactile-hex--center" id="previewHexCenter">-</div>
+                        <div class="tactile-hex" id="previewHex3">-</div>
+                      </div>
+                      <div class="tactile-hive-row">
+                        <div class="tactile-hex" id="previewHex4">-</div>
+                        <div class="tactile-hex" id="previewHex5">-</div>
+                      </div>
+                    </div>
+                    <div class="hive-status-pill" id="hiveStatusTag">Awaiting 7 letters</div>
+                    <div class="hive-solver-callout" id="hiveSolverBadge" hidden></div>
+                  </div>
+                </div>
+
+                <div class="wizard-footer">
+                  <div></div>
+                  <button type="button" class="interactive-tactile btn-primary" id="btnNextToStep2">Continue to Vocabulary →</button>
+                </div>
+              </fieldset>
+
+              <!-- STEP 2: VOCABULARY & PANGRAMS -->
+              <fieldset class="wizard-pane" id="wizardPane2" hidden role="tabpanel" aria-labelledby="stepNode2">
+                <legend class="sr-only">Step 2: Vocabulary & Pangrams</legend>
+                <div class="pane-header">
+                  <span class="pane-kicker">PHASE 02 OF 03</span>
+                  <h2 class="pane-title">Compile Solution Vocabulary</h2>
+                  <p class="pane-description">
+                    Extract candidate anagrams from the online dictionary or paste custom words. Words must contain at least 4 letters and use only hive characters.
+                  </p>
+                </div>
+
+                <div class="vocabulary-toolbar paper-card">
+                  <div class="active-hive-indicator">
+                    <span class="indicator-label">Active Hive:</span>
+                    <span class="indicator-center" id="displayActiveCenter">-</span>
+                    <span class="indicator-outer" id="displayActiveOuter">------</span>
+                  </div>
+                  <div class="vocabulary-toolbar-actions">
+                    <button type="button" class="interactive-tactile btn-primary btn-xs" id="btnGenerateAllWords">⚡ Fetch Online Anagrams</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-xs" id="btnAppendDictionaryWords">+ Append Missing</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-xs" id="btnCleanWordList">Deduplicate & Sort</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-xs" id="btnFilterInvalidNow">Strip Invalid Words</button>
+                  </div>
+                </div>
+
+                <div class="paper-input-group">
+                  <label for="inputRawWords" class="paper-label">
+                    <span>Solution Words</span>
+                    <span class="label-badge label-badge--terracotta">Mandatory</span>
+                  </label>
+                  <textarea id="inputRawWords" class="paper-input paper-textarea" rows="7" placeholder="Click '⚡ Fetch Online Anagrams' or type words separated by spaces or new lines..."></textarea>
+                  <p class="field-hint">Case-insensitive. Punctuations and duplicate tokens are automatically pruned.</p>
+                </div>
+
+                <!-- Vocabulary Metrics Matrix -->
+                <div class="metrics-grid">
+                  <div class="metric-card">
+                    <span class="metric-val" id="validWordsCount">0</span>
+                    <span class="metric-lbl">Valid Words</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="metric-val status--sage" id="pangramsCount">0</span>
+                    <span class="metric-lbl">Pangrams (All 7)</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="metric-val status--terracotta" id="invalidWordsCount">0</span>
+                    <span class="metric-lbl">Invalid Tokens</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="metric-val" id="estimatedScore">0</span>
+                    <span class="metric-lbl">Max Points</span>
+                  </div>
+                </div>
+
+                <!-- Invalid Words Accordion -->
+                <div id="invalidWordsDrawer" class="invalid-drawer" hidden>
+                  <div class="invalid-drawer-heading">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span id="invalidDrawerTitle">0 rejected words violate puzzle rules:</span>
+                  </div>
+                  <div id="invalidWordsList" class="invalid-chips-tray"></div>
+                </div>
+
+                <div class="wizard-footer">
+                  <button type="button" class="interactive-tactile btn-secondary" id="btnBackToStep1">← Back to Letters</button>
+                  <button type="button" class="interactive-tactile btn-primary" id="btnNextToStep3">Continue to Audit →</button>
+                </div>
+              </fieldset>
+
+              <!-- STEP 3: QUALITY AUDIT -->
+              <fieldset class="wizard-pane" id="wizardPane3" hidden role="tabpanel" aria-labelledby="stepNode3">
+                <legend class="sr-only">Step 3: Quality Audit</legend>
+                <div class="pane-header">
+                  <span class="pane-kicker">PHASE 03 OF 03</span>
+                  <h2 class="pane-title">Pre-Deployment Quality Audit</h2>
+                  <p class="pane-description">
+                    Review score thresholds, verify pangrams, and inspect the letter-length distribution matrix before committing this puzzle to the ledger.
+                  </p>
+                </div>
+
+                <div class="audit-summary-grid">
+                  <div class="paper-card audit-card">
+                    <h3 class="audit-card-title">Score & Rank Thresholds</h3>
+                    <div class="audit-metric-row">
+                      <span>Center Focus Letter:</span>
+                      <strong class="font-serif highlight-amber" id="revCenterLetter">-</strong>
+                    </div>
+                    <div class="audit-metric-row">
+                      <span>Outer Boundary Letters:</span>
+                      <strong class="font-mono" id="revOuterLetters">-</strong>
+                    </div>
+                    <div class="audit-metric-row">
+                      <span>Verified Vocabulary:</span>
+                      <strong id="revWordCount">0 words</strong>
+                    </div>
+                    <div class="audit-metric-row">
+                      <span>Pangrams Identified:</span>
+                      <strong class="status--sage" id="revPangramCount">0</strong>
+                    </div>
+                    <div class="audit-metric-row">
+                      <span>Maximum Score:</span>
+                      <strong id="revMaxScore">0 pts</strong>
+                    </div>
+                    <div class="audit-metric-row">
+                      <span>Genius Threshold (85%):</span>
+                      <strong id="revGeniusScore">0 pts</strong>
+                    </div>
+                  </div>
+
+                  <div class="paper-card audit-card">
+                    <h3 class="audit-card-title">Pangrams Identified (uses all 7)</h3>
+                    <div id="revPangramsList" class="pangrams-badge-tray">
+                      <span class="text-muted">None detected</span>
+                    </div>
+                    <p class="caption-muted">Pangrams grant a +7 bonus in standard Spelling Bee scoring engines.</p>
+                  </div>
+
+                  <div class="paper-card audit-card audit-card--full">
+                    <h3 class="audit-card-title">Distribution Matrix (Letter × Length)</h3>
+                    <div class="matrix-table-scroll">
+                      <table class="matrix-table" id="revMatrixTable" aria-label="Puzzle letter and word length matrix"></table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wizard-footer">
+                  <button type="button" class="interactive-tactile btn-secondary" id="btnBackToStep2">← Back to Vocabulary</button>
+                  <div class="wizard-footer-actions">
+                    <button type="button" class="interactive-tactile btn-secondary" id="btnSaveAndAddAnother">Commit & Build Another</button>
+                    <button type="button" class="interactive-tactile btn-primary" id="btnSaveAndFinish">Commit & View Library</button>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB PANEL 2: PUZZLE LIBRARY / RECORD MANAGER -->
+        <section id="panelManager" class="tab-panel" hidden aria-labelledby="tabBtnManager">
+          <div class="manager-toolbar">
+            <div class="manager-search-box">
+              <input type="text" id="librarySearchInput" class="paper-input input-sm" placeholder="Search by letter or word (e.g. F, DRAFT)..." aria-label="Search puzzle library">
+            </div>
+
+            <!-- Filter Chips Tray -->
+            <div class="filter-chip-tray" role="group" aria-label="Filter puzzles">
+              <button type="button" class="filter-chip filter-chip--active" data-filter="all">All (<span id="countFilterAll">0</span>)</button>
+              <button type="button" class="filter-chip" data-filter="warning">Needs Audit (<span id="countFilterWarning">0</span>)</button>
+              <button type="button" class="filter-chip" data-filter="nopangram">Missing Pangram (<span id="countFilterNoPangram">0</span>)</button>
+            </div>
+
+            <div class="manager-actions">
+              <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btnAppendNewRecord">+ New Hive</button>
+              <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btnUploadAdditionalCsv">Upload CSV</button>
+              <button type="button" class="interactive-tactile btn-secondary btn-sm btn-destructive" id="btnClearAllRecords">Clear All</button>
+            </div>
+          </div>
+
+          <!-- Puzzles Table Container -->
+          <div class="paper-card table-wrapper" id="puzzlesTableCard">
+            <table class="records-table" id="puzzlesTable">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 54px;">#</th>
+                  <th scope="col" style="width: 80px;">Center</th>
+                  <th scope="col" style="width: 140px;">Outer</th>
+                  <th scope="col">Vocabulary</th>
+                  <th scope="col">Pangrams</th>
+                  <th scope="col">Max Score</th>
+                  <th scope="col">Audit Status</th>
+                  <th scope="col" style="width: 140px; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="puzzlesTableBody"></tbody>
+            </table>
+
+            <div id="libraryEmptyState" class="empty-state" hidden>
+              <div class="empty-state-icon" aria-hidden="true">🐝</div>
+              <h3 class="empty-state-title">No Honeycombs in Library</h3>
+              <p class="empty-state-desc">Start building your collection using the guided creator or import a pre-existing CSV file.</p>
+              <div class="empty-state-actions">
+                <button type="button" class="interactive-tactile btn-primary" id="btnEmptyStartWizard">Launch Creator</button>
+                <button type="button" class="interactive-tactile btn-secondary" id="btnEmptyUpload">Upload CSV</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB PANEL 3: LIVE CSV PREVIEW -->
+        <section id="panelPreview" class="tab-panel" hidden aria-labelledby="tabBtnPreview">
+          <div class="preview-toolbar">
+            <div class="preview-mode-switch" role="group" aria-label="Serialization format view">
+              <button type="button" class="mode-btn mode-btn--active interactive-tactile" id="btnModeFriendly">Structured Ledger</button>
+              <button type="button" class="mode-btn interactive-tactile" id="btnModeRaw">Raw RFC 4180 Serialization</button>
+            </div>
+            <div class="preview-actions">
+              <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btnCopyRawCsv">Copy to Clipboard</button>
+              <button type="button" class="interactive-tactile btn-primary btn-sm" id="btnTriggerExportFromPreview">Download CSV</button>
+            </div>
+          </div>
+
+          <div id="previewFriendlyContainer" class="paper-card">
+            <div class="serialization-banner">
+              <span><strong>RFC Schema Header:</strong> <code>center_letter,outer_letters,words</code></span>
+              <span>Words are serialized as single-space-delimited strings compliant with game engines.</span>
+            </div>
+            <div class="table-wrapper">
+              <table class="records-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Row</th>
+                    <th scope="col">Center</th>
+                    <th scope="col">Outer</th>
+                    <th scope="col">Vocabulary Sample</th>
+                    <th scope="col">Word Count</th>
+                    <th scope="col">Pangrams</th>
+                  </tr>
+                </thead>
+                <tbody id="friendlyPreviewBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="previewRawContainer" class="paper-card" hidden>
+            <textarea id="rawCsvTextArea" class="raw-csv-editor" readonly spellcheck="false" aria-label="Raw CSV Serialization Output"></textarea>
+          </div>
+        </section>
+
+        <!-- TAB PANEL 4: ONLINE DICTIONARY SETTINGS -->
+        <section id="panelSettings" class="tab-panel" hidden aria-labelledby="tabBtnSettings">
+          <div class="paper-card settings-card">
+            <div class="settings-header">
+              <h3 class="settings-title">Online Lexicon Repository Engine</h3>
+              <p class="settings-description">
+                Configure which remote word repository the auto-solver engine pulls from to calculate valid anagrams.
+              </p>
+            </div>
+
+            <div class="paper-input-group">
+              <label for="selectOnlineSource" class="paper-label">Primary Remote Source</label>
+              <select id="selectOnlineSource" class="paper-input">
+                <option value="scrabble">Standard Scrabble/Bee TWL06 (~178,000 words via jsDelivr CDN)</option>
+                <option value="common">Google 20k Common English (~20,000 words - Fast download)</option>
+                <option value="custom">Custom Remote Plaintext URL (CORS enabled)</option>
+              </select>
+            </div>
+
+            <div class="paper-input-group" id="customUrlGroup" hidden>
+              <label for="inputCustomUrl" class="paper-label">Custom Wordlist URL</label>
+              <input type="url" id="inputCustomUrl" class="paper-input" placeholder="https://domain.com/words.txt">
+              <p class="field-hint">Must return plaintext with words delimited by newlines or spaces, and permit cross-origin requests.</p>
+            </div>
+
+            <div class="helper-actions-tray">
+              <button type="button" class="interactive-tactile btn-primary btn-sm" id="btnPreloadOnlineDictionary">Pre-load Lexicon Now</button>
+              <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btnClearCachedDictionary">Purge Local Cache</button>
+            </div>
+
+            <div class="lexicon-status-box" id="lexiconStatusBox">
+              <span id="lexiconStatusText">Lexicon Status: Idle (Will download automatically when you run auto-solve).</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- MOBILE-FIRST THUMB-ZONE BOTTOM DOCK -->
+    <nav class="app-bottom-dock" aria-label="Mobile Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Hydrated dynamically from APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+  </div>
+
+  <!-- EXPORT MODAL DIALOG -->
+  <div class="modal-backdrop" id="modalExport" hidden role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+    <div class="modal-window paper-card">
+      <header class="modal-header">
+        <h3 id="exportModalTitle" class="modal-title">Export Dataset</h3>
+        <button type="button" class="modal-close" data-close="modalExport" aria-label="Close dialog">&times;</button>
+      </header>
+      <div class="modal-body">
+        <div class="export-stat-summary">
+          <div class="summary-item">
+            <span>Total Honeycombs:</span>
+            <strong id="exportCountPuzzles">0</strong>
+          </div>
+          <div class="summary-item">
+            <span>Total Vocabulary:</span>
+            <strong id="exportCountWords">0</strong>
+          </div>
+          <div class="summary-item">
+            <span>Header Signature:</span>
+            <code>center_letter,outer_letters,words</code>
+          </div>
+        </div>
+
+        <div class="paper-input-group">
+          <label for="exportFileName" class="paper-label">Target File Name</label>
+          <input type="text" id="exportFileName" class="paper-input" value="puzzles.csv">
+          <p class="field-hint">The target game engine specifically expects <code>./puzzles.csv</code>.</p>
+        </div>
+
+        <div class="paper-input-group">
+          <span class="paper-label">Export Scope</span>
+          <div class="radio-stack">
+            <label class="radio-tile">
+              <input type="radio" name="exportMode" value="all" checked>
+              <span>Entire Dataset (All <span id="radioCountAll">0</span> honeycombs)</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="exportMode" value="newOnly">
+              <span>New Additions Only (Crafted this session)</span>
+            </label>
+            <label class="radio-tile">
+              <input type="radio" name="exportMode" value="template">
+              <span>Blank RFC Header Template (0 rows)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="interactive-tactile btn-secondary" data-close="modalExport">Cancel</button>
+        <button type="button" class="interactive-tactile btn-primary" id="btnConfirmDownload">Download CSV File</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- CONFIRMATION MODAL DIALOG -->
+  <div class="modal-backdrop" id="modalConfirm" hidden role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+    <div class="modal-window modal-window--compact paper-card">
+      <header class="modal-header">
+        <h3 id="confirmModalTitle" class="modal-title">Please Confirm</h3>
+        <button type="button" class="modal-close" data-close="modalConfirm" aria-label="Close dialog">&times;</button>
+      </header>
+      <div class="modal-body">
+        <p id="confirmModalMessage" class="confirm-message">Are you sure you wish to proceed?</p>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="interactive-tactile btn-secondary" data-close="modalConfirm">Cancel</button>
+        <button type="button" class="interactive-tactile btn-primary btn-destructive" id="btnConfirmAction">Proceed</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

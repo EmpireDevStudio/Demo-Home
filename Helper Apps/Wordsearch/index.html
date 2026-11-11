@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Curator Ledger — Word Search CSV Studio</title>
+  <meta name="description" content="Turnkey artisanal ledger and CSV authoring studio for grid-compliant word search puzzle engines.">
+  <meta name="theme-color" content="#F5F3ED">
+
+  <!-- Typography: High-legibility system fonts & elegant editorial serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Skip link for keyboard accessibility -->
+  <a href="#mainContent" class="skip-link">Skip to operational ledger</a>
+
+  <div class="app-shell">
+    <!-- UNIVERSAL STANDARDIZED PAGE HEADER -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__controls">
+        <!-- Back Navigation Button -->
+        <button type="button" id="btnHeaderBack" class="btn-back-nav interactive-tactile" aria-label="Navigate to launch overview">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="lblBackNav">Overview</span>
+        </button>
+
+        <!-- Contextual Header Actions -->
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <span id="draftIndicator" class="draft-indicator hidden" title="Draft changes stored locally">
+            <span class="draft-dot" aria-hidden="true"></span>
+            <span class="draft-text">Draft Preserved</span>
+          </span>
+          <button type="button" id="btnQuickTour" class="interactive-tactile btn-header-action" aria-label="Open curator specifications guide">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>Guide</span>
+          </button>
+          <button type="button" id="btnExportMenu" class="interactive-tactile btn-header-action btn-primary-accent" aria-label="Open export CSV menu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Export CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">PUZZLE ENGINE SUITE</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Curator Ledger</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Curate, validate, and simulate grid-compliant CSV ledgers tailored for word search engines.
+        </p>
+      </div>
+    </header>
+
+    <!-- MAIN INTERFACE BODY -->
+    <main id="mainContent" class="app-main-body" role="main">
+      
+      <!-- VIEW 1: LAUNCHPAD & ONBOARDING TILES -->
+      <section id="viewWelcome" class="view-panel" aria-labelledby="headingWelcome">
+        <div class="view-intro-card paper-surface">
+          <div class="view-intro-icon" aria-hidden="true">📜</div>
+          <div class="view-intro-text">
+            <h2 id="headingWelcome" class="view-intro-title">Select Operational Workflow</h2>
+            <p class="view-intro-desc">
+              Initialize a new publication dataset, inspect an existing ledger for matrix overflow defects, or append new themes with automated RFC 4180 serialization.
+            </p>
+          </div>
+        </div>
+
+        <div class="launch-cards-grid">
+          <!-- Pathway A: Append -->
+          <article class="paper-card launch-card" id="cardOptionAppend">
+            <div class="launch-card__top">
+              <span class="badge-accent badge-accent--sage">Option A</span>
+              <div class="launch-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+              </div>
+            </div>
+            <h3 class="paper-card__title">Append Existing CSV</h3>
+            <p class="paper-card__description">
+              Upload an existing <code>puzzles.csv</code>. The parser audits current entries, verifies matrix dimensions, and allows you to append new themed records.
+            </p>
+            <div class="launch-card__actions">
+              <label class="interactive-tactile btn-action-card upload-label">
+                <span>Upload & Append</span>
+                <input type="file" id="fileInputAppend" accept=".csv,text/csv" class="sr-only">
+              </label>
+            </div>
+          </article>
+
+          <!-- Pathway B: Fresh Dataset -->
+          <article class="paper-card launch-card" id="cardOptionFresh">
+            <div class="launch-card__top">
+              <span class="badge-accent badge-accent--terracotta">Option B</span>
+              <div class="launch-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+              </div>
+            </div>
+            <h3 class="paper-card__title">Create Fresh Dataset</h3>
+            <p class="paper-card__description">
+              Start with an unblemished matrix. Our guided wizard automatically formats 4-column schemas and enforces grid bounds (8×8, 10×10, 12×12).
+            </p>
+            <div class="launch-card__actions">
+              <button type="button" id="btnStartFresh" class="interactive-tactile btn-action-card btn-action-primary">
+                Start New Dataset
+              </button>
+            </div>
+          </article>
+
+          <!-- Pathway C: Review & Inspect -->
+          <article class="paper-card launch-card" id="cardOptionReview">
+            <div class="launch-card__top">
+              <span class="badge-accent badge-accent--ochre">Option C</span>
+              <div class="launch-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
+            </div>
+            <h3 class="paper-card__title">Audit Existing File</h3>
+            <p class="paper-card__description">
+              Examine an existing file for placement collisions, character overflow flags, and duplicate words before pushing updates live to production.
+            </p>
+            <div class="launch-card__actions">
+              <label class="interactive-tactile btn-action-card upload-label">
+                <span>Upload & Inspect</span>
+                <input type="file" id="fileInputInspect" accept=".csv,text/csv" class="sr-only">
+              </label>
+            </div>
+          </article>
+        </div>
+
+        <!-- Pre-curated Cocktail Demo Shelf -->
+        <aside class="paper-surface demo-shelf">
+          <div class="demo-shelf__content">
+            <span class="demo-shelf__badge" aria-hidden="true">🍸</span>
+            <div>
+              <h4 class="demo-shelf__title">Load Reference Cocktail Dataset</h4>
+              <p class="demo-shelf__desc">
+                Populate the workspace instantly with our standard 5-theme, 40-word verified mixology dataset to test simulation algorithms and audit logs.
+              </p>
+            </div>
+          </div>
+          <button type="button" id="btnLoadDefaultDataset" class="interactive-tactile btn-secondary-compact">
+            Load Master Demo
+          </button>
+        </aside>
+      </section>
+
+      <!-- VIEW 2: ACTIVE WORKSPACE & LEDGER -->
+      <section id="viewWorkspace" class="view-panel hidden" aria-labelledby="lblDatasetName">
+        <!-- Dataset Overview Summary Bar -->
+        <div class="paper-card dataset-summary-card">
+          <div class="dataset-summary-card__left">
+            <div class="dataset-title-cluster">
+              <h2 id="lblDatasetName" class="dataset-title">Active Ledger</h2>
+              <span id="badgeRecordCount" class="counter-pill">0 Entries</span>
+              <span id="badgeHealthSummary" class="status-pill status-pill--sage">0 Errors</span>
+            </div>
+            <p class="dataset-caption">
+              Conforms to target word search fields: <code>title</code>, <code>mini</code> (8×8), <code>midi</code> (10×10), and <code>main</code> (12×12).
+            </p>
+          </div>
+
+          <div class="dataset-summary-card__actions">
+            <button type="button" id="btnOpenCreator" class="interactive-tactile btn-primary-accent">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add Puzzle</span>
+            </button>
+            <button type="button" id="btnSwitchViewMode" class="interactive-tactile btn-secondary-compact" aria-label="Toggle between card view and technical table">
+              <span id="lblViewMode">Technical View</span>
+            </button>
+            <button type="button" id="btnResetWorkspace" class="interactive-tactile btn-secondary-compact" aria-label="Close current ledger">
+              Close File
+            </button>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs & Search Toolbar -->
+        <div class="workspace-toolbar">
+          <div class="segmented-control" role="tablist" aria-label="Workspace perspectives">
+            <button type="button" class="segmented-tab active" data-tab="tabLedger" role="tab" aria-selected="true" aria-controls="tabLedger">
+              Ledger Cards (<span id="tabCountLedger">0</span>)
+            </button>
+            <button type="button" class="segmented-tab" data-tab="tabRawPreview" role="tab" aria-selected="false" aria-controls="tabRawPreview">
+              Raw RFC CSV
+            </button>
+            <button type="button" class="segmented-tab" data-tab="tabHealthAudit" role="tab" aria-selected="false" aria-controls="tabHealthAudit">
+              Health Audit (<span id="tabCountWarnings">0</span>)
+            </button>
+          </div>
+
+          <div class="search-field-wrapper">
+            <svg class="search-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="search" id="inputLedgerSearch" class="paper-input search-field-input" placeholder="Search by title or cocktail word..." autocomplete="off">
+          </div>
+        </div>
+
+        <!-- TAB 1: LEDGER LIST (Friendly Cards & Technical Table) -->
+        <div id="tabLedger" class="tab-panel active" role="tabpanel">
+          <!-- Card Grid Container -->
+          <div id="friendlyCardContainer" class="card-feed-container ledger-cards-grid"></div>
+
+          <!-- Technical Table (Sunken Paper Surface) -->
+          <div id="techTableContainer" class="tech-table-wrapper paper-surface hidden">
+            <div class="table-scroll">
+              <table class="tech-table">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width: 48px;">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Mini (8×8 • ≤8)</th>
+                    <th scope="col">Midi (10×10 • ≤10)</th>
+                    <th scope="col">Main (12×12 • ≤12)</th>
+                    <th scope="col" style="width: 140px; text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="techTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Empty State Container -->
+          <div id="emptyWorkspaceState" class="paper-card empty-state-box hidden">
+            <div class="empty-state-icon" aria-hidden="true">📜</div>
+            <h3 class="paper-card__title" id="emptyStateHeading">No Records Currently Documented</h3>
+            <p class="paper-card__description" id="emptyStateDesc">
+              This operational log is clear. Create a new entry using the primary action below to initiate records.
+            </p>
+            <button type="button" class="interactive-tactile btn-primary-accent btn-open-creator-empty">
+              Create First Puzzle
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: RAW CSV INSPECTOR -->
+        <div id="tabRawPreview" class="tab-panel hidden" role="tabpanel">
+          <div class="paper-card raw-preview-card">
+            <div class="raw-preview-header">
+              <div>
+                <h3 class="paper-card__title">RFC 4180 Serialization Preview</h3>
+                <span class="raw-stat" id="lblRawStats">0 bytes • 0 records</span>
+              </div>
+              <button type="button" id="btnCopyRawCSV" class="interactive-tactile btn-secondary-compact" aria-label="Copy CSV content to clipboard">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>Copy CSV Text</span>
+              </button>
+            </div>
+            <label for="rawCsvOutput" class="sr-only">Raw CSV Text Inspector</label>
+            <textarea id="rawCsvOutput" class="raw-csv-textarea" readonly spellcheck="false"></textarea>
+          </div>
+        </div>
+
+        <!-- TAB 3: INTEGRITY & AUDIT REPORT -->
+        <div id="tabHealthAudit" class="tab-panel hidden" role="tabpanel">
+          <div class="paper-card audit-report-card">
+            <div class="audit-summary-head">
+              <h3 class="paper-card__title">Engine Matrix Diagnostic Audit</h3>
+              <p class="paper-card__description">
+                Verifies every word length against maximum grid boundaries to guarantee zero silent drops or matrix collision crashes when loaded by the game runtime.
+              </p>
+            </div>
+            <div id="auditReportList" class="audit-issues-list" role="feed"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- UNIVERSAL ERGONOMIC BOTTOM THUMB DOCK (MOBILE-FIRST) -->
+    <nav class="app-bottom-dock" aria-label="Primary Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Populated via APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1: STEP-BY-STEP GUIDED PUZZLE ASSISTANT (WIZARD)
+       ========================================================================= -->
+  <dialog id="modalCreator" class="modal-dialog modal-dialog--wide" aria-labelledby="creatorTitle">
+    <div class="paper-dialog-surface">
+      <div class="modal-head">
+        <div>
+          <span class="modal-eyebrow" id="creatorSuperTitle">Curator Assistant</span>
+          <h2 class="dialog-title" id="creatorTitle">Create New Puzzle Entry</h2>
+        </div>
+        <button type="button" class="btn-dialog-close" id="btnCloseCreator" aria-label="Close Assistant">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Stepper Progress Dots -->
+      <nav class="wizard-stepper" aria-label="Wizard Steps">
+        <button type="button" class="step-indicator active" data-step="1">
+          <span class="indicator-num">1</span>
+          <span class="indicator-label">Theme</span>
+        </button>
+        <span class="indicator-connector" aria-hidden="true"></span>
+        <button type="button" class="step-indicator" data-step="2">
+          <span class="indicator-num">2</span>
+          <span class="indicator-label">Mini (8×8)</span>
+        </button>
+        <span class="indicator-connector" aria-hidden="true"></span>
+        <button type="button" class="step-indicator" data-step="3">
+          <span class="indicator-num">3</span>
+          <span class="indicator-label">Midi (10×10)</span>
+        </button>
+        <span class="indicator-connector" aria-hidden="true"></span>
+        <button type="button" class="step-indicator" data-step="4">
+          <span class="indicator-num">4</span>
+          <span class="indicator-label">Main (12×12)</span>
+        </button>
+        <span class="indicator-connector" aria-hidden="true"></span>
+        <button type="button" class="step-indicator" data-step="5">
+          <span class="indicator-num">5</span>
+          <span class="indicator-label">Simulation</span>
+        </button>
+      </nav>
+
+      <!-- Wizard Step Panels -->
+      <div class="wizard-body">
+        <!-- STEP 1: THEME IDENTITY -->
+        <section class="wizard-step active" id="step1" aria-labelledby="step1Heading">
+          <div class="step-lead">
+            <h3 id="step1Heading" class="step-heading">Step 1: Set Puzzle Theme Identity</h3>
+            <p class="step-subheading">Define the distinctive cocktail or spirits theme label rendered in the application header.</p>
+          </div>
+
+          <div class="paper-input-group">
+            <label for="inputPuzzleTitle" class="paper-label">
+              Theme Title <span class="required-mark" aria-hidden="true">*</span>
+              <span class="paper-label__hint">Column: <code>title</code></span>
+            </label>
+            <input type="text" id="inputPuzzleTitle" class="paper-input" placeholder="e.g. Classic Cocktails, Mezcal Palenques, Bar Tools" maxlength="64" required>
+            <div class="field-feedback" id="feedbackTitle" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div class="inspiration-panel">
+            <span class="inspiration-panel__title">Curator Theme Suggestions:</span>
+            <div class="inspiration-chips-row">
+              <button type="button" class="filter-chip theme-sugg-chip">Smoky Islay Malts</button>
+              <button type="button" class="filter-chip theme-sugg-chip">Aperitivo Culture</button>
+              <button type="button" class="filter-chip theme-sugg-chip">Mezcal Palenques</button>
+              <button type="button" class="filter-chip theme-sugg-chip">Tiki Mythology</button>
+              <button type="button" class="filter-chip theme-sugg-chip">Deco Hotel Bars</button>
+              <button type="button" class="filter-chip theme-sugg-chip">Botanical Amari</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 2: MINI TIER (8×8) -->
+        <section class="wizard-step hidden" id="step2" aria-labelledby="step2Heading">
+          <div class="step-lead">
+            <h3 id="step2Heading" class="step-heading">Step 2: Mini Tier (8×8 Grid)</h3>
+            <p class="step-subheading">Word length must be <strong>2 to 8 letters</strong>. Target length: <strong>5 to 7 words</strong>.</p>
+          </div>
+
+          <div class="tier-editor-layout">
+            <div class="tier-editor-main">
+              <div class="paper-input-group">
+                <label for="tagInputMini" class="paper-label">
+                  Add Word (Press Enter or Comma)
+                  <span class="paper-label__hint">A–Z letters only (max 8)</span>
+                </label>
+                <div class="tag-input-row">
+                  <input type="text" id="tagInputMini" class="paper-input uppercase-input" placeholder="e.g. SOUR, FIZZ, MULE..." maxlength="8">
+                  <button type="button" id="btnAddWordMini" class="interactive-tactile btn-secondary-compact">Add</button>
+                </div>
+                <div class="field-feedback" id="feedbackMini" role="alert" aria-live="polite"></div>
+              </div>
+
+              <div class="tags-shelf" id="tagsShelfMini" aria-label="Selected Mini words"></div>
+              <div class="tier-stats-row" id="statsRowMini">
+                <span>0 words entered</span>
+                <span class="tier-spec">Matrix: 8×8 (Max 8 letters)</span>
+              </div>
+            </div>
+
+            <aside class="tier-suggestions-aside">
+              <span class="aside-title">Quick Add Mini</span>
+              <div class="chips-pool" id="poolMini">
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">SOUR</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">FIZZ</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">MULE</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">PUNCH</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">GIMLET</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">SMASH</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">JIGGER</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="mini">SHAKER</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- STEP 3: MIDI TIER (10×10) -->
+        <section class="wizard-step hidden" id="step3" aria-labelledby="step3Heading">
+          <div class="step-lead">
+            <h3 id="step3Heading" class="step-heading">Step 3: Midi Tier (10×10 Grid)</h3>
+            <p class="step-subheading">Word length must be <strong>2 to 10 letters</strong>. Target length: <strong>6 to 8 words</strong>.</p>
+          </div>
+
+          <div class="tier-editor-layout">
+            <div class="tier-editor-main">
+              <div class="paper-input-group">
+                <label for="tagInputMidi" class="paper-label">
+                  Add Word (Press Enter or Comma)
+                  <span class="paper-label__hint">A–Z letters only (max 10)</span>
+                </label>
+                <div class="tag-input-row">
+                  <input type="text" id="tagInputMidi" class="paper-input uppercase-input" placeholder="e.g. NEGRONI, MARTINI, DAIQUIRI..." maxlength="10">
+                  <button type="button" id="btnAddWordMidi" class="interactive-tactile btn-secondary-compact">Add</button>
+                </div>
+                <div class="field-feedback" id="feedbackMidi" role="alert" aria-live="polite"></div>
+              </div>
+
+              <div class="tags-shelf" id="tagsShelfMidi" aria-label="Selected Midi words"></div>
+              <div class="tier-stats-row" id="statsRowMidi">
+                <span>0 words entered</span>
+                <span class="tier-spec">Matrix: 10×10 (Max 10 letters)</span>
+              </div>
+            </div>
+
+            <aside class="tier-suggestions-aside">
+              <span class="aside-title">Quick Add Midi</span>
+              <div class="chips-pool" id="poolMidi">
+                <button type="button" class="filter-chip chip-add-word" data-tier="midi">NEGRONI</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="midi">MARTINI</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="midi">DAIQUIRI</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="midi">SIDECAR</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="midi">PALOMA</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="midi">COLLINS</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="midi">SAZERAC</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- STEP 4: MAIN TIER (12×12) -->
+        <section class="wizard-step hidden" id="step4" aria-labelledby="step4Heading">
+          <div class="step-lead">
+            <h3 id="step4Heading" class="step-heading">Step 4: Main Tier (12×12 Grid)</h3>
+            <p class="step-subheading">Word length must be <strong>2 to 12 letters</strong>. Target length: <strong>7 to 8 words</strong>.</p>
+          </div>
+
+          <div class="tier-editor-layout">
+            <div class="tier-editor-main">
+              <div class="paper-input-group">
+                <label for="tagInputMain" class="paper-label">
+                  Add Word (Press Enter or Comma)
+                  <span class="paper-label__hint">A–Z letters only (max 12)</span>
+                </label>
+                <div class="tag-input-row">
+                  <input type="text" id="tagInputMain" class="paper-input uppercase-input" placeholder="e.g. MANHATTAN, BOULEVARDIER..." maxlength="12">
+                  <button type="button" id="btnAddWordMain" class="interactive-tactile btn-secondary-compact">Add</button>
+                </div>
+                <div class="field-feedback" id="feedbackMain" role="alert" aria-live="polite"></div>
+              </div>
+
+              <div class="tags-shelf" id="tagsShelfMain" aria-label="Selected Main words"></div>
+              <div class="tier-stats-row" id="statsRowMain">
+                <span>0 words entered</span>
+                <span class="tier-spec">Matrix: 12×12 (Max 12 letters)</span>
+              </div>
+            </div>
+
+            <aside class="tier-suggestions-aside">
+              <span class="aside-title">Quick Add Main</span>
+              <div class="chips-pool" id="poolMain">
+                <button type="button" class="filter-chip chip-add-word" data-tier="main">MANHATTAN</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="main">MARGARITA</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="main">BOULEVARDIER</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="main">VIEUXCARRE</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="main">COSMOPOLITAN</button>
+                <button type="button" class="filter-chip chip-add-word" data-tier="main">AVIATION</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- STEP 5: BOARD SIMULATION & DIAGNOSTIC -->
+        <section class="wizard-step hidden" id="step5" aria-labelledby="step5Heading">
+          <div class="step-lead">
+            <h3 id="step5Heading" class="step-heading">Step 5: Board Placement Simulation</h3>
+            <p class="step-subheading">Simulate the board generation engine with seeded placement across 8 directions.</p>
+          </div>
+
+          <div class="sim-tier-switch" role="tablist" aria-label="Simulation grid dimension">
+            <button type="button" class="filter-chip sim-tier-tab active" data-sim="mini">Mini (8×8)</button>
+            <button type="button" class="filter-chip sim-tier-tab" data-sim="midi">Midi (10×10)</button>
+            <button type="button" class="filter-chip sim-tier-tab" data-sim="main">Main (12×12)</button>
+          </div>
+
+          <div class="simulation-dashboard">
+            <div class="sim-board-wrap">
+              <div id="simGrid" class="sim-grid grid-8" aria-label="Word search simulation matrix"></div>
+            </div>
+            <div class="sim-details-wrap">
+              <div class="paper-surface sim-card">
+                <h4 class="sim-card-title">Collision Diagnostic</h4>
+                <div id="simStatusSummary" class="sim-status-list"></div>
+              </div>
+              <div class="paper-surface sim-card">
+                <h4 class="sim-card-title">Placed Target Words</h4>
+                <ul id="simPlacedWords" class="sim-words-list"></ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Modal Footer Controls -->
+      <div class="modal-footer">
+        <button type="button" id="btnWizardPrev" class="interactive-tactile btn-secondary-compact" disabled>
+          Back
+        </button>
+        <div class="modal-footer-right">
+          <button type="button" id="btnWizardNext" class="interactive-tactile btn-primary-accent">
+            Continue to Mini Tier
+          </button>
+          <button type="button" id="btnWizardSave" class="interactive-tactile btn-primary-accent hidden">
+            Commit to Ledger
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- =========================================================================
+       MODAL 2: RFC 4180 EXPORT OPERATIONS
+       ========================================================================= -->
+  <dialog id="modalExport" class="modal-dialog" aria-labelledby="exportHeading">
+    <div class="paper-dialog-surface">
+      <div class="modal-head">
+        <div>
+          <span class="modal-eyebrow">Production Ready</span>
+          <h2 class="dialog-title" id="exportHeading">Export CSV Ledger</h2>
+        </div>
+        <button type="button" class="btn-dialog-close" id="btnCloseExport" aria-label="Close Export Modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-form-body">
+        <div class="paper-input-group">
+          <label for="exportFilename" class="paper-label">Destination Filename</label>
+          <input type="text" id="exportFilename" class="paper-input" value="puzzles.csv">
+          <span class="paper-label__hint">Standard puzzle runtime loads <code>puzzles.csv</code> by default.</span>
+        </div>
+
+        <div class="export-actions-stack">
+          <button type="button" id="btnDownloadFullCSV" class="interactive-tactile btn-action-card btn-action-primary">
+            <span>Download Complete Ledger (<span id="lblExportCountTotal">0</span> entries)</span>
+          </button>
+          <button type="button" id="btnDownloadSessionCSV" class="interactive-tactile btn-action-card">
+            <span>Download New Session Puzzles Only (<span id="lblExportCountSession">0</span>)</span>
+          </button>
+          <button type="button" id="btnDownloadBlankTemplate" class="interactive-tactile btn-action-card">
+            <span>Download Blank CSV Template</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-footer modal-footer--single">
+        <button type="button" class="interactive-tactile btn-secondary-compact w-100" id="btnDismissExport">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- =========================================================================
+       MODAL 3: CURATOR SPECIFICATIONS & ENGINE RULES
+       ========================================================================= -->
+  <dialog id="modalGuide" class="modal-dialog" aria-labelledby="guideHeading">
+    <div class="paper-dialog-surface">
+      <div class="modal-head">
+        <div>
+          <span class="modal-eyebrow">Standard Architecture</span>
+          <h2 class="dialog-title" id="guideHeading">Engine Specifications</h2>
+        </div>
+        <button type="button" class="btn-dialog-close" id="btnCloseGuide" aria-label="Close Guide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="guide-rules-list">
+        <div class="rule-block">
+          <div class="rule-badge">1</div>
+          <div class="rule-content">
+            <h4>4-Column Header Structure</h4>
+            <p>Every dataset must retain the canonical row: <code>title,mini,midi,main</code>. Sub-tier words are wrapped in double quotes as comma-separated values.</p>
+          </div>
+        </div>
+        <div class="rule-block">
+          <div class="rule-badge">2</div>
+          <div class="rule-content">
+            <h4>Grid Dimension Caps</h4>
+            <p><strong>Mini:</strong> 8×8 grid → Maximum word length is <strong>8</strong>.<br>
+               <strong>Midi:</strong> 10×10 grid → Maximum word length is <strong>10</strong>.<br>
+               <strong>Main:</strong> 12×12 grid → Maximum word length is <strong>12</strong>.</p>
+          </div>
+        </div>
+        <div class="rule-block">
+          <div class="rule-badge">3</div>
+          <div class="rule-content">
+            <h4>Character Sanitization</h4>
+            <p>Game runtime automatically removes whitespace, punctuation, and hyphens. For example, <code>OLD-FASHIONED</code> evaluates as <code>OLDFASHIONED</code> (12 characters).</p>
+          </div>
+        </div>
+        <div class="rule-block">
+          <div class="rule-badge">4</div>
+          <div class="rule-content">
+            <h4>Deterministic Board Fit</h4>
+            <p>The placement engine tests random coordinates over 120 iterations. Keeping word density between 5 and 8 words per tier guarantees 100% placement success.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer modal-footer--single">
+        <button type="button" class="interactive-tactile btn-primary-accent w-100" id="btnAckGuide">
+          I Understand the Specifications
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Tactile Feedback Banner / Toast -->
+  <div id="appToast" class="tactile-toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

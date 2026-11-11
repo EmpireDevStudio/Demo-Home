@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F5F3ED">
+  <meta name="description" content="Artisanal CSV riddle vault curator and dataset manager for the Cocktail Lounge Hangman game.">
+  <title>Curator Studio — Mixologist's Puzzle Vault</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Charter:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Physical Light and Paper Fiber Layers -->
+  <div class="ambient-light-layer" aria-hidden="true"></div>
+  <div class="paper-texture-layer" aria-hidden="true"></div>
+
+  <!-- Global Toast Announcer -->
+  <div id="toast" class="toast-capsule" role="status" aria-live="polite"></div>
+
+  <div class="app-viewport-shell">
+
+    <!-- ===================================================================
+         UNIFORM STANDARDIZED PAGE HEADER
+         =================================================================== -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__controls">
+        <!-- Back Navigation Button (Standardized 44x44px Touch Target) -->
+        <button type="button" id="btn-global-back" class="btn-back-nav interactive-tactile" aria-label="Navigate to welcome overview">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="back-nav-label">Overview</span>
+        </button>
+
+        <!-- Status Pill & Contextual Actions Tray -->
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <div id="dataset-status-pill" class="status-pill status-pill--idle">
+            <span class="status-indicator-dot" aria-hidden="true"></span>
+            <span id="dataset-status-text">Cellar Empty</span>
+          </div>
+          <button type="button" id="header-draft-clear-btn" class="interactive-tactile btn-ghost btn-sm" title="Clear working draft from browser cache" style="display: none;">
+            Reset Draft
+          </button>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">MIXOLOGIST'S PUZZLE VAULT</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Cocktail Cellar Curator</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Curate, expand, and audit daily challenge riddles and vault puzzles for the Cocktail Lounge Hangman game. Zero spreadsheet hassle required.
+        </p>
+      </div>
+    </header>
+
+    <!-- ===================================================================
+         MAIN VIEWPORT FLOW
+         =================================================================== -->
+    <main class="main-content-flow" id="main-content">
+
+      <!-- VIEW 1: WELCOME & INGESTION WORKSPACE -->
+      <section id="welcome-view" class="curator-view view-active" aria-label="Dataset Ingestion and Setup">
+        <div class="welcome-card-wrapper card-feed-container">
+          
+          <div class="welcome-hero-banner">
+            <div class="hero-seal-badge" aria-hidden="true">🍸</div>
+            <h2 class="welcome-hero-title">Riddle Vault Setup</h2>
+            <p class="welcome-hero-text">
+              Select an operational intake method to calibrate your cocktail puzzle ledger. All imported files are validated against RFC 4180 standards.
+            </p>
+          </div>
+
+          <div class="welcome-choices-grid">
+
+            <!-- Choice A: Append to CSV -->
+            <article class="paper-card choice-card" id="choice-append-card">
+              <div class="choice-card__icon" aria-hidden="true">📂</div>
+              <div class="choice-card__body">
+                <h3 class="paper-card__title">Add to Existing CSV</h3>
+                <p class="paper-card__description">
+                  Upload your active <code>puzzles.csv</code> to append fresh drinks, bar tools, and botanical spirits without disrupting current rotation order.
+                </p>
+              </div>
+              <div class="choice-card__action">
+                <label class="interactive-tactile btn-primary full-width" for="file-upload-append">
+                  <span>Upload &amp; Append</span>
+                  <input type="file" id="file-upload-append" accept=".csv,text/csv" class="sr-only">
+                </label>
+              </div>
+            </article>
+
+            <!-- Choice B: Create Fresh -->
+            <article class="paper-card choice-card choice-card--highlight" id="choice-create-card">
+              <div class="choice-card__icon" aria-hidden="true">✨</div>
+              <div class="choice-card__body">
+                <div class="paper-card__status-indicator paper-card__status-indicator--sage" style="align-self: flex-start; margin-bottom: 6px;">
+                  <span class="status-dot"></span>
+                  <span>Recommended</span>
+                </div>
+                <h3 class="paper-card__title">Create Fresh Dataset</h3>
+                <p class="paper-card__description">
+                  Initiate a pristine puzzle collection pre-seeded with handcrafted cellar cocktail classics, tools, and tasting lore.
+                </p>
+              </div>
+              <div class="choice-card__action">
+                <button type="button" id="choice-create-btn" class="interactive-tactile btn-primary full-width">
+                  Start Fresh Vault
+                </button>
+              </div>
+            </article>
+
+            <!-- Choice C: Audit Existing -->
+            <article class="paper-card choice-card" id="choice-review-card">
+              <div class="choice-card__icon" aria-hidden="true">🔍</div>
+              <div class="choice-card__body">
+                <h3 class="paper-card__title">Audit &amp; Inspect CSV</h3>
+                <p class="paper-card__description">
+                  Load an existing catalogue to search entries, refine clues, fix typos, verify calendar rotation, or reorganize the cellar.
+                </p>
+              </div>
+              <div class="choice-card__action">
+                <label class="interactive-tactile btn-secondary full-width" for="file-upload-review">
+                  <span>Inspect Existing</span>
+                  <input type="file" id="file-upload-review" accept=".csv,text/csv" class="sr-only">
+                </label>
+              </div>
+            </article>
+
+          </div>
+
+          <div class="schema-spec-banner">
+            <span class="schema-spec-icon" aria-hidden="true">ℹ️</span>
+            <span>Target Schema: <strong>category</strong>, <strong>answer</strong>, <strong>clue</strong>, <strong>note</strong> (RFC 4180 Escaped)</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VIEW 2: WORKSPACE & CELLAR MANAGEMENT -->
+      <section id="workspace-view" class="curator-view" aria-label="Puzzle Management Workspace">
+        
+        <!-- Action Toolbar -->
+        <div class="workspace-action-bar">
+          <div class="bar-left">
+            <button type="button" id="toolbar-new-record-btn" class="interactive-tactile btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Add Riddle</span>
+            </button>
+            <button type="button" id="toolbar-export-btn" class="interactive-tactile btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Export CSV…</span>
+            </button>
+          </div>
+
+          <div class="bar-right">
+            <div class="search-well">
+              <span class="search-well__icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </span>
+              <input type="search" id="catalogue-search-input" class="search-well__input" placeholder="Search answers, lore, or clues…" aria-label="Search puzzle ledger">
+            </div>
+
+            <div class="filter-dropdown-wrapper">
+              <select id="catalogue-category-filter" class="paper-select" aria-label="Filter by Category">
+                <option value="ALL">All Categories</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="workspace-stats-grid">
+          <div class="stat-card">
+            <span class="stat-card__number" id="metric-total-count">0</span>
+            <span class="stat-card__label">Total Puzzles</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__number" id="metric-new-count">0</span>
+            <span class="stat-card__label">Session New</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__number" id="metric-category-count">0</span>
+            <span class="stat-card__label">Categories</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__number" id="metric-cycle-days">0</span>
+            <span class="stat-card__label">Days Rotation</span>
+          </div>
+        </div>
+
+        <!-- View Navigation Tabs -->
+        <div class="curator-tab-row">
+          <div class="tab-pill-group" role="tablist" aria-label="Catalogue Display Format">
+            <button type="button" id="tab-vault-view" class="tab-pill tab-pill--active" role="tab" aria-selected="true" aria-controls="subview-cards">
+              Parlour Cards (<span id="tab-count-cards">0</span>)
+            </button>
+            <button type="button" id="tab-table-view" class="tab-pill" role="tab" aria-selected="false" aria-controls="subview-table">
+              Data Ledger Grid
+            </button>
+            <button type="button" id="tab-technical-view" class="tab-pill" role="tab" aria-selected="false" aria-controls="subview-technical">
+              Raw RFC 4180
+            </button>
+          </div>
+          
+          <div class="tab-aux-actions">
+            <button type="button" id="btn-quick-import" class="interactive-tactile btn-ghost btn-sm" title="Merge external CSV into active dataset">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"></path></svg>
+              <span>Merge CSV File</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUBVIEW A: Parlour Cards Grid -->
+        <div id="subview-cards" class="subview-panel subview-panel--active" role="tabpanel" aria-labelledby="tab-vault-view">
+          <div id="records-cards-container" class="records-cards-grid card-feed-container">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- SUBVIEW B: Data Ledger Grid -->
+        <div id="subview-table" class="subview-panel" role="tabpanel" aria-labelledby="tab-table-view">
+          <div class="table-paper-scroller">
+            <table class="curator-table" id="curator-data-table">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 54px;">#</th>
+                  <th scope="col" style="width: 150px;">Category</th>
+                  <th scope="col" style="width: 200px;">Secret Answer</th>
+                  <th scope="col">Game Clue / Hint</th>
+                  <th scope="col">Mixologist Lore Fact</th>
+                  <th scope="col" style="width: 130px;" class="th-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="curator-table-body">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUBVIEW C: Raw RFC 4180 View -->
+        <div id="subview-technical" class="subview-panel" role="tabpanel" aria-labelledby="tab-technical-view">
+          <div class="technical-csv-container">
+            <div class="tech-header-bar">
+              <span class="tech-info">Standard RFC 4180 Compliant Representation (UTF-8, Escaped Commas &amp; Quotes)</span>
+              <button type="button" id="btn-copy-raw-csv" class="interactive-tactile btn-secondary btn-sm">
+                Copy Raw CSV
+              </button>
+            </div>
+            <textarea id="raw-csv-preview" class="raw-csv-box" readonly spellcheck="false" aria-label="Raw CSV Representation"></textarea>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ===================================================================
+         UNIFORM BOTTOM THUMB-ZONE NAVIGATION (MOBILE DOCK)
+         =================================================================== -->
+    <nav class="app-bottom-dock" aria-label="Primary Mobile Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Injected dynamically via APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+
+    <!-- ===================================================================
+         STEP-BY-STEP GUIDED RIDDLE BUILDER DIALOG
+         =================================================================== -->
+    <dialog id="builder-modal" class="modal-window modal-window--wide" aria-labelledby="builder-modal-title">
+      <div class="modal-surface">
+        
+        <header class="modal-header">
+          <div class="modal-header__title-block">
+            <span class="modal-eyebrow" id="builder-mode-eyebrow">GUIDED RIDDLE CREATOR</span>
+            <h2 id="builder-modal-title" class="modal-title">Draft Cocktail Riddle</h2>
+          </div>
+          <button type="button" class="modal-close-btn" id="builder-modal-close" aria-label="Close builder dialog">&times;</button>
+        </header>
+
+        <!-- Stepper Indicators -->
+        <nav class="builder-stepper" aria-label="Riddle Creation Steps">
+          <button type="button" class="step-indicator step-indicator--active" data-step="1">
+            <span class="step-indicator__num">1</span>
+            <span class="step-indicator__name">Answer &amp; Category</span>
+          </button>
+          <button type="button" class="step-indicator" data-step="2">
+            <span class="step-indicator__num">2</span>
+            <span class="step-indicator__name">Mixologist Hint</span>
+          </button>
+          <button type="button" class="step-indicator" data-step="3">
+            <span class="step-indicator__num">3</span>
+            <span class="step-indicator__name">Post-Win Lore</span>
+          </button>
+          <button type="button" class="step-indicator" data-step="4">
+            <span class="step-indicator__num">4</span>
+            <span class="step-indicator__name">Live Simulation</span>
+          </button>
+        </nav>
+
+        <form id="builder-form" class="builder-modal-body" novalidate>
+
+          <!-- STEP 1: Basic Answer & Category -->
+          <fieldset class="builder-step-pane pane-active" data-pane="1">
+            <legend class="sr-only">Step 1: Secret Answer and Category</legend>
+
+            <div class="form-row-duo">
+              
+              <!-- Category Selector / Datalist -->
+              <div class="paper-input-group">
+                <label for="input-category" class="paper-label">
+                  Category
+                  <span class="req-star" title="Required">*</span>
+                </label>
+                <div class="input-with-datalist">
+                  <input type="text" id="input-category" class="paper-input" list="known-categories-list" placeholder="e.g., Cocktails, Agave, Bar Tools" required autocomplete="off">
+                  <datalist id="known-categories-list"></datalist>
+                </div>
+                <p class="field-hint">The category badge displayed prominently at the top of the Hangman scaffold.</p>
+                <div class="field-quick-pills" id="category-quick-pills" aria-label="Recommended category tags"></div>
+              </div>
+
+              <!-- Answer / Secret Word -->
+              <div class="paper-input-group">
+                <label for="input-answer" class="paper-label">
+                  Secret Word or Phrase
+                  <span class="req-star" title="Required">*</span>
+                </label>
+                <input type="text" id="input-answer" class="paper-input font-answer" placeholder="e.g., BOULEVARDIER, CLEAR ICE" required autocomplete="off" spellcheck="false">
+                <p class="field-hint">
+                  Only letters A–Z will be hidden puzzle slots. Spaces, dashes, and apostrophes are shown automatically.
+                </p>
+                <div id="answer-validation-feedback" class="field-feedback" role="status" aria-live="polite"></div>
+              </div>
+
+            </div>
+
+            <!-- Live Letter Slot Preview Strip -->
+            <div class="live-slot-preview-card">
+              <span class="preview-mini-label">Board Silhouette Preview:</span>
+              <div id="mini-slots-strip" class="mini-slots-strip" aria-live="polite"></div>
+              <div class="slot-summary-meta">
+                <span id="slot-letter-count">0 Letters</span> • 
+                <span id="slot-word-count">0 Words</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- STEP 2: The Gameplay Hint -->
+          <fieldset class="builder-step-pane" data-pane="2">
+            <legend class="sr-only">Step 2: Mixologist Clue</legend>
+            <div class="paper-input-group">
+              <label for="input-clue" class="paper-label">
+                Mixologist's Clue / In-Game Hint
+                <span class="req-star" title="Required">*</span>
+              </label>
+              <textarea id="input-clue" class="paper-textarea" rows="3" placeholder="e.g., Equal-parts Italian classic of gin, sweet vermouth, and Campari." required></textarea>
+              <div class="field-char-count">
+                <span id="clue-char-count">0</span> characters (Recommended: 30–120 characters)
+              </div>
+              <p class="field-hint">
+                Revealed when the player taps the 💡 Hint button during gameplay. Keep it intriguing without giving the entire word away!
+              </p>
+            </div>
+
+            <div class="quick-template-box">
+              <span class="template-header-label">Quick Prompt Inspirations:</span>
+              <div class="template-chips">
+                <button type="button" class="btn-chip interactive-tactile" data-tpl-clue="Iconic [region] concoction featuring [spirit], [modifier], and [citrus].">Regional Classic</button>
+                <button type="button" class="btn-chip interactive-tactile" data-tpl-clue="Specialized bar implement crafted to [action] without [side effect].">Bar Tool Purpose</button>
+                <button type="button" class="btn-chip interactive-tactile" data-tpl-clue="Traditional distillation crafted from [botanical/base] originating in [country].">Spirit Provenance</button>
+                <button type="button" class="btn-chip interactive-tactile" data-tpl-clue="Essential technique used to chill and aerate without creating unwanted bubbles.">Bartender Technique</button>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- STEP 3: The Victory Lore Note -->
+          <fieldset class="builder-step-pane" data-pane="3">
+            <legend class="sr-only">Step 3: Post-Game Mixology Lore</legend>
+            <div class="paper-input-group">
+              <label for="input-note" class="paper-label">
+                Cocktail Lore / Mixology Fact
+                <span class="opt-tag">(Recommended)</span>
+              </label>
+              <textarea id="input-note" class="paper-textarea" rows="3" placeholder="e.g., Invented in Florence circa 1919 when Count Camillo Negroni asked to stiffen his Americano with gin instead of soda."></textarea>
+              <div class="field-char-count">
+                <span id="note-char-count">0</span> characters
+              </div>
+              <p class="field-hint">
+                Displayed in the "Puzzle Complete" celebration modal upon solving or failing the riddle. Adds sophisticated atmosphere.
+              </p>
+            </div>
+          </fieldset>
+
+          <!-- STEP 4: Live Interactive Simulation -->
+          <fieldset class="builder-step-pane" data-pane="4">
+            <legend class="sr-only">Step 4: Live Simulation</legend>
+            <p class="step-explanation">
+              Exact simulation of how your riddle appears and operates inside the Cocktail Lounge Hangman game interface:
+            </p>
+
+            <div class="hang-simulation-frame">
+              <div class="sim-header">
+                <span class="sim-title">Daily Challenge • 2026 Simulation</span>
+                <span class="sim-strikes">0 / 6 STRIKES</span>
+              </div>
+              <div class="sim-body">
+                <div class="sim-category-badge" id="sim-cat-display">CATEGORY</div>
+                
+                <div class="sim-slots-board" id="sim-slots-display">
+                  <!-- Generated interactive test slots -->
+                </div>
+
+                <div class="sim-hint-area">
+                  <div class="sim-hint-header">
+                    <span class="hint-dot" aria-hidden="true">💡</span>
+                    <span>Mixologist Clue:</span>
+                  </div>
+                  <p class="sim-hint-text" id="sim-hint-display">Your clue text will appear here.</p>
+                </div>
+
+                <div class="sim-result-card" id="sim-result-preview">
+                  <span class="sim-res-label">Puzzle Complete Lore Preview:</span>
+                  <p class="sim-note-text" id="sim-note-display">Your mixology fact will appear here after victory.</p>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+        </form>
+
+        <!-- Stepper Navigation Controls -->
+        <footer class="modal-footer">
+          <div class="modal-footer__left">
+            <button type="button" id="step-prev-btn" class="interactive-tactile btn-secondary" style="display: none;">
+              ← Back
+            </button>
+          </div>
+          <div class="modal-footer__right">
+            <button type="button" id="step-next-btn" class="interactive-tactile btn-secondary">
+              Next Step →
+            </button>
+            <button type="button" id="save-another-btn" class="interactive-tactile btn-secondary">
+              Save &amp; Add Another
+            </button>
+            <button type="button" id="save-record-btn" class="interactive-tactile btn-primary">
+              Save Puzzle
+            </button>
+          </div>
+        </footer>
+
+      </div>
+    </dialog>
+
+    <!-- ===================================================================
+         EXPORT WORKFLOW DIALOG
+         =================================================================== -->
+    <dialog id="export-modal" class="modal-window" aria-labelledby="export-modal-title">
+      <div class="modal-surface">
+        <header class="modal-header">
+          <h2 id="export-modal-title" class="modal-title">Export Puzzles CSV</h2>
+          <button type="button" class="modal-close-btn" data-close aria-label="Close export dialog">&times;</button>
+        </header>
+        <div class="modal-content">
+          
+          <div class="export-summary-box">
+            <div class="summary-line">
+              <span>Ready for Export:</span>
+              <strong id="export-total-records">0 records</strong>
+            </div>
+            <div class="summary-line">
+              <span>Newly Added This Session:</span>
+              <strong id="export-new-records">0 records</strong>
+            </div>
+            <div class="summary-line">
+              <span>RFC 4180 Integrity:</span>
+              <span class="badge-ready">✓ 100% Valid Escaped UTF-8</span>
+            </div>
+          </div>
+
+          <div class="paper-input-group" style="margin-top: 16px;">
+            <label for="export-filename" class="paper-label">Target File Name</label>
+            <div class="input-with-extension">
+              <input type="text" id="export-filename" class="paper-input" value="puzzles">
+              <span class="ext-badge">.csv</span>
+            </div>
+            <p class="field-hint">Place as <code>puzzles.csv</code> in the Hangman game directory for automatic calendar loading.</p>
+          </div>
+
+          <div class="export-options-list">
+            
+            <button type="button" id="btn-export-full" class="export-option-card interactive-tactile">
+              <div class="opt-info">
+                <strong>Export Complete Dataset</strong>
+                <span>All active records formatted and escaped for the game engine.</span>
+              </div>
+              <span class="badge-action">Download</span>
+            </button>
+
+            <button type="button" id="btn-export-new-only" class="export-option-card interactive-tactile">
+              <div class="opt-info">
+                <strong>Export Session Additions Only</strong>
+                <span>Only riddles authored or appended during this active session.</span>
+              </div>
+              <span class="badge-action">Download</span>
+            </button>
+
+            <button type="button" id="btn-export-blank-template" class="export-option-card interactive-tactile">
+              <div class="opt-info">
+                <strong>Download Clean CSV Header Template</strong>
+                <span>A blank RFC 4180 template file containing only the 4 canonical headers.</span>
+              </div>
+              <span class="badge-action">Template</span>
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+    </dialog>
+
+    <!-- ===================================================================
+         CONFIRMATION DIALOG
+         =================================================================== -->
+    <dialog id="confirm-modal" class="modal-window" aria-labelledby="confirm-title">
+      <div class="modal-surface">
+        <header class="modal-header">
+          <h2 id="confirm-title" class="modal-title">Confirm Deletion</h2>
+          <button type="button" class="modal-close-btn" data-close aria-label="Close dialog">&times;</button>
+        </header>
+        <div class="modal-content">
+          <p id="confirm-prompt-message">Are you sure you wish to remove this puzzle from the cellar?</p>
+          <div class="modal-action-row" style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="interactive-tactile btn-secondary" data-close>Cancel</button>
+            <button type="button" id="confirm-accept-btn" class="interactive-tactile btn-danger">Delete Puzzle</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

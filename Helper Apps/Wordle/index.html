@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Curator Studio — Word Guess Dataset Manager</title>
+  <meta name="description" content="Production-grade artisanal dataset curator and CSV manager for 5-letter word puzzle games.">
+  <meta name="theme-color" content="#F5F3ED">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+
+    <!-- STANDARDIZED APP PAGE HEADER -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__controls">
+        <button type="button" id="btn-header-back" class="btn-back-nav" aria-label="Navigate to previous view">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="btn-back-label">Back</span>
+        </button>
+
+        <div class="app-page-header__actions">
+          <span id="session-counter" class="status-pill status-pill--sage hidden" aria-live="polite">0 records</span>
+          <button id="btn-header-reset" class="interactive-tactile btn-header-icon hidden" type="button" title="Reset Session" aria-label="Start new session">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">DATASET WORKSPACE</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Word Guess CSV Builder</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Craft, inspect, and export verified five-letter puzzle catalogues with sensory tasting definitions.
+        </p>
+      </div>
+    </header>
+
+    <!-- MAIN VIEW CONTAINER -->
+    <main class="main-body" role="main">
+
+      <!-- VIEW 1: WELCOME SCREEN (Action Launcher) -->
+      <section id="view-welcome" class="view view-welcome">
+        <div class="welcome-container">
+
+          <!-- Local Draft Recovery Banner -->
+          <div id="draft-banner" class="draft-banner hidden" role="region" aria-label="Draft Recovery">
+            <div class="draft-banner__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+            <div class="draft-banner__content">
+              <strong class="draft-banner__title">Unsaved Work Detected</strong>
+              <p id="draft-message" class="draft-banner__desc">Found a saved draft from your previous session.</p>
+            </div>
+            <div class="draft-banner__actions">
+              <button id="btn-restore-draft" class="interactive-tactile btn-small btn-primary" type="button">Restore Draft</button>
+              <button id="btn-discard-draft" class="interactive-tactile btn-small btn-secondary" type="button">Discard</button>
+            </div>
+          </div>
+
+          <div class="action-cards-grid">
+            <!-- Option A: Add to Existing CSV -->
+            <button id="card-start-append" class="action-card interactive-tactile" type="button">
+              <div class="action-card__icon-wrap action-card__icon-wrap--terracotta" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+              </div>
+              <div class="action-card__text">
+                <span class="action-card__title">Append to Existing CSV</span>
+                <span class="action-card__desc">Load your production <code class="code-pill">puzzles.csv</code>, verify formatting integrity, and append new entries.</span>
+              </div>
+              <span class="action-card__arrow" aria-hidden="true">&rarr;</span>
+            </button>
+
+            <!-- Option B: Create Fresh CSV -->
+            <button id="card-start-fresh" class="action-card interactive-tactile" type="button">
+              <div class="action-card__icon-wrap action-card__icon-wrap--sage" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <div class="action-card__text">
+                <span class="action-card__title">Create Fresh Dataset</span>
+                <span class="action-card__desc">Start an immaculate catalog from scratch with strict schema checks and real-time guidance.</span>
+              </div>
+              <span class="action-card__arrow" aria-hidden="true">&rarr;</span>
+            </button>
+
+            <!-- Option C: Review & Edit CSV -->
+            <button id="card-start-review" class="action-card interactive-tactile" type="button">
+              <div class="action-card__icon-wrap action-card__icon-wrap--ochre" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </div>
+              <div class="action-card__text">
+                <span class="action-card__title">Audit & Edit File</span>
+                <span class="action-card__desc">Import an existing spreadsheet to search, isolate duplicate words, and refine definitions.</span>
+              </div>
+              <span class="action-card__arrow" aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+
+          <!-- Hidden Native File Input for CSV Ingestion -->
+          <input type="file" id="file-input-csv" accept=".csv,text/csv" class="visually-hidden" aria-hidden="true">
+        </div>
+      </section>
+
+      <!-- VIEW 2: WORKSPACE (Editor, Table, and Export) -->
+      <section id="view-workspace" class="view view-workspace hidden">
+        <!-- Sub-View Desktop / Tablet Tab Strip -->
+        <nav class="sub-nav-bar" aria-label="Workspace Sections">
+          <div class="sub-nav-left">
+            <button id="tab-btn-form" class="interactive-tactile sub-nav-tab active" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              <span id="tab-form-label">Add Entry</span>
+            </button>
+            <button id="tab-btn-table" class="interactive-tactile sub-nav-tab" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="3" y1="15" x2="21" y2="15"/>
+                <line x1="9" y1="3" x2="9" y2="21"/>
+              </svg>
+              <span>Catalog (<span id="count-tab-total">0</span>)</span>
+            </button>
+            <button id="tab-btn-export" class="interactive-tactile sub-nav-tab" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export</span>
+            </button>
+          </div>
+          <div class="sub-nav-right">
+            <button id="btn-quick-sample" class="interactive-tactile btn-micro" type="button" title="Insert a verified sample entry into the form">
+              + Sample Word
+            </button>
+          </div>
+        </nav>
+
+        <!-- PANEL A: GUIDED DATA ENTRY FORM -->
+        <div id="panel-form" class="workspace-panel">
+          <div class="panel-inner-constrained">
+            <!-- Step Progress Indicator -->
+            <div class="progress-bar-container" aria-label="Creation Lifecycle">
+              <div class="step-nodes">
+                <div class="step-node active" id="node-step-1">
+                  <span class="node-dot">1</span>
+                  <span class="node-label">Mystery Word</span>
+                </div>
+                <div class="step-line" id="line-step-1"></div>
+                <div class="step-node" id="node-step-2">
+                  <span class="node-dot">2</span>
+                  <span class="node-label">Definition Note</span>
+                </div>
+                <div class="step-line" id="line-step-2"></div>
+                <div class="step-node" id="node-step-3">
+                  <span class="node-dot">3</span>
+                  <span class="node-label">Commit</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Paper Card -->
+            <article class="paper-card editor-card">
+              <header class="editor-card-header">
+                <div>
+                  <span id="form-mode-eyebrow" class="paper-card__eyebrow">NEW ENTRY</span>
+                  <h2 id="form-mode-title" class="editor-card__title">Define New Puzzle</h2>
+                </div>
+                <div id="editing-indicator" class="status-pill status-pill--terracotta hidden">Editing Active</div>
+              </header>
+
+              <form id="puzzle-form" class="editor-form" novalidate>
+                <!-- FIELD 1: WORD -->
+                <div class="paper-input-group" id="group-word">
+                  <div class="form-label-row">
+                    <label for="input-word" class="paper-label">
+                      Mystery Word <span class="required-star">*</span>
+                    </label>
+                    <span class="field-meta" id="word-char-counter">0 / 5 letters</span>
+                  </div>
+                  <p class="field-help">
+                    Must be exactly <strong>5 alphabetic letters</strong>. Formatted automatically to uppercase.
+                  </p>
+
+                  <div class="word-input-container">
+                    <input 
+                      type="text" 
+                      id="input-word" 
+                      name="word" 
+                      class="paper-input word-input" 
+                      placeholder="SHAKE" 
+                      maxlength="5" 
+                      autocomplete="off" 
+                      spellcheck="false" 
+                      required
+                    >
+                    <!-- Visual 5-Letter Tile Preview Strip -->
+                    <div class="tile-strip" aria-hidden="true">
+                      <div class="input-preview-tile" id="tile-0"></div>
+                      <div class="input-preview-tile" id="tile-1"></div>
+                      <div class="input-preview-tile" id="tile-2"></div>
+                      <div class="input-preview-tile" id="tile-3"></div>
+                      <div class="input-preview-tile" id="tile-4"></div>
+                    </div>
+                  </div>
+                  <div id="word-feedback" class="field-validation-msg hidden" role="alert"></div>
+                </div>
+
+                <!-- FIELD 2: DEFINITION -->
+                <div class="paper-input-group" id="group-definition">
+                  <div class="form-label-row">
+                    <label for="input-definition" class="paper-label">
+                      Tasting Note or Definition <span class="required-star">*</span>
+                    </label>
+                    <span class="field-meta" id="def-char-counter">0 characters</span>
+                  </div>
+                  <p class="field-help">
+                    Displayed inside the game summary dialog when the player concludes the puzzle.
+                  </p>
+                  <textarea 
+                    id="input-definition" 
+                    name="definition" 
+                    class="paper-input paper-textarea" 
+                    rows="3" 
+                    placeholder="e.g. A traditional bittersweet herbal liqueur infused with alpine botanicals and roots."
+                    required
+                  ></textarea>
+                  <div id="def-feedback" class="field-validation-msg hidden" role="alert"></div>
+                </div>
+
+                <!-- LIVE VERDICT SIMULATION (Tactile Sunken Panel) -->
+                <div class="preview-box">
+                  <div class="preview-box-header">
+                    <span class="preview-box-title">IN-GAME VERDICT PREVIEW</span>
+                    <span class="status-pill status-pill--ochre">Game Dialog State</span>
+                  </div>
+                  <div class="preview-box-body">
+                    <div class="preview-sim-word" id="sim-word">SHAKE</div>
+                    <p class="preview-sim-def" id="sim-def">To agitate rapidly with ice to chill and aerate ingredients.</p>
+                  </div>
+                </div>
+
+                <!-- FORM BUTTONS -->
+                <div class="form-actions-row">
+                  <button type="submit" id="btn-save-record" class="interactive-tactile btn-primary">
+                    <span id="save-btn-text">Save Puzzle Record</span>
+                  </button>
+                  <button type="button" id="btn-save-and-add" class="interactive-tactile btn-secondary">
+                    Save & Add Another
+                  </button>
+                  <button type="button" id="btn-cancel-edit" class="interactive-tactile btn-ghost hidden">
+                    Discard Editing
+                  </button>
+                </div>
+              </form>
+            </article>
+          </div>
+        </div>
+
+        <!-- PANEL B: TABLE & RECORD REVIEW -->
+        <div id="panel-table" class="workspace-panel hidden">
+          <div class="panel-inner-wide">
+            <!-- Table Toolbar -->
+            <div class="table-toolbar">
+              <div class="toolbar-search-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="table-search-input" class="paper-input search-input" placeholder="Search entries by word or keyword...">
+              </div>
+
+              <div class="toolbar-filter-group">
+                <select id="table-filter-status" class="paper-input filter-select" aria-label="Filter catalog entries">
+                  <option value="all">All Records</option>
+                  <option value="new">Newly Added in Session</option>
+                  <option value="original">Original Base Records</option>
+                  <option value="duplicates">Duplicate Words</option>
+                </select>
+                <div class="toggle-view-btn-group" role="radiogroup" aria-label="Table Mode">
+                  <button id="view-mode-friendly" class="toggle-btn active" type="button" role="radio" aria-checked="true">Formatted</button>
+                  <button id="view-mode-raw" class="toggle-btn" type="button" role="radio" aria-checked="false">Raw CSV</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Health Summary Bar -->
+            <div id="health-bar" class="health-summary-bar">
+              <div class="health-stat">
+                <span class="health-dot dot-valid" aria-hidden="true"></span>
+                <span>Verified: <strong id="stat-valid-count">0</strong></span>
+              </div>
+              <div class="health-stat">
+                <span class="health-dot dot-warn" aria-hidden="true"></span>
+                <span>Duplicates: <strong id="stat-warn-count">0</strong></span>
+              </div>
+              <div class="health-stat">
+                <span class="health-dot dot-err" aria-hidden="true"></span>
+                <span>Format Errors: <strong id="stat-err-count">0</strong></span>
+              </div>
+            </div>
+
+            <!-- Data Table Card -->
+            <div class="paper-card table-card-wrap">
+              <div class="table-scroll-frame">
+                <table id="records-table" class="data-table" aria-label="Puzzle Catalog Records">
+                  <thead>
+                    <tr id="table-header-row">
+                      <!-- Populated dynamically via JS -->
+                    </tr>
+                  </thead>
+                  <tbody id="table-body">
+                    <!-- Populated dynamically via JS -->
+                  </tbody>
+                </table>
+                <div id="table-empty-state" class="empty-state hidden">
+                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                  <h3 class="empty-title">No Matching Records Found</h3>
+                  <p class="empty-desc">Adjust your search query or clear active filters to inspect records.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table Foot Actions -->
+            <div class="table-foot-actions">
+              <span id="table-foot-count" class="foot-counter">Showing 0 records</span>
+              <button id="btn-table-add-new" class="interactive-tactile btn-primary btn-small" type="button">+ Create New Puzzle</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL C: EXPORT & PACKAGING -->
+        <div id="panel-export" class="workspace-panel hidden">
+          <div class="panel-inner-constrained">
+            <article class="paper-card editor-card">
+              <header class="editor-card-header">
+                <div>
+                  <span class="paper-card__eyebrow">FINAL VERIFICATION & OUTPUT</span>
+                  <h2 class="editor-card__title">Export Verified CSV</h2>
+                </div>
+              </header>
+
+              <div class="export-summary-box">
+                <div class="export-stat-item">
+                  <span class="export-stat-val" id="exp-total-count">0</span>
+                  <span class="export-stat-lbl">Total Records</span>
+                </div>
+                <div class="export-stat-item">
+                  <span class="export-stat-val" id="exp-session-count">0</span>
+                  <span class="export-stat-lbl">Added This Session</span>
+                </div>
+                <div class="export-stat-item">
+                  <span class="export-stat-val" id="exp-errors-count">0</span>
+                  <span class="export-stat-lbl">Blocking Errors</span>
+                </div>
+              </div>
+
+              <!-- Export Config Form -->
+              <div class="export-config-group">
+                <div class="paper-input-group">
+                  <label for="export-filename" class="paper-label">Target File Name</label>
+                  <input type="text" id="export-filename" class="paper-input" value="puzzles.csv">
+                  <p class="field-help">Word Guess expects this dataset to remain titled <code>puzzles.csv</code>.</p>
+                </div>
+
+                <div class="paper-input-group">
+                  <span class="paper-label">Export Scope</span>
+                  <div class="radio-card-group" role="radiogroup">
+                    <label class="radio-card interactive-tactile">
+                      <input type="radio" name="export-scope" value="all" checked>
+                      <div class="radio-card-content">
+                        <strong>Complete Catalog (Recommended)</strong>
+                        <span>Export all base catalog puzzles combined with new entries.</span>
+                      </div>
+                    </label>
+                    <label class="radio-card interactive-tactile" id="scope-card-new-only">
+                      <input type="radio" name="export-scope" value="new-only">
+                      <div class="radio-card-content">
+                        <strong>Only Newly Added Records</strong>
+                        <span>Isolate and download entries created during this active session.</span>
+                      </div>
+                    </label>
+                    <label class="radio-card interactive-tactile">
+                      <input type="radio" name="export-scope" value="blank-template">
+                      <div class="radio-card-content">
+                        <strong>Clean Structural Template</strong>
+                        <span>Downloads an empty file containing strictly <code class="code-pill">word,definition</code>.</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Raw CSV Snippet Preview -->
+                <div class="paper-input-group">
+                  <div class="form-label-row">
+                    <label class="paper-label">Raw Export Preview (Initial 5 Rows)</label>
+                    <button id="btn-copy-csv" class="interactive-tactile btn-micro" type="button">Copy to Clipboard</button>
+                  </div>
+                  <pre id="raw-csv-snippet" class="csv-preview-pre">word,definition</pre>
+                </div>
+              </div>
+
+              <div class="export-actions">
+                <button id="btn-download-csv" class="interactive-tactile btn-primary btn-large" type="button">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  <span>Download Verified CSV File</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- UNIFORM BOTTOM THUMB-ZONE NAVIGATION (MOBILE DOCK) -->
+    <nav class="app-bottom-dock" aria-label="Primary Mobile Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Dynamically hydrated via APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+  </div>
+
+  <!-- DELETE CONFIRMATION DIALOG -->
+  <dialog id="modal-delete" class="unified-dialog">
+    <div class="dialog-shell paper-card">
+      <header class="dialog-header">
+        <span class="paper-card__eyebrow">CONFIRM REMOVAL</span>
+        <h3 class="dialog-title">Delete Puzzle Record?</h3>
+      </header>
+      <div class="dialog-body">
+        <p>Are you certain you wish to remove <strong id="delete-word-display" class="highlight-word">SHAKE</strong> from this dataset? This record will be permanently excluded upon file export.</p>
+      </div>
+      <footer class="dialog-footer">
+        <button id="btn-confirm-delete" class="interactive-tactile btn-small btn-danger" type="button">Delete Permanently</button>
+        <button class="interactive-tactile btn-small btn-secondary" data-close="modal-delete" type="button">Keep Record</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- RECOVERY / RESET CONFIRMATION DIALOG -->
+  <dialog id="modal-reset" class="unified-dialog">
+    <div class="dialog-shell paper-card">
+      <header class="dialog-header">
+        <span class="paper-card__eyebrow">RESET SESSION</span>
+        <h3 class="dialog-title">Reset Active Workspace?</h3>
+      </header>
+      <div class="dialog-body">
+        <p>This action will discard your working catalog and return you to the welcome view. Verify you have exported any required datasets before continuing.</p>
+      </div>
+      <footer class="dialog-footer">
+        <button id="btn-confirm-reset" class="interactive-tactile btn-small btn-danger" type="button">Discard & Reset</button>
+        <button class="interactive-tactile btn-small btn-secondary" data-close="modal-reset" type="button">Resume Work</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- ACCESSIBLE TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

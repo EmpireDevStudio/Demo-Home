@@ -1,150 +1,126 @@
+/**
+ * =========================================================================
+ * CLIENT CONFIGURATION ENGINE (APP_CONFIG)
+ * Production-Ready White-Label Master Configuration
+ * All application copy, branding, endpoints, and toggles are managed here.
+ * =========================================================================
+ */
+const APP_CONFIG = Object.freeze({
+  identity: {
+    appId: "cocktail-sequence-ledger",
+    appName: "SEQUENCE",
+    appTagline: "The Mixologist's Method & Specs Ledger",
+    version: "2.4.0",
+    environment: "production",
+    canonicalUrl: "../",
+    language: "en-US",
+    locale: "en-US",
+    maxAttempts: 4,
+    slotsCount: 5,
+  },
+
+  branding: {
+    logoUrl: "./assets/brand-logo.svg",
+    logoAlt: "Sequence Artisanal Cocktail Seal",
+    faviconUrl: "./favicon.ico",
+    accentColor: "#A25750",      /* Terracotta Accent */
+    accentSecondary: "#526F56",  /* Sage Green Accent */
+    accentHighlight: "#7B641F",  /* Warm Ochre Accent */
+  },
+
+  navigation: {
+    enableTopBackNavigation: true,
+    defaultFallbackRoute: "menu",
+    homeUrl: "../../",
+  },
+
+  content: {
+    headers: {
+      menuEyebrow: "THE ARTISANAL LEDGER",
+      menuTitle: "SEQUENCE",
+      menuSubtitle: "Five elements. One canonical mixology progression.",
+      gameEyebrow: "SPECIFICATION DRILL",
+      gameTitle: "METHOD LEDGER",
+      vaultEyebrow: "ARCHIVAL RECORDS",
+      vaultTitle: "THE VAULT",
+      settingsEyebrow: "CONFIGURATION",
+      settingsTitle: "PREFERENCES",
+    },
+    notifications: {
+      fillAllSlots: "Assign tokens to all five stages before submitting.",
+      linkCopied: "Formulation ledger link copied to clipboard.",
+      scoreCopied: "Formulation score copied to clipboard.",
+      copyFailed: "Unable to copy to clipboard.",
+      archiveModeNotice: "Archival formulation: practicing without streak penalty.",
+    },
+    storageKeys: {
+      gameState: "sequence_mixology_ledger_v3",
+    },
+  },
+
+  features: {
+    enableHapticFeedback: true,
+    enableBotanicalAnimation: true,
+    botanicalCount: 8,
+  },
+
+  dailyCycle: {
+    anchorDate: "2026-01-01",
+    startingIndex: 0,
+  },
+
+  data: {
+    csvUrl: "puzzles.csv",
+    cacheMode: "no-cache",
+    requestTimeoutMs: 6000,
+  },
+});
+
 (function () {
   "use strict";
 
-  // ==========================================================================
-  // 1. CENTRAL DEVELOPER CONFIGURATION
-  // ==========================================================================
-  const CONFIG = {
-    app: {
-      name: "Sequence",
-      storageKey: "cocktail_tileworks_sequence_state_v2",
-      homeUrl: "../Demo-Games/",
-      maxAttempts: 4,
-      slotsCount: 5
-    },
-    data: {
-      csvUrl: "puzzles.csv",
-      cacheMode: "no-cache",
-      requestTimeoutMs: 6000
-    },
-    dailyCycle: {
-      anchorDate: "2026-01-01",
-      startingIndex: 0
-    },
-    display: {
-      dateFormatLocale: "en-CA",
-      toastDurationMs: 2400,
-      panelDurationMs: 420,
-      midnightCheckIntervalMs: 60000
-    },
-    atmosphere: {
-      garnishCount: 8,
-      defaultAnimation: true
-    }
-  };
-
-  // 12 Cocktail Lounge Vector Garnishes
-  const GARNISH_SVGS = [
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 38C10 24 24 10 38 12C44 13 42 22 34 24C22 27 18 36 28 40C34 42 40 38 42 34" stroke="#FFA733" stroke-width="4" stroke-linecap="round"/>
-      <path d="M10 36C12 25 24 13 36 14C41 15 39 21 33 23" stroke="#FFF1BE" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 40C11 25 22 10 36 10C42 10 42 18 35 22C24 28 22 38 32 40C38 41 42 36 43 32" stroke="#FFD84D" stroke-width="3.2" stroke-linecap="round"/>
-      <path d="M14 38C13 26 23 12 35 12" stroke="#FFFBE6" stroke-width="1.2" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="20" stroke="#7CB342" stroke-width="3" fill="rgba(46, 125, 50, 0.2)"/>
-      <circle cx="24" cy="24" r="16" stroke="#AED581" stroke-width="1.5"/>
-      <circle cx="24" cy="24" r="3" fill="#DCEDC8"/>
-      <line x1="24" y1="8" x2="24" y2="21" stroke="#AED581" stroke-width="1.2"/>
-      <line x1="24" y1="27" x2="24" y2="40" stroke="#AED581" stroke-width="1.2"/>
-      <line x1="8" y1="24" x2="21" y2="24" stroke="#AED581" stroke-width="1.2"/>
-      <line x1="27" y1="24" x2="40" y2="24" stroke="#AED581" stroke-width="1.2"/>
-      <line x1="12.7" y1="12.7" x2="21.9" y2="21.9" stroke="#AED581" stroke-width="1.2"/>
-      <line x1="26.1" y1="26.1" x2="35.3" y2="35.3" stroke="#AED581" stroke-width="1.2"/>
-      <line x1="35.3" y1="12.7" x2="26.1" y2="21.9" stroke="#AED581" stroke-width="1.2"/>
-      <line x1="21.9" y1="26.1" x2="12.7" y2="35.3" stroke="#AED581" stroke-width="1.2"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="20" stroke="#FF7043" stroke-width="3" fill="rgba(239, 83, 80, 0.25)"/>
-      <circle cx="24" cy="24" r="16" stroke="#FFAB91" stroke-width="1.5"/>
-      <circle cx="24" cy="24" r="3" fill="#FFE0B2"/>
-      <line x1="24" y1="8" x2="24" y2="40" stroke="#FFAB91" stroke-width="1.2"/>
-      <line x1="8" y1="24" x2="40" y2="24" stroke="#FFAB91" stroke-width="1.2"/>
-      <line x1="12.7" y1="12.7" x2="35.3" y2="35.3" stroke="#FFAB91" stroke-width="1.2"/>
-      <line x1="35.3" y1="12.7" x2="12.7" y2="35.3" stroke="#FFAB91" stroke-width="1.2"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="20" stroke="#E64A19" stroke-width="3.2" fill="rgba(183, 28, 28, 0.35)"/>
-      <circle cx="24" cy="24" r="16" stroke="#FF8A65" stroke-width="1.5"/>
-      <circle cx="24" cy="24" r="3" fill="#FFCCBC"/>
-      <line x1="24" y1="8" x2="24" y2="40" stroke="#FF8A65" stroke-width="1.2"/>
-      <line x1="8" y1="24" x2="40" y2="24" stroke="#FF8A65" stroke-width="1.2"/>
-      <line x1="12.7" y1="12.7" x2="35.3" y2="35.3" stroke="#FF8A65" stroke-width="1.2"/>
-      <line x1="35.3" y1="12.7" x2="12.7" y2="35.3" stroke="#FF8A65" stroke-width="1.2"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="24" cy="24" r="20" stroke="#8D6E63" stroke-width="3" fill="rgba(109, 76, 65, 0.25)"/>
-      <circle cx="24" cy="16" stroke="#BCAAA4" stroke-dasharray="3 2" stroke-width="1.2"/>
-      <circle cx="24" cy="24" r="3" fill="#D7CCC8"/>
-      <line x1="24" y1="8" x2="24" y2="40" stroke="#A1887F" stroke-width="1.2"/>
-      <line x1="8" y1="24" x2="40" y2="24" stroke="#A1887F" stroke-width="1.2"/>
-      <line x1="12.7" y1="12.7" x2="35.3" y2="35.3" stroke="#A1887F" stroke-width="1.2"/>
-      <line x1="35.3" y1="12.7" x2="12.7" y2="35.3" stroke="#A1887F" stroke-width="1.2"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M26 26C34 16 38 8 36 6C34 4 28 10 24 22" stroke="#8D6E63" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="22" cy="30" r="12" fill="#B71C1C" stroke="#D32F2F" stroke-width="2"/>
-      <path d="M16 26C18 24 22 24 24 25" stroke="#FF8A80" stroke-width="2" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M18 28C22 16 26 8 28 6C30 8 34 18 36 30" stroke="#795548" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="16" cy="32" r="9" fill="#B71C1C" stroke="#D32F2F" stroke-width="1.8"/>
-      <circle cx="34" cy="34" r="8" fill="#880E4F" stroke="#C2185B" stroke-width="1.8"/>
-      <path d="M13 29C15 27 18 27 19 28" stroke="#FF8A80" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 42C24 30 24 16 24 6" stroke="#4CAF50" stroke-width="2" stroke-linecap="round"/>
-      <path d="M24 26C16 24 10 16 12 10C18 8 22 18 24 26Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.2"/>
-      <path d="M24 22C32 20 38 12 36 6C30 4 26 14 24 22Z" fill="#81C784" stroke="#388E3C" stroke-width="1.2"/>
-      <path d="M24 34C18 32 14 26 16 22C20 20 23 28 24 34Z" fill="#4CAF50" stroke="#1B5E20" stroke-width="1.2"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 42C22 30 26 18 28 6" stroke="#5D4037" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M22 30L12 24" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
-      <path d="M24 26L34 20" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
-      <path d="M25 20L15 14" stroke="#558B2F" stroke-width="2" stroke-linecap="round"/>
-      <path d="M27 16L37 10" stroke="#689F38" stroke-width="2" stroke-linecap="round"/>
-      <path d="M28 10L24 4" stroke="#7CB342" stroke-width="2" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="24" cy="24" rx="14" ry="18" fill="#689F38" stroke="#8BC34A" stroke-width="2" transform="rotate(-15 24 24)"/>
-      <circle cx="24" cy="17" r="4.5" fill="#D32F2F" stroke="#E57373" stroke-width="1"/>
-      <ellipse cx="19" cy="26" rx="2" ry="5" fill="#DCEDC8" opacity="0.6" transform="rotate(-15 19 26)"/>
-    </svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10 38C12 24 34 32 36 18C38 8 26 6 18 10C10 14 20 28 34 36" stroke="#81C784" stroke-width="3" stroke-linecap="round"/>
-      <path d="M10 38C12 24 34 32 36 18" stroke="#2E7D32" stroke-width="1.2" stroke-linecap="round"/>
-    </svg>`
+  // Botanical Sketches for Ambient Background
+  const BOTANICAL_SVGS = [
+    `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="18"/><line x1="24" y1="6" x2="24" y2="42"/><line x1="6" y1="24" x2="42" y2="24"/><line x1="11" y1="11" x2="37" y2="37"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><path d="M24 6c0 14-12 18-12 26a12 12 0 0 0 24 0c0-8-12-12-12-26z"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="28" r="14"/><path d="M24 14V6m0 0l-5 4m5-4l5 4"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 40c6-14 16-24 24-28m-20 6c6 4 12 14 14 20"/></svg>`
   ];
 
-  // ==========================================================================
-  // 2. DOM REFERENCES
-  // ==========================================================================
+  // DOM References
   const DOM = {
+    pageEyebrowSlot: document.getElementById("pageEyebrowSlot"),
+    pageTitleSlot: document.getElementById("pageTitleSlot"),
+    pageSubtitleSlot: document.getElementById("pageSubtitleSlot"),
+    btnBackNav: document.getElementById("btn-back-nav"),
+    backNavLabel: document.getElementById("back-nav-label"),
     btnHeaderHome: document.getElementById("btn-header-home"),
-    btnHeaderBack: document.getElementById("btn-header-back"),
-    headerTitle: document.getElementById("header-title"),
-    
+    btnHeaderStats: document.getElementById("btn-header-stats"),
+
     viewMenu: document.getElementById("view-menu"),
     viewGame: document.getElementById("view-game"),
     viewVault: document.getElementById("view-vault"),
     viewSettings: document.getElementById("view-settings"),
-    
+
+    heroDateBadge: document.getElementById("hero-date-badge"),
+    heroDateStamp: document.getElementById("hero-date-stamp"),
+    heroChallengeTitle: document.getElementById("hero-challenge-title"),
+    heroChallengeDesc: document.getElementById("hero-challenge-desc"),
     btnMenuPlay: document.getElementById("btn-menu-play"),
     btnPlayLabel: document.getElementById("btn-play-label"),
-    menuPlaySub: document.getElementById("menu-play-sub"),
-    menuTodayDate: document.getElementById("menu-today-date"),
+    heroStatusPill: document.getElementById("hero-status-pill"),
     btnMenuVault: document.getElementById("btn-menu-vault"),
     menuVaultCount: document.getElementById("menu-vault-count"),
-    btnMenuSettings: document.getElementById("btn-menu-settings"),
     btnMenuRules: document.getElementById("btn-menu-rules"),
-    
-    btnUtilStats: document.getElementById("btn-util-stats"),
-    btnUtilShare: document.getElementById("btn-util-share"),
-    btnUtilPlus: document.getElementById("btn-util-plus"),
-    
+    btnMenuStatsCard: document.getElementById("btn-menu-stats-card"),
+    btnMenuSettings: document.getElementById("btn-menu-settings"),
+
+    dockBtnMenu: document.getElementById("dock-btn-menu"),
+    dockBtnPlay: document.getElementById("dock-btn-play"),
+    dockBtnVault: document.getElementById("dock-btn-vault"),
+    dockBtnStats: document.getElementById("dock-btn-stats"),
+    dockBtnGuide: document.getElementById("dock-btn-guide"),
+
     gameTitleBadge: document.getElementById("game-title-badge"),
     gameAttemptsBadge: document.getElementById("game-attempts-badge"),
     gameClue: document.getElementById("game-clue"),
@@ -155,17 +131,19 @@
     itemsPool: document.getElementById("items-pool"),
     btnClearPool: document.getElementById("btn-clear-pool"),
     btnSubmit: document.getElementById("btn-submit"),
-    
+
     vaultList: document.getElementById("vault-list"),
     btnAnimOn: document.getElementById("btn-anim-on"),
     btnAnimOff: document.getElementById("btn-anim-off"),
-    
+    btnHapticsOn: document.getElementById("btn-haptics-on"),
+    btnHapticsOff: document.getElementById("btn-haptics-off"),
+
     panelRulesOverlay: document.getElementById("panel-rules-overlay"),
     sidePanelRules: document.getElementById("side-panel-rules"),
     backdropRules: document.getElementById("backdrop-rules"),
     btnCloseRules: document.getElementById("btn-close-rules"),
     btnRulesConfirm: document.getElementById("btn-rules-confirm"),
-    
+
     modalStats: document.getElementById("modal-stats"),
     btnCloseStats: document.getElementById("btn-close-stats"),
     statPlayed: document.getElementById("stat-played"),
@@ -173,7 +151,7 @@
     statStreak: document.getElementById("stat-streak"),
     statMaxStreak: document.getElementById("stat-max-streak"),
     statsDistribution: document.getElementById("stats-distribution"),
-    
+
     modalResult: document.getElementById("modal-result"),
     btnCloseResult: document.getElementById("btn-close-result"),
     resultTitle: document.getElementById("result-title"),
@@ -184,27 +162,28 @@
     btnShare: document.getElementById("btn-share"),
     btnResultVault: document.getElementById("btn-result-vault"),
     btnResultMenu: document.getElementById("btn-result-menu"),
-    
+
     toast: document.getElementById("toast"),
-    bgFloatingIcons: document.getElementById("bg-floating-icons")
+    bgFloatingBotanicals: document.getElementById("bg-floating-botanicals")
   };
 
-  // ==========================================================================
-  // 3. STORAGE & APPLICATION STATE
-  // ==========================================================================
+  // State Management
   function loadStorage() {
     const fallback = {
-      version: 2,
-      settings: { anim: CONFIG.atmosphere.defaultAnimation },
+      version: 3,
+      settings: {
+        anim: APP_CONFIG.features.enableBotanicalAnimation,
+        haptics: APP_CONFIG.features.enableHapticFeedback
+      },
       stats: { played: 0, won: 0, currentStreak: 0, maxStreak: 0, dist: { 1: 0, 2: 0, 3: 0, 4: 0 } },
       history: {}
     };
     try {
-      const raw = localStorage.getItem(CONFIG.app.storageKey);
+      const raw = localStorage.getItem(APP_CONFIG.content.storageKeys.gameState);
       if (!raw) return fallback;
       const parsed = JSON.parse(raw);
       return {
-        version: 2,
+        version: 3,
         settings: Object.assign({}, fallback.settings, parsed.settings || {}),
         stats: Object.assign({}, fallback.stats, parsed.stats || {}),
         history: parsed.history || {}
@@ -216,10 +195,8 @@
 
   function saveStorage() {
     try {
-      localStorage.setItem(CONFIG.app.storageKey, JSON.stringify(AppState.store));
-    } catch (e) {
-      // Storage unavailable or quota exceeded
-    }
+      localStorage.setItem(APP_CONFIG.content.storageKeys.gameState, JSON.stringify(AppState.store));
+    } catch (e) {}
   }
 
   const AppState = {
@@ -239,9 +216,20 @@
     store: loadStorage()
   };
 
-  // ==========================================================================
-  // 4. DATE AND SEQUENTIAL CYCLE ENGINE
-  // ==========================================================================
+  // Tactile Micro-Haptics
+  function triggerHapticPulse() {
+    if (
+      AppState.store.settings.haptics &&
+      typeof navigator !== "undefined" &&
+      "vibrate" in navigator
+    ) {
+      try {
+        navigator.vibrate(12);
+      } catch (e) {}
+    }
+  }
+
+  // Calendar & Chronology Engine
   const CalendarEngine = {
     getLocalDateString(dateObj = new Date()) {
       const year = dateObj.getFullYear();
@@ -260,15 +248,24 @@
 
     getCycleIndexForDate(dateStr, totalCount) {
       if (!totalCount || totalCount <= 0) return 0;
-      const daysDiff = this.getDaysBetween(CONFIG.dailyCycle.anchorDate, dateStr);
-      const effectiveShift = daysDiff + CONFIG.dailyCycle.startingIndex;
+      const daysDiff = this.getDaysBetween(APP_CONFIG.dailyCycle.anchorDate, dateStr);
+      const effectiveShift = daysDiff + APP_CONFIG.dailyCycle.startingIndex;
       return ((effectiveShift % totalCount) + totalCount) % totalCount;
     }
   };
 
-  // ==========================================================================
-  // 5. CSV PARSER & DATA INGESTION
-  // ==========================================================================
+  // Toast Notification
+  let toastTimer = null;
+  function showToast(msg) {
+    if (toastTimer) clearTimeout(toastTimer);
+    DOM.toast.textContent = msg;
+    DOM.toast.classList.remove("hidden");
+    toastTimer = setTimeout(() => {
+      DOM.toast.classList.add("hidden");
+    }, 2400);
+  }
+
+  // CSV Parsing
   function parseCSV(text) {
     const rows = [];
     let row = [];
@@ -326,7 +323,7 @@
     const slots = [];
     const pool = [];
 
-    for (let s = 1; s <= CONFIG.app.slotsCount; s++) {
+    for (let s = 1; s <= APP_CONFIG.identity.slotsCount; s++) {
       const name = raw[`slot_${s}_name`] || `Stage ${s}`;
       const answer = raw[`slot_${s}_answer`] || `Element ${s}`;
       const decoy = raw[`slot_${s}_decoy`] || `Alternate ${s}`;
@@ -339,8 +336,8 @@
       id,
       index,
       title,
-      clue: raw.clue || "Determine the authentic sequence.",
-      hint: raw.hint || "Review foundational cocktail balance.",
+      clue: raw.clue || "Determine the canonical sequence formulation.",
+      hint: raw.hint || "Review classical cocktail balance and dilution standards.",
       notes: raw.notes || "",
       slots,
       pool,
@@ -352,8 +349,8 @@
     return transformRawPuzzle({
       title: "Old Fashioned",
       clue: "Assemble the canonical spec for the archetype of all cocktails.",
-      hint: "Demerara or sugar cube muddled with aromatic bitters forms the base before adding whiskey.",
-      notes: "The 1806 definition of a cocktail was spirits sugar water and bitters.",
+      hint: "Demerara muddled with aromatic bitters forms the seasoning before stirring over hand-carved ice.",
+      notes: "First documented in 1806 as spirits, sugar, water, and bitters. Built directly in an Old Fashioned rocks glass.",
       slot_1_name: "Base Spirit",
       slot_1_answer: "Bourbon or Rye Whiskey",
       slot_1_decoy: "Blended Scotch Whisky",
@@ -372,22 +369,7 @@
     }, 0);
   }
 
-  // ==========================================================================
-  // 6. TOAST NOTIFICATIONS
-  // ==========================================================================
-  let toastTimer = null;
-  function showToast(msg) {
-    if (toastTimer) clearTimeout(toastTimer);
-    DOM.toast.textContent = msg;
-    DOM.toast.classList.remove("hidden");
-    toastTimer = setTimeout(() => {
-      DOM.toast.classList.add("hidden");
-    }, CONFIG.display.toastDurationMs);
-  }
-
-  // ==========================================================================
-  // 7. NAVIGATION ROUTING
-  // ==========================================================================
+  // Navigation Routing
   function showView(viewId) {
     AppState.currentView = viewId;
     DOM.viewMenu.classList.add("hidden");
@@ -395,70 +377,79 @@
     DOM.viewVault.classList.add("hidden");
     DOM.viewSettings.classList.add("hidden");
 
+    // Reset bottom dock indicators
+    [DOM.dockBtnMenu, DOM.dockBtnPlay, DOM.dockBtnVault, DOM.dockBtnStats, DOM.dockBtnGuide].forEach(btn => {
+      btn.classList.remove("nav-tab-item--active");
+    });
+
     if (viewId === "menu") {
-      DOM.btnHeaderBack.classList.add("hidden");
-      DOM.btnHeaderHome.classList.remove("hidden");
-      DOM.headerTitle.textContent = "SEQUENCE";
+      DOM.pageEyebrowSlot.textContent = APP_CONFIG.content.headers.menuEyebrow;
+      DOM.pageTitleSlot.textContent = APP_CONFIG.content.headers.menuTitle;
+      DOM.pageSubtitleSlot.textContent = APP_CONFIG.content.headers.menuSubtitle;
+      DOM.btnBackNav.classList.add("hidden");
+      DOM.dockBtnMenu.classList.add("nav-tab-item--active");
       DOM.viewMenu.classList.remove("hidden");
       renderMenu();
     } else {
-      DOM.btnHeaderHome.classList.add("hidden");
-      DOM.btnHeaderBack.classList.remove("hidden");
+      DOM.btnBackNav.classList.remove("hidden");
+      DOM.backNavLabel.textContent = "Menu";
 
       if (viewId === "game") {
-        DOM.headerTitle.textContent = "SEQUENCE";
+        DOM.pageEyebrowSlot.textContent = APP_CONFIG.content.headers.gameEyebrow;
+        DOM.pageTitleSlot.textContent = AppState.activePuzzle ? AppState.activePuzzle.title : "SEQUENCE";
+        DOM.pageSubtitleSlot.textContent = "Five elements. One authentic method.";
+        DOM.dockBtnPlay.classList.add("nav-tab-item--active");
         DOM.viewGame.classList.remove("hidden");
       } else if (viewId === "vault") {
-        DOM.headerTitle.textContent = "VAULT";
+        DOM.pageEyebrowSlot.textContent = APP_CONFIG.content.headers.vaultEyebrow;
+        DOM.pageTitleSlot.textContent = APP_CONFIG.content.headers.vaultTitle;
+        DOM.pageSubtitleSlot.textContent = "Review and replay archived specifications.";
+        DOM.dockBtnVault.classList.add("nav-tab-item--active");
         DOM.viewVault.classList.remove("hidden");
         renderVault();
       } else if (viewId === "settings") {
-        DOM.headerTitle.textContent = "SETTINGS";
+        DOM.pageEyebrowSlot.textContent = APP_CONFIG.content.headers.settingsEyebrow;
+        DOM.pageTitleSlot.textContent = APP_CONFIG.content.headers.settingsTitle;
+        DOM.pageSubtitleSlot.textContent = "Sensory haptics and ambient motion configuration.";
         DOM.viewSettings.classList.remove("hidden");
         renderSettings();
       }
     }
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
 
-  // ==========================================================================
-  // 8. HOW TO PLAY DRAWER
-  // ==========================================================================
+  // How to Play Panel
   function openHowToPlay() {
+    triggerHapticPulse();
     DOM.panelRulesOverlay.classList.remove("hidden");
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        DOM.panelRulesOverlay.classList.add("active");
-        DOM.sidePanelRules.focus();
-      });
+      DOM.panelRulesOverlay.classList.add("active");
+      DOM.sidePanelRules.focus();
     });
   }
 
   function closeHowToPlay() {
+    triggerHapticPulse();
     DOM.panelRulesOverlay.classList.remove("active");
     setTimeout(() => {
       DOM.panelRulesOverlay.classList.add("hidden");
-    }, CONFIG.display.panelDurationMs);
+    }, 320);
   }
 
-  // ==========================================================================
-  // 9. ATMOSPHERIC GARNISH FLIGHT
-  // ==========================================================================
-  function initFloatingGarnishes() {
-    DOM.bgFloatingIcons.innerHTML = "";
-    const count = CONFIG.atmosphere.garnishCount;
-    const depths = ["depth-bg", "depth-mid", "depth-fg"];
+  // Floating Botanicals Ambient Layer
+  function initFloatingBotanicals() {
+    DOM.bgFloatingBotanicals.innerHTML = "";
+    const count = APP_CONFIG.features.botanicalCount;
 
     for (let i = 0; i < count; i++) {
       const el = document.createElement("div");
-      const depth = depths[i % depths.length];
-      el.className = `floating-garnish ${depth}`;
-      el.innerHTML = GARNISH_SVGS[i % GARNISH_SVGS.length];
+      el.className = "floating-botanical-item";
+      el.innerHTML = BOTANICAL_SVGS[i % BOTANICAL_SVGS.length];
 
       const left = Math.floor(Math.random() * 88) + 6;
-      const duration = depth === "depth-bg" ? 24 + Math.random() * 8 : depth === "depth-mid" ? 18 + Math.random() * 6 : 14 + Math.random() * 4;
+      const duration = 20 + Math.random() * 12;
       const delay = -(Math.random() * duration);
-      const drift = Math.floor(Math.random() * 44) - 22;
+      const drift = Math.floor(Math.random() * 50) - 25;
       const rot = Math.floor(Math.random() * 90) - 45;
 
       el.style.left = `${left}%`;
@@ -467,7 +458,7 @@
       el.style.setProperty("--drift", `${drift}px`);
       el.style.setProperty("--rot", `${rot}deg`);
 
-      DOM.bgFloatingIcons.appendChild(el);
+      DOM.bgFloatingBotanicals.appendChild(el);
     }
     applyAnimationSetting();
   }
@@ -489,16 +480,23 @@
     }
   }
 
-  function setAnimationSetting(on) {
-    AppState.store.settings.anim = on;
-    saveStorage();
-    applyAnimationSetting();
+  function applyHapticsSetting() {
+    const isEnabled = AppState.store.settings.haptics;
+    if (isEnabled) {
+      DOM.btnHapticsOn.classList.add("active");
+      DOM.btnHapticsOn.setAttribute("aria-pressed", "true");
+      DOM.btnHapticsOff.classList.remove("active");
+      DOM.btnHapticsOff.setAttribute("aria-pressed", "false");
+    } else {
+      DOM.btnHapticsOff.classList.add("active");
+      DOM.btnHapticsOff.setAttribute("aria-pressed", "true");
+      DOM.btnHapticsOn.classList.remove("active");
+      DOM.btnHapticsOn.setAttribute("aria-pressed", "false");
+    }
   }
 
-  // ==========================================================================
-  // 10. REFRESH CYCLE & SYNCHRONIZATION
-  // ==========================================================================
-  function updateDailyChallengeSelection() {
+  // Daily Challenge Refresh
+  function updateDailySelection() {
     const localToday = CalendarEngine.getLocalDateString();
     AppState.activeDateString = localToday;
 
@@ -514,94 +512,41 @@
   function checkDateRollover() {
     const localToday = CalendarEngine.getLocalDateString();
     if (localToday !== AppState.activeDateString) {
-      updateDailyChallengeSelection();
-      if (AppState.currentView === "menu") {
-        renderMenu();
-      } else if (AppState.currentView === "vault") {
-        renderVault();
-      }
+      updateDailySelection();
+      if (AppState.currentView === "menu") renderMenu();
+      else if (AppState.currentView === "vault") renderVault();
     }
   }
 
-  // ==========================================================================
-  // 11. INITIALIZATION & DATA PIPELINE
-  // ==========================================================================
-  async function init() {
-    DOM.btnHeaderHome.setAttribute("href", CONFIG.app.homeUrl);
-    bindEvents();
-    initFloatingGarnishes();
-
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), CONFIG.data.requestTimeoutMs);
-
-      const res = await fetch(CONFIG.data.csvUrl, {
-        cache: CONFIG.data.cacheMode,
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
-
-      if (!res.ok) throw new Error("Dataset fetch failed");
-      const text = await res.text();
-      const rows = parseCSV(text);
-      if (rows.length < 2) throw new Error("Dataset contains insufficient rows");
-
-      const header = rows[0].map((h) => h.toLowerCase());
-      const rawList = [];
-
-      for (let i = 1; i < rows.length; i++) {
-        const r = rows[i];
-        if (!r || r.length === 0 || (r.length === 1 && !r[0])) continue;
-        const p = {};
-        header.forEach((k, idx) => {
-          p[k] = r[idx] !== undefined ? r[idx] : "";
-        });
-        if (p.title || p.slot_1_answer) {
-          rawList.push(p);
-        }
-      }
-
-      if (rawList.length === 0) throw new Error("No valid puzzle rows found");
-
-      AppState.puzzles = rawList.map((p, idx) => transformRawPuzzle(p, idx));
-    } catch (err) {
-      AppState.puzzles = [getFallbackPuzzle()];
-    }
-
-    updateDailyChallengeSelection();
-    showView("menu");
-
-    setInterval(checkDateRollover, CONFIG.display.midnightCheckIntervalMs);
-  }
-
-  // ==========================================================================
-  // 12. MENU RENDERING
-  // ==========================================================================
+  // Render Menu
   function renderMenu() {
     const today = AppState.todayPuzzle;
     if (!today) return;
 
-    DOM.menuTodayDate.textContent = AppState.activeDateString;
-    DOM.btnPlayLabel.textContent = "Play Sequence";
+    DOM.heroDateStamp.textContent = AppState.activeDateString;
+    DOM.heroChallengeTitle.textContent = today.title;
+    DOM.heroChallengeDesc.textContent = today.clue;
 
     const record = AppState.store.history[today.id];
     if (record && record.completed) {
-      DOM.menuPlaySub.textContent = record.won
-        ? `Solved (${record.attemptsUsed}/${CONFIG.app.maxAttempts})`
+      DOM.btnPlayLabel.textContent = "View Verified Solution";
+      DOM.heroStatusPill.textContent = record.won
+        ? `Solved in ${record.attemptsUsed}/${APP_CONFIG.identity.maxAttempts} Attempts`
         : "Completed (Unsolved)";
     } else if (record && record.attemptsUsed > 0) {
-      DOM.menuPlaySub.textContent = `Resume (${record.attemptsUsed}/${CONFIG.app.maxAttempts} attempts)`;
+      DOM.btnPlayLabel.textContent = "Resume Sequence Drill";
+      DOM.heroStatusPill.textContent = `${APP_CONFIG.identity.maxAttempts - record.attemptsUsed} Attempts Remaining`;
     } else {
-      DOM.menuPlaySub.textContent = "Daily Challenge";
+      DOM.btnPlayLabel.textContent = "Assemble Daily Spec";
+      DOM.heroStatusPill.textContent = `${APP_CONFIG.identity.maxAttempts} Attempts Allowed`;
     }
 
-    DOM.menuVaultCount.textContent = AppState.puzzles.length;
+    DOM.menuVaultCount.textContent = `Archive: ${AppState.puzzles.length} Formulations`;
   }
 
-  // ==========================================================================
-  // 13. GAMEPLAY ENGINE
-  // ==========================================================================
+  // Puzzle Session Initiation
   function startPuzzle(puzzle, isArchive = false) {
+    triggerHapticPulse();
     AppState.activePuzzle = puzzle;
     AppState.isArchiveMode = isArchive;
     AppState.selectedSlot = 0;
@@ -629,7 +574,7 @@
       AppState.historyGrid = [];
     }
 
-    DOM.gameTitleBadge.textContent = isArchive ? puzzle.title : `${puzzle.title} (Daily)`;
+    DOM.gameTitleBadge.textContent = isArchive ? "Archival Ledger" : "Daily Challenge";
     DOM.gameClue.textContent = puzzle.clue;
 
     if (!puzzle.shuffledPool) {
@@ -646,8 +591,8 @@
   }
 
   function renderGameStatus() {
-    const remaining = CONFIG.app.maxAttempts - AppState.attemptsUsed;
-    DOM.gameAttemptsBadge.textContent = `Attempts: ${remaining} / ${CONFIG.app.maxAttempts}`;
+    const remaining = APP_CONFIG.identity.maxAttempts - AppState.attemptsUsed;
+    DOM.gameAttemptsBadge.textContent = `${remaining} Attempts Remaining`;
 
     const hintAvailable = AppState.attemptsUsed >= 2 || AppState.isCompleted;
     if (hintAvailable) {
@@ -658,10 +603,10 @@
     }
 
     if (AppState.isCompleted) {
-      DOM.btnSubmit.textContent = "View Summary";
+      DOM.btnSubmit.textContent = "View Verified Solution";
       DOM.btnClearPool.classList.add("hidden");
     } else {
-      DOM.btnSubmit.textContent = "Submit Sequence";
+      DOM.btnSubmit.textContent = "Verify Sequence Formulation";
       DOM.btnClearPool.classList.remove("hidden");
     }
   }
@@ -669,15 +614,15 @@
   function renderSlots() {
     DOM.slots.forEach((el, idx) => {
       const slotDef = AppState.activePuzzle.slots[idx];
-      el.querySelector(".slot-label").textContent = slotDef.name;
+      el.querySelector(".slot-category-name").textContent = slotDef.name;
       el.classList.remove("active", "locked");
 
-      const valHolder = el.querySelector(".slot-value");
+      const valHolder = el.querySelector(".slot-assigned-value");
       valHolder.innerHTML = "";
 
       if (AppState.lockedSlots[idx]) {
         el.classList.add("locked");
-        el.setAttribute("aria-label", `Slot ${idx + 1}: Locked correct, ${slotDef.answer}`);
+        el.setAttribute("aria-label", `Slot ${idx + 1}: Sealed correct, ${slotDef.answer}`);
         el.setAttribute("aria-pressed", "true");
         valHolder.textContent = slotDef.answer;
       } else if (AppState.currentDraft[idx]) {
@@ -688,7 +633,7 @@
       } else {
         el.setAttribute("aria-label", `Slot ${idx + 1}: Empty`);
         el.setAttribute("aria-pressed", idx === AppState.selectedSlot ? "true" : "false");
-        valHolder.innerHTML = '<span class="placeholder">Select slot to fill</span>';
+        valHolder.innerHTML = '<span class="slot-placeholder">Select to assign token</span>';
       }
 
       if (!AppState.isCompleted && !AppState.lockedSlots[idx] && idx === AppState.selectedSlot) {
@@ -704,7 +649,7 @@
     AppState.activePuzzle.shuffledPool.forEach((item) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "item-tile";
+      btn.className = "item-tile interactive-tactile";
       btn.textContent = item.text;
 
       if (placedIds.has(item.id)) {
@@ -712,7 +657,7 @@
         btn.setAttribute("aria-disabled", "true");
         btn.tabIndex = -1;
       } else {
-        btn.setAttribute("aria-label", `Place ${item.text}`);
+        btn.setAttribute("aria-label", `Assign ${item.text}`);
         btn.addEventListener("click", () => handleTileClick(item));
       }
       DOM.itemsPool.appendChild(btn);
@@ -721,11 +666,12 @@
 
   function handleTileClick(item) {
     if (AppState.isCompleted) return;
+    triggerHapticPulse();
 
     let target = AppState.selectedSlot;
     if (AppState.lockedSlots[target] || AppState.currentDraft[target]) {
       target = -1;
-      for (let i = 0; i < CONFIG.app.slotsCount; i++) {
+      for (let i = 0; i < APP_CONFIG.identity.slotsCount; i++) {
         if (!AppState.lockedSlots[i] && !AppState.currentDraft[i]) {
           target = i;
           break;
@@ -738,7 +684,7 @@
     AppState.currentDraft[target] = item;
 
     let next = -1;
-    for (let i = 0; i < CONFIG.app.slotsCount; i++) {
+    for (let i = 0; i < APP_CONFIG.identity.slotsCount; i++) {
       if (!AppState.lockedSlots[i] && !AppState.currentDraft[i]) {
         next = i;
         break;
@@ -752,6 +698,7 @@
 
   function handleSlotClick(idx) {
     if (AppState.isCompleted || AppState.lockedSlots[idx]) return;
+    triggerHapticPulse();
 
     if (AppState.currentDraft[idx]) {
       AppState.currentDraft[idx] = null;
@@ -765,7 +712,8 @@
 
   function clearDraft() {
     if (AppState.isCompleted) return;
-    for (let i = 0; i < CONFIG.app.slotsCount; i++) {
+    triggerHapticPulse();
+    for (let i = 0; i < APP_CONFIG.identity.slotsCount; i++) {
       if (!AppState.lockedSlots[i]) AppState.currentDraft[i] = null;
     }
     const firstFree = AppState.lockedSlots.findIndex((l) => !l);
@@ -775,14 +723,15 @@
   }
 
   function submitAttempt() {
+    triggerHapticPulse();
     if (AppState.isCompleted) {
       openResultModal();
       return;
     }
 
-    for (let i = 0; i < CONFIG.app.slotsCount; i++) {
+    for (let i = 0; i < APP_CONFIG.identity.slotsCount; i++) {
       if (!AppState.lockedSlots[i] && !AppState.currentDraft[i]) {
-        showToast("Fill all 5 sequence slots before submitting.");
+        showToast(APP_CONFIG.content.notifications.fillAllSlots);
         return;
       }
     }
@@ -790,7 +739,7 @@
     AppState.attemptsUsed++;
     const rowResult = [];
 
-    for (let i = 0; i < CONFIG.app.slotsCount; i++) {
+    for (let i = 0; i < APP_CONFIG.identity.slotsCount; i++) {
       if (AppState.lockedSlots[i]) {
         rowResult.push("hit");
         continue;
@@ -804,7 +753,7 @@
         rowResult.push("miss");
         const slotEl = DOM.slots[i];
         slotEl.classList.add("incorrect-flash");
-        setTimeout(() => slotEl.classList.remove("incorrect-flash"), 450);
+        setTimeout(() => slotEl.classList.remove("incorrect-flash"), 420);
       }
     }
 
@@ -823,7 +772,7 @@
       return;
     }
 
-    if (AppState.attemptsUsed >= CONFIG.app.maxAttempts) {
+    if (AppState.attemptsUsed >= APP_CONFIG.identity.maxAttempts) {
       AppState.isCompleted = true;
       AppState.isWon = false;
       AppState.lockedSlots = [true, true, true, true, true];
@@ -871,63 +820,59 @@
     saveStorage();
   }
 
-  // ==========================================================================
-  // 14. VAULT & SETTINGS RENDERING
-  // ==========================================================================
+  // Vault & Settings
   function renderVault() {
     DOM.vaultList.innerHTML = "";
-
     if (!AppState.puzzles || AppState.puzzles.length === 0) {
-      DOM.vaultList.innerHTML = '<p class="status-caption">No challenges currently in the vault.</p>';
+      DOM.vaultList.innerHTML = '<p class="subview-caption">No formulations currently available in the ledger.</p>';
       return;
     }
 
     AppState.puzzles.forEach((puzzle, index) => {
       const record = AppState.store.history[puzzle.id];
       const item = document.createElement("div");
-      item.className = "vault-item";
+      item.className = "vault-item interactive-tactile";
       item.setAttribute("role", "button");
       item.setAttribute("tabindex", "0");
 
-      let status = "Not Started";
-      let isSolved = false;
+      let statusBadge = `<span class="paper-badge">Available</span>`;
       if (record && record.completed) {
-        status = record.won ? `Solved (${record.attemptsUsed}/${CONFIG.app.maxAttempts})` : "Unsolved";
-        isSolved = record.won;
+        statusBadge = record.won
+          ? `<span class="paper-badge paper-badge--sage">Verified (${record.attemptsUsed}/${APP_CONFIG.identity.maxAttempts})</span>`
+          : `<span class="paper-badge paper-badge--terracotta">Unsolved</span>`;
       }
 
-      const isCurrentDaily = AppState.todayPuzzle && AppState.todayPuzzle.id === puzzle.id;
-      const subtitle = isCurrentDaily ? "Today's Daily Challenge" : `Sequence #${index + 1}`;
+      const isToday = AppState.todayPuzzle && AppState.todayPuzzle.id === puzzle.id;
+      const subtitle = isToday ? "Today's Active Dispatch" : `Formulation #${index + 1}`;
 
       item.innerHTML = `
         <div>
           <div class="vault-item-title">${puzzle.title}</div>
-          <div class="status-caption">${subtitle}</div>
+          <div class="vault-item-sub">${subtitle}</div>
         </div>
-        <span class="badge ${isSolved ? "badge-accent" : ""}">${status}</span>
+        ${statusBadge}
       `;
 
-      const selectVaultPuzzle = () => startPuzzle(puzzle, !isCurrentDaily);
-      item.addEventListener("click", selectVaultPuzzle);
+      const launch = () => startPuzzle(puzzle, !isToday);
+      item.addEventListener("click", launch);
       item.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          selectVaultPuzzle();
+          launch();
         }
       });
-
       DOM.vaultList.appendChild(item);
     });
   }
 
   function renderSettings() {
     applyAnimationSetting();
+    applyHapticsSetting();
   }
 
-  // ==========================================================================
-  // 15. MODALS: STATS & RESULTS
-  // ==========================================================================
+  // Modals: Stats & Results
   function openStatsModal() {
+    triggerHapticPulse();
     const s = AppState.store.stats;
     DOM.statPlayed.textContent = s.played;
     DOM.statWinRate.textContent = `${s.played > 0 ? Math.round((s.won / s.played) * 100) : 0}%`;
@@ -936,15 +881,15 @@
 
     DOM.statsDistribution.innerHTML = "";
     const maxVal = Math.max(1, ...Object.values(s.dist));
-    for (let i = 1; i <= CONFIG.app.maxAttempts; i++) {
+    for (let i = 1; i <= APP_CONFIG.identity.maxAttempts; i++) {
       const count = s.dist[i] || 0;
-      const pct = Math.max(14, Math.round((count / maxVal) * 100));
+      const pct = Math.max(16, Math.round((count / maxVal) * 100));
 
       const row = document.createElement("div");
       row.className = "dist-row";
       row.innerHTML = `
-        <span style="width:16px;font-weight:700;font-family:var(--font-serif);">${i}</span>
-        <div class="dist-bar-bg">
+        <span style="width:14px;font-weight:700;font-family:var(--font-serif);">${i}</span>
+        <div class="dist-bar-track">
           <div class="dist-bar-fill" style="width:${pct}%">${count}</div>
         </div>
       `;
@@ -954,9 +899,12 @@
   }
 
   function openResultModal() {
+    triggerHapticPulse();
     const p = AppState.activePuzzle;
-    DOM.resultTitle.textContent = AppState.isWon ? "Sequence Mastered" : "Sequence Complete";
-    DOM.resultSubtitle.textContent = AppState.isArchiveMode ? p.title : `${p.title} (${AppState.activeDateString})`;
+    DOM.resultTitle.textContent = AppState.isWon ? "Formulation Verified" : "Sequence Concluded";
+    DOM.resultSubtitle.textContent = AppState.isArchiveMode
+      ? p.title
+      : `${p.title} — ${AppState.activeDateString}`;
 
     DOM.resultGrid.innerHTML = "";
     AppState.historyGrid.forEach((row) => {
@@ -981,67 +929,85 @@
     DOM.modalResult.classList.remove("hidden");
   }
 
-  // ==========================================================================
-  // 16. SHARING SYSTEM
-  // ==========================================================================
-  function handleShareAction() {
-    const url = window.location.href;
-    const title = CONFIG.app.name;
-    const text = "Discover the correct sequence of five mixology elements!";
-
-    if (navigator.share) {
-      navigator.share({ title, text, url }).catch(() => {});
-    } else if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url)
-        .then(() => showToast("Lounge link copied."))
-        .catch(() => showToast("Unable to copy link."));
-    } else {
-      showToast("Sharing not supported on this browser.");
-    }
-  }
-
+  // Sharing System
   function handleResultShare() {
+    triggerHapticPulse();
     const p = AppState.activePuzzle;
-    const score = AppState.isWon ? `${AppState.attemptsUsed}/${CONFIG.app.maxAttempts}` : `X/${CONFIG.app.maxAttempts}`;
+    const score = AppState.isWon
+      ? `${AppState.attemptsUsed}/${APP_CONFIG.identity.maxAttempts}`
+      : `X/${APP_CONFIG.identity.maxAttempts}`;
     const headerTitle = AppState.isArchiveMode ? p.title : `${AppState.activeDateString} (${p.title})`;
-    let shareText = `Sequence ${headerTitle} — ${score}\n`;
+
+    let shareText = `Sequence Formulation: ${headerTitle} — ${score}\n`;
     AppState.historyGrid.forEach((row) => {
-      shareText += row.map((cell) => (cell === "hit" ? "🥃" : "⬛")).join("") + "\n";
+      shareText += row.map((cell) => (cell === "hit" ? "🥃" : "⬜")).join("") + "\n";
     });
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(shareText)
-        .then(() => showToast("Score copied to clipboard!"))
-        .catch(() => showToast("Unable to copy score."));
+        .then(() => showToast(APP_CONFIG.content.notifications.scoreCopied))
+        .catch(() => showToast(APP_CONFIG.content.notifications.copyFailed));
     } else {
-      showToast("Clipboard unavailable.");
+      showToast(APP_CONFIG.content.notifications.copyFailed);
     }
   }
 
-  // ==========================================================================
-  // 17. EVENT BINDING
-  // ==========================================================================
+  // Event Binding
   function bindEvents() {
-    DOM.btnHeaderBack.addEventListener("click", () => showView("menu"));
-
-    DOM.btnMenuPlay.addEventListener("click", () => startPuzzle(AppState.todayPuzzle, false));
-    DOM.btnMenuVault.addEventListener("click", () => showView("vault"));
-    DOM.btnMenuSettings.addEventListener("click", () => showView("settings"));
-    DOM.btnMenuRules.addEventListener("click", openHowToPlay);
-
-    DOM.btnUtilStats.addEventListener("click", openStatsModal);
-    DOM.btnUtilShare.addEventListener("click", handleShareAction);
-    DOM.btnUtilPlus.addEventListener("click", () => {
-      showToast("Tileworks Nocturne collection.");
+    DOM.btnBackNav.addEventListener("click", () => {
+      triggerHapticPulse();
+      showView(APP_CONFIG.navigation.defaultFallbackRoute);
     });
 
-    DOM.btnAnimOn.addEventListener("click", () => setAnimationSetting(true));
-    DOM.btnAnimOff.addEventListener("click", () => setAnimationSetting(false));
+    DOM.btnHeaderHome.addEventListener("click", () => {
+      triggerHapticPulse();
+      window.location.href = APP_CONFIG.navigation.homeUrl;
+    });
 
+    DOM.btnHeaderStats.addEventListener("click", openStatsModal);
+
+    DOM.btnMenuPlay.addEventListener("click", () => startPuzzle(AppState.todayPuzzle, false));
+    DOM.btnMenuVault.addEventListener("click", () => { triggerHapticPulse(); showView("vault"); });
+    DOM.btnMenuRules.addEventListener("click", openHowToPlay);
+    DOM.btnMenuStatsCard.addEventListener("click", openStatsModal);
+    DOM.btnMenuSettings.addEventListener("click", () => { triggerHapticPulse(); showView("settings"); });
+
+    // Mobile Bottom Dock
+    DOM.dockBtnMenu.addEventListener("click", () => { triggerHapticPulse(); showView("menu"); });
+    DOM.dockBtnPlay.addEventListener("click", () => startPuzzle(AppState.todayPuzzle, false));
+    DOM.dockBtnVault.addEventListener("click", () => { triggerHapticPulse(); showView("vault"); });
+    DOM.dockBtnStats.addEventListener("click", openStatsModal);
+    DOM.dockBtnGuide.addEventListener("click", openHowToPlay);
+
+    // Settings Segmented Controls
+    DOM.btnAnimOn.addEventListener("click", () => {
+      AppState.store.settings.anim = true;
+      saveStorage();
+      applyAnimationSetting();
+    });
+    DOM.btnAnimOff.addEventListener("click", () => {
+      AppState.store.settings.anim = false;
+      saveStorage();
+      applyAnimationSetting();
+    });
+    DOM.btnHapticsOn.addEventListener("click", () => {
+      AppState.store.settings.haptics = true;
+      saveStorage();
+      applyHapticsSetting();
+      triggerHapticPulse();
+    });
+    DOM.btnHapticsOff.addEventListener("click", () => {
+      AppState.store.settings.haptics = false;
+      saveStorage();
+      applyHapticsSetting();
+    });
+
+    // How to Play Controls
     DOM.btnCloseRules.addEventListener("click", closeHowToPlay);
     DOM.btnRulesConfirm.addEventListener("click", closeHowToPlay);
     DOM.backdropRules.addEventListener("click", closeHowToPlay);
 
+    // Target Slots
     DOM.slots.forEach((el) => {
       const idx = parseInt(el.dataset.slot, 10);
       el.addEventListener("click", () => handleSlotClick(idx));
@@ -1058,6 +1024,7 @@
 
     DOM.btnCloseStats.addEventListener("click", () => DOM.modalStats.classList.add("hidden"));
     DOM.btnCloseResult.addEventListener("click", () => DOM.modalResult.classList.add("hidden"));
+
     DOM.btnResultMenu.addEventListener("click", () => {
       DOM.modalResult.classList.add("hidden");
       showView("menu");
@@ -1075,17 +1042,55 @@
     });
 
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        checkDateRollover();
-      }
+      if (document.visibilityState === "visible") checkDateRollover();
     });
-
     window.addEventListener("focus", checkDateRollover);
   }
 
-  // ==========================================================================
-  // 18. INITIAL RUNTIME BOOT
-  // ==========================================================================
+  // System Initialization
+  async function init() {
+    bindEvents();
+    initFloatingBotanicals();
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), APP_CONFIG.data.requestTimeoutMs);
+
+      const res = await fetch(APP_CONFIG.data.csvUrl, {
+        cache: APP_CONFIG.data.cacheMode,
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (!res.ok) throw new Error("Remote ledger dataset unavailable");
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (rows.length < 2) throw new Error("Dataset rows insufficient");
+
+      const header = rows[0].map((h) => h.toLowerCase());
+      const rawList = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || r.length === 0 || (r.length === 1 && !r[0])) continue;
+        const p = {};
+        header.forEach((k, idx) => {
+          p[k] = r[idx] !== undefined ? r[idx] : "";
+        });
+        if (p.title || p.slot_1_answer) rawList.push(p);
+      }
+
+      if (rawList.length === 0) throw new Error("No formulation rows found");
+      AppState.puzzles = rawList.map((p, idx) => transformRawPuzzle(p, idx));
+    } catch (err) {
+      AppState.puzzles = [getFallbackPuzzle()];
+    }
+
+    updateDailySelection();
+    showView("menu");
+    setInterval(checkDateRollover, 60000);
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {

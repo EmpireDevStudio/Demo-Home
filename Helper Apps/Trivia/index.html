@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Turnkey Cocktail Trivia Challenge Engine & RFC 4180 CSV Architect. Design, audit, simulate, and export calibrated 5-question daily puzzle rounds.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Daily Quiz — Editorial CSV Architect</title>
+
+  <!-- Typography: Charter Serif & Plus Jakarta Sans / System UI Stack -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Ambient Physical Lighting & Paper Canvas Foundation -->
+  <div class="paper-ambient-canvas" aria-hidden="true">
+    <div class="canvas-top-illumination"></div>
+    <div class="canvas-grain-layer"></div>
+  </div>
+
+  <div class="app-layout">
+    <!-- Standardized Universal Header (Part 5.1 Architecture) -->
+    <header class="app-page-header">
+      <div class="app-page-header__controls">
+        <button type="button" id="btnUniversalBack" class="btn-back-nav interactive-tactile" aria-label="Navigate to previous view">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="backNavLabel">Menu</span>
+        </button>
+
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <div id="saveDraftIndicator" class="draft-pill interactive-tactile" role="status" aria-live="polite" title="Draft status: Automatically saved to local storage">
+            <span class="draft-pill__dot"></span>
+            <span class="draft-pill__text" id="draftStatusText">Saved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">EDITORIAL ARCHITECT</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Cocktail Challenge Builder</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Create, inspect, and export verified 5-question daily trivia rounds conforming to the production quiz engine.
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Operational Workspace -->
+    <main class="app-content-body" id="appContentBody">
+
+      <!-- ================= 1. START / ONBOARDING VIEW ================= -->
+      <section id="startView" class="view-panel" aria-labelledby="startHeroHeading">
+        <div class="start-hero-card paper-card">
+          <div class="start-hero-badge">
+            <span class="paper-card__status-indicator paper-card__status-indicator--ochre">
+              <span class="status-dot"></span>
+              <span class="status-label">5-Question Round Matrix</span>
+            </span>
+          </div>
+          <h2 id="startHeroHeading" class="start-hero-title">Architect Daily Cocktail Challenges</h2>
+          <p class="start-hero-description">
+            Design trivia challenges adhering strictly to the RFC 4180 CSV standard. Every 5 questions seamlessly assemble into a complete, calibrated Daily Quiz challenge round.
+          </p>
+        </div>
+
+        <!-- Mode Selection Actions -->
+        <div class="start-options-grid">
+          <!-- Option A: Append to Existing File -->
+          <label for="csvFileInputAppend" class="mode-select-card interactive-tactile">
+            <input type="file" id="csvFileInputAppend" accept=".csv,text/csv" class="sr-only">
+            <div class="mode-select-card__body">
+              <div class="mode-select-card__meta">
+                <span class="mode-tag">Path A</span>
+                <span class="paper-card__status-indicator paper-card__status-indicator--sage">Preserve &amp; Extend</span>
+              </div>
+              <h3 class="mode-select-card__title">Append to Existing CSV</h3>
+              <p class="mode-select-card__desc">Upload your active <code>puzzles.csv</code> dataset and seamlessly append fresh challenges without losing past rounds.</p>
+            </div>
+            <div class="mode-select-card__arrow" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </label>
+
+          <!-- Option B: Create Fresh Dataset -->
+          <button type="button" id="btnCreateNew" class="mode-select-card interactive-tactile">
+            <div class="mode-select-card__body">
+              <div class="mode-select-card__meta">
+                <span class="mode-tag">Path B</span>
+                <span class="paper-card__status-indicator paper-card__status-indicator--ochre">Clean Slate</span>
+              </div>
+              <h3 class="mode-select-card__title">Create Fresh Dataset</h3>
+              <p class="mode-select-card__desc">Start an immaculate puzzle collection from scratch with guided schema validation and live preview.</p>
+            </div>
+            <div class="mode-select-card__arrow" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </button>
+
+          <!-- Option C: Audit / Edit Existing File -->
+          <label for="csvFileInputEdit" class="mode-select-card interactive-tactile">
+            <input type="file" id="csvFileInputEdit" accept=".csv,text/csv" class="sr-only">
+            <div class="mode-select-card__body">
+              <div class="mode-select-card__meta">
+                <span class="mode-tag">Path C</span>
+                <span class="paper-card__status-indicator paper-card__status-indicator--terracotta">Audit &amp; Repair</span>
+              </div>
+              <h3 class="mode-select-card__title">Audit &amp; Edit Existing CSV</h3>
+              <p class="mode-select-card__desc">Review loaded questions, repair missing options, reorganize sequence, or adjust reference keys.</p>
+            </div>
+            <div class="mode-select-card__arrow" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </label>
+        </div>
+
+        <!-- Saved Draft Banner (Conditioned via Local Storage) -->
+        <aside id="resumeDraftBanner" class="paper-card draft-banner-card hidden" aria-label="Unsaved draft recovery">
+          <div class="draft-banner-card__content">
+            <span class="paper-card__status-indicator paper-card__status-indicator--ochre">Unexported Session Recovered</span>
+            <p id="resumeDraftDetails" class="draft-banner-text">0 items detected in local browser memory.</p>
+          </div>
+          <div class="draft-banner-card__actions">
+            <button type="button" id="btnResumeDraft" class="interactive-tactile btn-primary">Resume Session</button>
+            <button type="button" id="btnDiscardDraft" class="interactive-tactile btn-secondary">Discard</button>
+          </div>
+        </aside>
+
+        <!-- Standard Sample Data Preloader -->
+        <div class="starter-auxiliary-tray">
+          <button type="button" id="btnLoadSampleData" class="interactive-tactile btn-secondary aux-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span>Load Canonical 5-Question Challenge Sample</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 2. QUESTION EDITOR VIEW ================= -->
+      <section id="builderView" class="view-panel hidden" aria-labelledby="editorHeading">
+        <div class="paper-card editor-form-card">
+          <!-- Editor Subheader -->
+          <div class="editor-form-header">
+            <div class="editor-form-title-group">
+              <span class="editor-mode-badge" id="editorModeTag">New Entry</span>
+              <h2 id="editorHeading" class="editor-main-headline">Question Architect</h2>
+            </div>
+            <div class="round-status-pill" id="roundIndicatorPill">
+              <span class="round-status-pill__label" id="roundBadgeText">Round #1 • Q1 of 5</span>
+            </div>
+          </div>
+
+          <!-- Quick Template Selector -->
+          <div class="template-selector-tray" aria-label="Reference Templates">
+            <span class="template-selector-title">Mixology Blueprints:</span>
+            <div class="template-chips-collection">
+              <button type="button" class="template-chip interactive-tactile" data-template="cocktail">Classic Recipe</button>
+              <button type="button" class="template-chip interactive-tactile" data-template="spirit">Distillation &amp; Law</button>
+              <button type="button" class="template-chip interactive-tactile" data-template="technique">Bar Technique</button>
+              <button type="button" class="template-chip interactive-tactile" data-template="glassware">Glassware &amp; Service</button>
+            </div>
+          </div>
+
+          <!-- Question Formulation Form -->
+          <form id="questionForm" class="architect-form" novalidate>
+            <!-- Step 1: Prompt -->
+            <div class="paper-input-group">
+              <div class="label-meta-row">
+                <label for="inputQuestion" class="paper-label">
+                  Question Prompt <span class="required-indicator" aria-hidden="true">*</span>
+                </label>
+                <code class="schema-pill" title="CSV schema column header">csv: question</code>
+              </div>
+              <p class="field-help-text">Formulate the trivia challenge presented to the guest.</p>
+              <textarea id="inputQuestion" class="paper-input paper-textarea" rows="3" required placeholder="e.g., Which classic cocktail is traditionally made with equal parts gin, sweet vermouth, and Campari?"></textarea>
+              <div class="field-validation-msg" id="feedbackQuestion" role="alert" aria-live="polite"></div>
+            </div>
+
+            <!-- Step 2: Answer Choices & Correct Key -->
+            <div class="paper-input-group">
+              <div class="label-meta-row">
+                <span class="paper-label">Answer Choices &amp; Solution Key <span class="required-indicator" aria-hidden="true">*</span></span>
+                <code class="schema-pill">csv: option_a .. option_d, answer</code>
+              </div>
+              <p class="field-help-text">Supply four distinct choices. Tap the key emblem to designate the correct solution.</p>
+
+              <div class="options-selection-grid">
+                <!-- Option A -->
+                <div class="option-row" id="optionRowA">
+                  <button type="button" class="btn-key-select interactive-tactile selected" data-letter="A" aria-label="Designate Option A as correct solution">
+                    <span class="key-letter">A</span>
+                    <span class="key-status-text">✓ Correct</span>
+                  </button>
+                  <div class="option-input-wrapper">
+                    <input type="text" id="inputOptionA" class="paper-input" placeholder="Option A text (e.g., Boulevardier)" required>
+                  </div>
+                </div>
+
+                <!-- Option B -->
+                <div class="option-row" id="optionRowB">
+                  <button type="button" class="btn-key-select interactive-tactile" data-letter="B" aria-label="Designate Option B as correct solution">
+                    <span class="key-letter">B</span>
+                    <span class="key-status-text">✓ Correct</span>
+                  </button>
+                  <div class="option-input-wrapper">
+                    <input type="text" id="inputOptionB" class="paper-input" placeholder="Option B text (e.g., Negroni)" required>
+                  </div>
+                </div>
+
+                <!-- Option C -->
+                <div class="option-row" id="optionRowC">
+                  <button type="button" class="btn-key-select interactive-tactile" data-letter="C" aria-label="Designate Option C as correct solution">
+                    <span class="key-letter">C</span>
+                    <span class="key-status-text">✓ Correct</span>
+                  </button>
+                  <div class="option-input-wrapper">
+                    <input type="text" id="inputOptionC" class="paper-input" placeholder="Option C text (e.g., Americano)" required>
+                  </div>
+                </div>
+
+                <!-- Option D -->
+                <div class="option-row" id="optionRowD">
+                  <button type="button" class="btn-key-select interactive-tactile" data-letter="D" aria-label="Designate Option D as correct solution">
+                    <span class="key-letter">D</span>
+                    <span class="key-status-text">✓ Correct</span>
+                  </button>
+                  <div class="option-input-wrapper">
+                    <input type="text" id="inputOptionD" class="paper-input" placeholder="Option D text (e.g., Martinez)" required>
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" id="inputAnswerLetter" value="A">
+              <div class="field-validation-msg" id="feedbackOptions" role="alert" aria-live="polite"></div>
+            </div>
+
+            <!-- Step 3: Reference Explanation -->
+            <div class="paper-input-group">
+              <div class="label-meta-row">
+                <label for="inputExplanation" class="paper-label">
+                  Historical &amp; Mixological Factoid <span class="optional-tag">(Recommended)</span>
+                </label>
+                <code class="schema-pill">csv: explanation</code>
+              </div>
+              <p class="field-help-text">Presented immediately following guess resolution to reveal the verified history.</p>
+              <textarea id="inputExplanation" class="paper-input paper-textarea" rows="2" placeholder="e.g., The Negroni was created in Florence around 1919 when Count Camillo Negroni requested gin in place of soda water in his Americano."></textarea>
+              <div class="field-validation-msg" id="feedbackExplanation" role="alert" aria-live="polite"></div>
+            </div>
+
+            <!-- Form Action Buttons -->
+            <div class="form-action-dock">
+              <button type="submit" id="btnSaveQuestion" class="interactive-tactile btn-primary">
+                <span id="btnSaveText">Commit Question</span>
+              </button>
+              <button type="button" id="btnSaveAndNew" class="interactive-tactile btn-secondary">
+                <span>Save &amp; Add Another</span>
+              </button>
+              <button type="button" id="btnCancelEdit" class="interactive-tactile btn-secondary hidden">
+                <span>Cancel</span>
+              </button>
+              <button type="button" id="btnClearForm" class="interactive-tactile btn-secondary">
+                <span>Clear</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- In-Game Mirror Simulation Card -->
+        <article class="paper-card simulation-card" aria-label="Live question preview">
+          <div class="paper-card__header">
+            <span class="paper-card__status-indicator paper-card__status-indicator--sage">
+              <span class="status-dot"></span>
+              <span class="status-label">In-Game Mirror</span>
+            </span>
+            <span class="sim-counter-tag" id="simCounterTag">Question 1 of 5</span>
+          </div>
+          <div class="sim-viewport">
+            <h3 class="sim-prompt-text" id="simQuestionText">Your question prompt will preview here...</h3>
+            <div class="sim-options-collection" id="simOptionsList">
+              <!-- Hydrated dynamically -->
+            </div>
+            <div class="sim-explanation-card">
+              <div class="sim-explanation-tag">✓ Verified Reference</div>
+              <p class="sim-explanation-content" id="simExplanationText">Verified reference answer.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 3. CATALOG MANAGER VIEW ================= -->
+      <section id="managerView" class="view-panel hidden" aria-labelledby="catalogHeadline">
+        <div class="paper-card catalog-control-card">
+          <div class="catalog-control-header">
+            <div>
+              <span class="app-page-header__eyebrow">DATASET INVENTORY</span>
+              <h2 id="catalogHeadline" class="catalog-title">Question Catalog</h2>
+            </div>
+            <div class="catalog-metrics-pills">
+              <span class="paper-card__status-indicator paper-card__status-indicator--ochre" id="catalogQuestionsTotal">0 Questions</span>
+              <span class="paper-card__status-indicator paper-card__status-indicator--sage" id="catalogRoundsTotal">0 Complete Rounds</span>
+            </div>
+          </div>
+
+          <!-- 5-Question Round Balance Auditor Notification -->
+          <div id="roundBalanceNotice" class="round-balance-banner" role="status">
+            <div class="balance-banner-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <p id="roundBalanceNoticeText" class="balance-banner-text">
+              Daily Quiz serves 5 questions per challenge. Start adding questions to form Round #1.
+            </p>
+          </div>
+
+          <!-- Catalog Toolbar -->
+          <div class="catalog-toolbar">
+            <div class="search-field-wrapper">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="search" id="catalogSearchInput" class="paper-input search-input" placeholder="Filter questions, options, or explanations..." aria-label="Search puzzle catalog">
+            </div>
+
+            <div class="toolbar-actions">
+              <button type="button" id="btnNewQuestionFromCatalog" class="interactive-tactile btn-primary">
+                <span>+ Add Question</span>
+              </button>
+              <button type="button" id="btnClearAllQuestions" class="interactive-tactile btn-danger" title="Remove all items from current workspace">
+                <span>Clear All</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Catalog Items List -->
+        <div class="catalog-items-container" id="catalogItemsContainer">
+          <!-- Dynamically populated question cards -->
+        </div>
+
+        <!-- Empty Catalog State -->
+        <div id="catalogEmptyState" class="paper-card empty-catalog-card hidden">
+          <div class="empty-seal" aria-hidden="true"></div>
+          <h3 class="empty-catalog-headline">No Questions in Dataset</h3>
+          <p class="empty-catalog-description">Begin composing trivia records using the structured architect, or upload an existing CSV document.</p>
+          <div class="empty-catalog-actions">
+            <button type="button" id="btnEmptyCreate" class="interactive-tactile btn-primary">+ Create First Question</button>
+            <label for="csvFileInputEmpty" class="interactive-tactile btn-secondary">
+              <input type="file" id="csvFileInputEmpty" accept=".csv,text/csv" class="sr-only">
+              <span>Import Existing CSV</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. VALIDATION & EXPORT VIEW ================= -->
+      <section id="previewView" class="view-panel hidden" aria-labelledby="exportHeading">
+        <div class="paper-card export-control-card">
+          <div class="paper-card__header">
+            <div>
+              <span class="app-page-header__eyebrow">QUALITY AUDIT &amp; SERIALIZATION</span>
+              <h2 id="exportHeading" class="paper-card__title">Validation &amp; Export</h2>
+            </div>
+            <div class="view-mode-toggle" role="group" aria-label="Presentation Format">
+              <button type="button" id="btnViewFriendly" class="view-mode-btn active interactive-tactile">Formatted Table</button>
+              <button type="button" id="btnViewTechnical" class="view-mode-btn interactive-tactile">Technical RFC 4180 CSV</button>
+            </div>
+          </div>
+
+          <!-- Quality Assurance Diagnostic Banner -->
+          <div id="validationAuditBanner" class="audit-status-card" role="region" aria-label="Dataset verification status">
+            <div class="audit-status-header">
+              <span class="audit-status-badge" id="auditIcon">✓</span>
+              <div class="audit-status-meta">
+                <h3 class="audit-status-title" id="auditTitle">Schema Verification Active</h3>
+                <p class="audit-status-subtitle" id="auditSubtitle">All records strictly conform to Daily Quiz schema.</p>
+              </div>
+            </div>
+            <div id="auditIssueList" class="audit-issues-tray hidden"></div>
+          </div>
+
+          <!-- Export Parameters & Triggers -->
+          <div class="export-settings-block">
+            <div class="export-filename-group">
+              <label for="exportFilenameInput" class="paper-label">Export File Name:</label>
+              <div class="filename-input-shell">
+                <input type="text" id="exportFilenameInput" class="paper-input filename-input" value="puzzles_updated.csv">
+                <span class="filename-extension">.csv</span>
+              </div>
+            </div>
+
+            <div class="export-buttons-tray">
+              <button type="button" id="btnDownloadFullCsv" class="interactive-tactile btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Download Complete CSV (<span id="btnExportFullCount">0</span>)</span>
+              </button>
+
+              <button type="button" id="btnDownloadNewOnly" class="interactive-tactile btn-secondary" title="Export only questions added or edited in this session">
+                <span>Download New Additions (<span id="btnExportNewCount">0</span>)</span>
+              </button>
+
+              <button type="button" id="btnDownloadTemplate" class="interactive-tactile btn-secondary" title="Download empty canonical CSV template">
+                <span>Blank Schema Template</span>
+              </button>
+
+              <button type="button" id="btnCopyCsvClipboard" class="interactive-tactile btn-secondary" title="Copy raw CSV to system clipboard">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy to Clipboard</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Friendly Table Preview -->
+        <div id="friendlyPreviewSection" class="paper-card table-preview-panel">
+          <div class="table-scroll-boundary">
+            <table class="editorial-table" id="friendlyTable">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 54px;">#</th>
+                  <th scope="col" style="min-width: 220px;">Question</th>
+                  <th scope="col" style="min-width: 130px;">Option A</th>
+                  <th scope="col" style="min-width: 130px;">Option B</th>
+                  <th scope="col" style="min-width: 130px;">Option C</th>
+                  <th scope="col" style="min-width: 130px;">Option D</th>
+                  <th scope="col" style="width: 65px; text-align: center;">Key</th>
+                  <th scope="col" style="min-width: 220px;">Explanation</th>
+                </tr>
+              </thead>
+              <tbody id="friendlyTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Raw Technical RFC 4180 Preview -->
+        <div id="technicalPreviewSection" class="paper-card technical-preview-panel hidden">
+          <div class="technical-preview-header">
+            <span class="app-page-header__eyebrow">RAW SERIALIZATION</span>
+            <span class="paper-card__status-indicator paper-card__status-indicator--sage">RFC 4180 Standard • UTF-8</span>
+          </div>
+          <pre class="raw-csv-stream" id="rawCsvCode" tabindex="0"></pre>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Standard Ergonomic Bottom Thumb-Zone Navigation (Part 5.2 Architecture) -->
+    <nav class="app-bottom-dock" aria-label="Primary Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <button type="button" class="nav-tab-item interactive-tactile" data-target-view="startView" aria-label="Start and Onboarding">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5h-5v-6h-5v6h-5A1.5 1.5 0 0 1 3 20V10.5z"/>
+          </svg>
+          <span class="nav-tab-label">Start</span>
+          <span class="nav-tab-item__indicator"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item interactive-tactile" data-target-view="builderView" aria-label="Question Architect">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span class="nav-tab-label" id="tabBuilderNavLabel">Architect</span>
+          <span class="nav-tab-item__indicator"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item interactive-tactile" data-target-view="managerView" aria-label="Dataset Catalog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="nav-tab-label">Catalog (<span id="dockCountBadge">0</span>)</span>
+          <span class="nav-tab-item__indicator"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item interactive-tactile" data-target-view="previewView" aria-label="Validation and Export">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span class="nav-tab-label">Export</span>
+          <span class="nav-tab-item__indicator"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Contextual Confirmation Dialog Modal -->
+    <div id="confirmModalBackdrop" class="modal-backdrop hidden" role="presentation">
+      <div class="confirm-dialog paper-card" role="dialog" aria-modal="true" aria-labelledby="confirmDialogTitle" aria-describedby="confirmDialogMessage">
+        <div class="paper-card__header">
+          <h3 id="confirmDialogTitle" class="paper-card__title">Confirm Action</h3>
+        </div>
+        <p id="confirmDialogMessage" class="confirm-dialog-body">Are you sure you want to proceed?</p>
+        <div class="confirm-dialog-actions">
+          <button type="button" id="btnConfirmCancel" class="interactive-tactile btn-secondary">Cancel</button>
+          <button type="button" id="btnConfirmProceed" class="interactive-tactile btn-danger">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tactile Sensory Toast Notification -->
+    <div id="toastMessage" class="toast-feedback" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

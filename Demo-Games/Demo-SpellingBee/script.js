@@ -1,108 +1,150 @@
-/* ==========================================================================
-   SPELLING BEE • HIGH-PROOF HONEYCOMB
-   Production Release Version
-   ========================================================================== */
+/**
+ * =========================================================================
+ * CLIENT CONFIGURATION ENGINE (APP_CONFIG)
+ * Production-Ready White-Label Master Configuration
+ * All application copy, branding, endpoints, and toggles are managed here.
+ * =========================================================================
+ */
+const APP_CONFIG = Object.freeze({
+  // 1. APPLICATION IDENTITY & METADATA
+  identity: {
+    appId: "artisanal-spelling-bee-suite",
+    appName: "Spelling Bee",
+    appTagline: "Artisanal Vocabulary Ledger & Daily Hive Challenge",
+    version: "6.0.0",
+    environment: "production",
+    canonicalUrl: "../",
+    language: "en-US",
+    locale: "en-US",
+    currency: "USD",
+  },
+
+  // 2. BRANDING & VISUAL PALETTE OVERRIDES
+  branding: {
+    logoUrl: "./assets/brand-logo.svg",
+    logoAlt: "Spelling Bee Artisanal Seal",
+    faviconUrl: "./favicon.ico",
+    appIconApple: "./apple-touch-icon.png",
+    accentColor: "#6E5614",      // High-contrast Warm Ochre
+    accentSecondary: "#3E5B42",  // High-contrast Sage Green
+    accentHighlight: "#963E35",  // High-contrast Terracotta Red
+    fontFamilyBase: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamilySerif: "Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif",
+  },
+
+  // 3. GLOBAL NAVIGATION ARCHITECTURE
+  navigation: {
+    enableTopBackNavigation: true,
+    defaultFallbackRoute: "menu",
+    items: [
+      { id: "menu", label: "Workspace", icon: "icon-overview", route: "#menu", enabled: true },
+      { id: "game", label: "Hive", icon: "icon-hive", route: "#game", enabled: true },
+      { id: "vault", label: "Vault", icon: "icon-vault", route: "#vault", enabled: true },
+    ],
+  },
+
+  // 4. APPLICATION COPY & CONTENT MATRIX (ZERO-PLACEHOLDER PRODUCTION DATA)
+  content: {
+    headers: {
+      defaultTitle: "Spelling Bee",
+      defaultSubtitle: "Artisanal vocabulary challenge. Construct words with the daily hive stationery.",
+      vaultTitle: "The Vault",
+      vaultSubtitle: "Historical challenges. Browse, replay, or complete unfound words.",
+    },
+    emptyStates: {
+      noDataHeading: "No Historical Hives Documented",
+      noDataDescription: "The archive index is currently empty. Synchronize or load additional puzzles.",
+      noSearchResultsHeading: "No Matching Honeycombs Found",
+      noSearchResultsDescription: "Review your filter parameters and attempt the query again.",
+    },
+    actions: {
+      confirm: "Confirm & Proceed",
+      cancel: "Discard Changes",
+      save: "Save Ledger Entry",
+      delete: "Remove Permanently",
+      retry: "Retry Operation",
+      back: "Navigate Back",
+    },
+    notifications: {
+      saveSuccess: "Progress committed to local ledger.",
+      saveError: "Unable to commit changes. Verify storage quota.",
+      streakProtected: "Streak Shield Activated! Sequence safeguarded.",
+      copySuccess: "Daily ledger summary copied to clipboard.",
+    },
+    legal: {
+      copyrightHolder: "Editorial Ledger Systems LLC",
+      establishedYear: 2026,
+    },
+  },
+
+  // 5. EXTERNAL LINKS, SUPPORT & SUITE
+  support: {
+    contactEmail: "",
+    suiteUrl: "../../",
+    socialLinks: {
+      documentation: "",
+    },
+  },
+
+  // 6. FEATURE SWITCHES & INTERACTION CONTROLS
+  features: {
+    enableHapticFeedback: true,        // Gentle 12ms navigator.vibrate()
+    enableSmoothPageTransitions: true, // Kinetic transitions
+    enableAutoSave: true,              // Automatic persistence
+    autoSaveIntervalMs: 5000,
+    enableDetailedDiagnostics: false,  // Telemetry logs
+    enableAtmosphericLighting: true,   // Subtle top-down ambient lighting
+  },
+
+  // 7. API ENDPOINTS & STORAGE KEYS
+  endpoints: {
+    csvPath: "./puzzles.csv",
+    dictionaryApiUrl: "https://api.dictionaryapi.dev/api/v2/entries/en/",
+    storageKeys: {
+      save: "artisanal_spelling_bee_save_v6",
+      cachedPuzzles: "artisanal_spelling_bee_cached_puzzles_v3",
+      draftPrefix: "artisanal_spelling_bee_draft_",
+      settings: "artisanal_spelling_bee_settings_v2",
+    },
+  },
+
+  // 8. DAILY CYCLE ANCHOR
+  dailyCycle: {
+    anchorDate: "2025-01-01",
+    startIndex: 0,
+    dateLocale: "en-US",
+    dateOptions: {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    }
+  }
+});
 
 (function () {
-  'use strict';
-
-  /* ==========================================================================
-     DEVELOPER CONFIGURATION
-     Central control panel for application parameters and behaviour
-     ========================================================================== */
-  const CONFIG = {
-    app: {
-      name: 'Spelling Bee',
-      version: '6.0.0',
-      plusButtonAction: {
-        url: '../Demo-Games/',
-        fallbackMessage: 'Spelling Bee • High-Proof Hive Edition'
-      }
-    },
-    data: {
-      csvPath: './puzzles.csv',
-      storageKeys: {
-        save: 'cocktail_spelling_bee_save_v6',
-        cachedPuzzles: 'cocktail_spelling_bee_cached_puzzles_v3',
-        draftPrefix: 'cocktail_spelling_bee_draft_',
-        settings: 'cocktail_spelling_bee_settings_v2'
-      }
-    },
-    dailyCycle: {
-      // Calendar day anchoring index 0 of the sequential puzzle sequence.
-      // Format: YYYY-MM-DD in local calendar time.
-      anchorDate: '2025-01-01',
-      startIndex: 0
-    },
-    display: {
-      dateLocale: 'en-US',
-      dateOptions: {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      }
-    }
-  };
+  "use strict";
 
   const RANKS = [
-    { name: 'Beginner', pct: 0 },
-    { name: 'Good Start', pct: 0.03 },
-    { name: 'Moving Up', pct: 0.08 },
-    { name: 'Good', pct: 0.16 },
-    { name: 'Solid', pct: 0.26 },
-    { name: 'Nice', pct: 0.40 },
-    { name: 'Great', pct: 0.55 },
-    { name: 'Amazing', pct: 0.70 },
-    { name: 'Genius', pct: 0.85 },
-    { name: 'Queen Bee', pct: 1.00 }
+    { name: "Beginner", pct: 0 },
+    { name: "Good Start", pct: 0.03 },
+    { name: "Moving Up", pct: 0.08 },
+    { name: "Good", pct: 0.16 },
+    { name: "Solid", pct: 0.26 },
+    { name: "Nice", pct: 0.40 },
+    { name: "Great", pct: 0.55 },
+    { name: "Amazing", pct: 0.70 },
+    { name: "Genius", pct: 0.85 },
+    { name: "Queen Bee", pct: 1.00 }
   ];
 
-  const FALLBACK_PUZZLES = [
-    {
-      id: 'puzzle_fallback_1',
-      puzzleNumber: 1,
-      centerLetter: 'T',
-      outerLetters: ['A', 'E', 'I', 'N', 'R', 'S'],
-      words: [
-        'ANTI', 'ARTIST', 'ATTAIN', 'ATTIRE', 'EAST', 'EATEN', 'EATER', 'EATS',
-        'ENTER', 'ENTERS', 'ESTATE', 'INITIATE', 'INSTATE', 'INTENT', 'INTER',
-        'INTERN', 'IRATE', 'ITERATE', 'NATTER', 'NEAT', 'NEST', 'NETT', 'RATE',
-        'RATER', 'RATES', 'RETAIN', 'RETINA', 'SAINT', 'SATIN', 'STAIN', 'STAINER',
-        'STAIR', 'STAR', 'STARE', 'START', 'STATE', 'STEER', 'STEIN', 'STERN',
-        'STIR', 'STRAIN', 'STRAINER', 'STRAIT', 'STRATA', 'TAINT', 'TANNIN',
-        'TARE', 'TARN', 'TART', 'TASTE', 'TASTER', 'TEAR', 'TEAT', 'TEEN',
-        'TENET', 'TENNIS', 'TENT', 'TERRA', 'TERSE', 'TIARA', 'TIER', 'TINE',
-        'TINT', 'TIRE', 'TITAN', 'TITRE', 'TRAIN', 'TRAINER', 'TRAIT', 'TRANSIT',
-        'TREAT', 'TREE'
-      ],
-      pangrams: ['STAINER', 'STRAINER']
-    },
-    {
-      id: 'puzzle_fallback_2',
-      puzzleNumber: 2,
-      centerLetter: 'G',
-      outerLetters: ['E', 'I', 'N', 'O', 'R', 'S'],
-      words: [
-        'EGGS', 'EGOS', 'ERGO', 'ERGS', 'GEAR', 'GEARS', 'GEESE', 'GENIE', 'GENRE',
-        'GIGS', 'GINGER', 'GINS', 'GOER', 'GOES', 'GONE', 'GONG', 'GORE', 'GORGE',
-        'GORGER', 'GORGES', 'GORGON', 'GREEN', 'GREENS', 'GRIN', 'GRINS', 'GROG',
-        'GROIN', 'IGNORE', 'IGNORES', 'OGRE', 'OGRES', 'ORIGIN', 'REGION', 'REGIONS',
-        'REIGN', 'REIGNS', 'RESIGN', 'RESIGNS', 'RING', 'RINGER', 'RINGS', 'SAGE',
-        'SAGER', 'SAGES', 'SIGN', 'SIGNER', 'SIGNS', 'SING', 'SINGER', 'SINGE',
-        'SINGES', 'SINGS', 'SONG', 'SONGS'
-      ],
-      pangrams: ['RESIGN', 'RESIGNS', 'IGNORES', 'REGION', 'REGIONS']
-    }
-  ];
 
   /* ==========================================================================
      CONTINUOUS DAILY PUZZLE CYCLE ENGINE
-     Deterministic calendar arithmetic based on local device date
      ========================================================================== */
   class ContinuousDailyCycleEngine {
     constructor(anchorDateStr, startIndex = 0) {
       this.startIndex = startIndex;
-      const parts = (anchorDateStr || '2025-01-01').split('-');
+      const parts = (anchorDateStr || "2025-01-01").split("-");
       const y = parseInt(parts[0], 10);
       const m = parseInt(parts[1], 10) - 1;
       const d = parseInt(parts[2], 10);
@@ -119,13 +161,16 @@
 
     getLocalDateString(targetDate = new Date()) {
       const y = targetDate.getFullYear();
-      const m = String(targetDate.getMonth() + 1).padStart(2, '0');
-      const d = String(targetDate.getDate()).padStart(2, '0');
+      const m = String(targetDate.getMonth() + 1).padStart(2, "0");
+      const d = String(targetDate.getDate()).padStart(2, "0");
       return `${y}-${m}-${d}`;
     }
 
     formatDisplayDate(targetDate = new Date()) {
-      return targetDate.toLocaleDateString(CONFIG.display.dateLocale, CONFIG.display.dateOptions);
+      return targetDate.toLocaleDateString(
+        APP_CONFIG.dailyCycle.dateLocale,
+        APP_CONFIG.dailyCycle.dateOptions
+      );
     }
 
     getPuzzleIndexForDate(totalPuzzles, targetDate = new Date()) {
@@ -138,7 +183,7 @@
   }
 
   /* ==========================================================================
-     CORE PUZZLE VALIDATION & SCORING ENGINE
+     SCORING & VALIDATION ENGINE
      ========================================================================== */
   class SpellingBeeEngine {
     static calculateWordScore(word, puzzle) {
@@ -171,29 +216,29 @@
     }
 
     static validateWord(rawWord, puzzle, foundWords) {
-      const word = (rawWord || '').trim().toUpperCase();
-      if (!word) return { valid: false, error: 'Empty' };
+      const word = (rawWord || "").trim().toUpperCase();
+      if (!word) return { valid: false, error: "Input empty" };
 
       if (word.length < 4) {
-        return { valid: false, error: 'Too short (min 4)' };
+        return { valid: false, error: "Too short (min 4 letters)" };
       }
 
       if (!word.includes(puzzle.centerLetter)) {
-        return { valid: false, error: 'Missing center letter' };
+        return { valid: false, error: "Missing center letter" };
       }
 
       const allowedLetters = new Set([puzzle.centerLetter, ...puzzle.outerLetters]);
-      const invalidLetter = word.split('').find(ch => !allowedLetters.has(ch));
+      const invalidLetter = word.split("").find(ch => !allowedLetters.has(ch));
       if (invalidLetter) {
         return { valid: false, error: `Letter '${invalidLetter}' not in hive` };
       }
 
       if (foundWords.includes(word)) {
-        return { valid: false, error: 'Already found' };
+        return { valid: false, error: "Already recorded" };
       }
 
       if (!puzzle.words.includes(word)) {
-        return { valid: false, error: 'Not in word list' };
+        return { valid: false, error: "Not in authorized word list" };
       }
 
       const points = this.calculateWordScore(word, puzzle);
@@ -211,268 +256,30 @@
   }
 
   /* ==========================================================================
-     BOTANICAL GARNISH VECTOR ICON ASSETS
-     ========================================================================== */
-  const GARNISH_SVG_ICONS = [
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <path d="M12 44 C10 32, 22 20, 34 22 C46 24, 48 12, 38 8 C30 5, 20 12, 24 24 C28 36, 44 38, 48 48 C50 54, 42 56, 36 52" fill="none" stroke="#E86A2D" stroke-width="4.5" stroke-linecap="round"/>
-      <path d="M14 43 C12 33, 23 22, 34 24 C44 26, 46 14, 38 10" fill="none" stroke="#F5DE8C" stroke-width="1.6" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <path d="M15 48 C8 36, 16 18, 30 18 C44 18, 52 28, 46 40 C42 48, 30 52, 22 46 C16 42, 18 30, 26 24 C32 20, 42 22, 45 14" fill="none" stroke="#F5DE8C" stroke-width="3.8" stroke-linecap="round"/>
-      <path d="M17 47 C11 37, 18 20, 30 20 C42 20, 50 29, 45 39" fill="none" stroke="#FFF1BE" stroke-width="1.3" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <circle cx="30" cy="30" r="24" fill="#1C381E" stroke="#7BA858" stroke-width="2.6"/>
-      <circle cx="30" cy="30" r="20" fill="none" stroke="#A3D977" stroke-width="1.2" stroke-dasharray="2 3"/>
-      <circle cx="30" cy="30" r="3.5" fill="#C2F099"/>
-      <line x1="30" y1="10" x2="30" y2="26.5" stroke="#7BA858" stroke-width="1.6"/>
-      <line x1="30" y1="33.5" x2="30" y2="50" stroke="#7BA858" stroke-width="1.6"/>
-      <line x1="10" y1="30" x2="26.5" y2="30" stroke="#7BA858" stroke-width="1.6"/>
-      <line x1="33.5" y1="30" x2="50" y2="30" stroke="#7BA858" stroke-width="1.6"/>
-      <line x1="16" y1="16" x2="27.5" y2="27.5" stroke="#7BA858" stroke-width="1.6"/>
-      <line x1="32.5" y1="32.5" x2="44" y2="44" stroke="#7BA858" stroke-width="1.6"/>
-      <line x1="16" y1="44" x2="27.5" y2="32.5" stroke="#7BA858" stroke-width="1.6"/>
-      <line x1="32.5" y1="27.5" x2="44" y2="16" stroke="#7BA858" stroke-width="1.6"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <circle cx="30" cy="30" r="25" fill="#421414" stroke="#DF8235" stroke-width="2.8"/>
-      <circle cx="30" cy="30" r="21" fill="none" stroke="#F87171" stroke-width="1.4"/>
-      <circle cx="30" cy="30" r="4" fill="#FCA5A5"/>
-      <line x1="30" y1="9" x2="30" y2="26" stroke="#DF8235" stroke-width="1.8"/>
-      <line x1="30" y1="34" x2="30" y2="51" stroke="#DF8235" stroke-width="1.8"/>
-      <line x1="9" y1="30" x2="26" y2="30" stroke="#DF8235" stroke-width="1.8"/>
-      <line x1="34" y1="30" x2="51" y2="30" stroke="#DF8235" stroke-width="1.8"/>
-      <line x1="15" y1="15" x2="27" y2="27" stroke="#DF8235" stroke-width="1.8"/>
-      <line x1="33" y1="33" x2="45" y2="45" stroke="#DF8235" stroke-width="1.8"/>
-      <line x1="15" y1="45" x2="27" y2="33" stroke="#DF8235" stroke-width="1.8"/>
-      <line x1="33" y1="27" x2="45" y2="15" stroke="#DF8235" stroke-width="1.8"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <circle cx="30" cy="30" r="24" fill="#38080C" stroke="#C4511D" stroke-width="2.6"/>
-      <circle cx="30" cy="19" r="19" fill="#540D14" stroke="#991B1B" stroke-width="1"/>
-      <circle cx="30" cy="30" r="3.5" fill="#FCA5A5"/>
-      <line x1="30" y1="11" x2="30" y2="26.5" stroke="#C4511D" stroke-width="1.6"/>
-      <line x1="30" y1="33.5" x2="30" y2="49" stroke="#C4511D" stroke-width="1.6"/>
-      <line x1="11" y1="30" x2="26.5" y2="30" stroke="#C4511D" stroke-width="1.6"/>
-      <line x1="33.5" y1="30" x2="49" y2="30" stroke="#C4511D" stroke-width="1.6"/>
-      <line x1="16.5" y1="16.5" x2="27.5" y2="27.5" stroke="#C4511D" stroke-width="1.6"/>
-      <line x1="32.5" y1="32.5" x2="43.5" y2="43.5" stroke="#C4511D" stroke-width="1.6"/>
-      <line x1="16.5" y1="43.5" x2="27.5" y2="32.5" stroke="#C4511D" stroke-width="1.6"/>
-      <line x1="32.5" y1="27.5" x2="43.5" y2="16.5" stroke="#C4511D" stroke-width="1.6"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <circle cx="30" cy="30" r="24" fill="#2E1809" stroke="#A5772D" stroke-width="2.5"/>
-      <circle cx="30" cy="30" r="20" fill="none" stroke="#CCA048" stroke-width="1.2" stroke-dasharray="3 2"/>
-      <circle cx="30" cy="30" r="3.5" fill="#ECD078"/>
-      <line x1="30" y1="10" x2="30" y2="26.5" stroke="#A5772D" stroke-width="1.6"/>
-      <line x1="30" y1="33.5" x2="30" y2="50" stroke="#A5772D" stroke-width="1.6"/>
-      <line x1="10" y1="30" x2="26.5" y2="30" stroke="#A5772D" stroke-width="1.6"/>
-      <line x1="33.5" y1="30" x2="50" y2="30" stroke="#A5772D" stroke-width="1.6"/>
-      <line x1="16" y1="16" x2="27.5" y2="27.5" stroke="#A5772D" stroke-width="1.6"/>
-      <line x1="32.5" y1="32.5" x2="44" y2="44" stroke="#A5772D" stroke-width="1.6"/>
-      <line x1="16" y1="44" x2="27.5" y2="32.5" stroke="#A5772D" stroke-width="1.6"/>
-      <line x1="32.5" y1="27.5" x2="44" y2="16" stroke="#A5772D" stroke-width="1.6"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <path d="M30 26 C30 14, 42 6, 48 8" fill="none" stroke="#73501D" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="28" cy="36" r="14" fill="#7F1D1D" stroke="#DC2626" stroke-width="2.2"/>
-      <ellipse cx="23" cy="32" rx="4" ry="2.5" transform="rotate(-30 23 32)" fill="#FCA5A5" opacity="0.65"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <path d="M18 36 C18 18, 30 10, 36 8" fill="none" stroke="#73501D" stroke-width="2" stroke-linecap="round"/>
-      <path d="M42 38 C42 20, 34 10, 36 8" fill="none" stroke="#73501D" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="18" cy="40" r="11" fill="#7F1D1D" stroke="#DC2626" stroke-width="2"/>
-      <circle cx="42" cy="42" r="11" fill="#991B1B" stroke="#EF4444" stroke-width="2"/>
-      <ellipse cx="14" cy="37" rx="3.5" ry="2" transform="rotate(-30 14 37)" fill="#FCA5A5" opacity="0.6"/>
-      <ellipse cx="38" cy="39" rx="3.5" ry="2" transform="rotate(-30 38 39)" fill="#FCA5A5" opacity="0.6"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <path d="M30 52 C30 36, 30 18, 30 12" fill="none" stroke="#4D7C0F" stroke-width="2.4" stroke-linecap="round"/>
-      <path d="M30 34 C20 30, 14 22, 18 16 C24 14, 28 24, 30 34 Z" fill="#365314" stroke="#84CC16" stroke-width="1.8"/>
-      <path d="M30 28 C40 24, 46 16, 42 10 C36 8, 32 18, 30 28 Z" fill="#365314" stroke="#84CC16" stroke-width="1.8"/>
-      <path d="M30 14 C26 6, 34 6, 30 14 Z" fill="#4D7C0F" stroke="#A3E635" stroke-width="1.5"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <path d="M15 50 C24 40, 36 26, 45 10" fill="none" stroke="#527928" stroke-width="2.2" stroke-linecap="round"/>
-      <line x1="22" y1="42" x2="16" y2="36" stroke="#7BA858" stroke-width="2.2" stroke-linecap="round"/>
-      <line x1="26" y1="37" x2="34" y2="40" stroke="#7BA858" stroke-width="2.2" stroke-linecap="round"/>
-      <line x1="30" y1="32" x2="24" y2="24" stroke="#7BA858" stroke-width="2.2" stroke-linecap="round"/>
-      <line x1="34" y1="27" x2="42" y2="30" stroke="#7BA858" stroke-width="2.2" stroke-linecap="round"/>
-      <line x1="38" y1="21" x2="32" y2="14" stroke="#7BA858" stroke-width="2.2" stroke-linecap="round"/>
-      <line x1="42" y1="16" x2="50" y2="18" stroke="#7BA858" stroke-width="2.2" stroke-linecap="round"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <ellipse cx="30" cy="30" rx="14" ry="20" fill="#364918" stroke="#65882B" stroke-width="2.4"/>
-      <circle cx="30" cy="22" r="5.5" fill="#991B1B" stroke="#DC2626" stroke-width="1.5"/>
-      <ellipse cx="25" cy="34" rx="3.5" ry="6" fill="#A3D977" opacity="0.35"/>
-    </svg>`,
-    `<svg viewBox="0 0 60 60" aria-hidden="true">
-      <path d="M12 48 C20 40, 18 28, 30 24 C42 20, 38 12, 48 10" fill="none" stroke="#225429" stroke-width="6" stroke-linecap="round"/>
-      <path d="M12 48 C20 40, 18 28, 30 24 C42 20, 38 12, 48 10" fill="none" stroke="#86EFAC" stroke-width="2.8" stroke-linecap="round"/>
-      <circle cx="28" cy="27" r="1.2" fill="#225429"/>
-      <circle cx="33" cy="22" r="1.2" fill="#225429"/>
-    </svg>`
-  ];
-
-  /* ==========================================================================
-     FLOATING ATMOSPHERE MANAGER
-     ========================================================================== */
-  class FloatingAtmosphereManager {
-    constructor(containerEl, isEnabled = true) {
-      this.container = containerEl;
-      this.isEnabled = isEnabled;
-      this.activeGarnishes = [];
-      this.minPopulation = 6;
-      this.maxPopulation = 9;
-      this.animationFrameId = null;
-      this.lastSpawnTime = 0;
-      this.spawnInterval = 1200;
-
-      if (this.isEnabled) {
-        this.init();
-      }
-    }
-
-    init() {
-      if (!this.container) return;
-      this.container.innerHTML = '';
-      this.activeGarnishes = [];
-
-      const count = 7;
-      for (let i = 0; i < count; i++) {
-        const initialY = (window.innerHeight / count) * i + (Math.random() * 40 - 20);
-        this.spawnGarnish(initialY);
-      }
-
-      this.startLoop();
-    }
-
-    spawnGarnish(initialY = null) {
-      if (!this.isEnabled || !this.container) return;
-      if (this.activeGarnishes.length >= this.maxPopulation) return;
-
-      const el = document.createElement('div');
-      const depths = ['depth-far', 'depth-mid', 'depth-near'];
-      const depthClass = depths[Math.floor(Math.random() * depths.length)];
-      el.className = `floating-garnish ${depthClass}`;
-
-      const iconIndex = Math.floor(Math.random() * GARNISH_SVG_ICONS.length);
-      el.innerHTML = GARNISH_SVG_ICONS[iconIndex];
-
-      const sizeMap = {
-        'depth-far': 34 + Math.random() * 6,
-        'depth-mid': 44 + Math.random() * 8,
-        'depth-near': 54 + Math.random() * 10
-      };
-      const size = sizeMap[depthClass];
-      el.style.width = `${size}px`;
-      el.style.height = `${size}px`;
-
-      const x = Math.random() * (window.innerWidth - size - 20) + 10;
-      const speed = depthClass === 'depth-far'
-        ? (0.32 + Math.random() * 0.18)
-        : (depthClass === 'depth-mid' ? (0.50 + Math.random() * 0.22) : (0.70 + Math.random() * 0.25));
-
-      const garnish = {
-        el,
-        x,
-        baseX: x,
-        y: initialY !== null ? initialY : (window.innerHeight + size + 20),
-        size,
-        speed,
-        driftPhase: Math.random() * Math.PI * 2,
-        driftSpeed: 0.008 + Math.random() * 0.008,
-        driftAmplitude: 14 + Math.random() * 18,
-        rotation: Math.random() * 360,
-        rotSpeed: (Math.random() - 0.5) * 0.25
-      };
-
-      this.container.appendChild(el);
-      this.activeGarnishes.push(garnish);
-    }
-
-    startLoop() {
-      if (this.animationFrameId) return;
-
-      const tick = (now) => {
-        if (!this.isEnabled) {
-          this.animationFrameId = null;
-          return;
-        }
-
-        if (now - this.lastSpawnTime > this.spawnInterval) {
-          this.lastSpawnTime = now;
-          if (this.activeGarnishes.length < this.maxPopulation) {
-            this.spawnGarnish();
-          }
-        }
-
-        for (let i = this.activeGarnishes.length - 1; i >= 0; i--) {
-          const g = this.activeGarnishes[i];
-          g.y -= g.speed;
-          g.driftPhase += g.driftSpeed;
-          g.x = g.baseX + Math.sin(g.driftPhase) * g.driftAmplitude;
-          g.rotation += g.rotSpeed;
-
-          g.el.style.transform = `translate3d(${g.x.toFixed(1)}px, ${g.y.toFixed(1)}px, 0) rotate(${g.rotation.toFixed(1)}deg)`;
-
-          if (g.y < -(g.size + 40)) {
-            if (g.el.parentNode) g.el.parentNode.removeChild(g.el);
-            this.activeGarnishes.splice(i, 1);
-          }
-        }
-
-        this.animationFrameId = requestAnimationFrame(tick);
-      };
-
-      this.animationFrameId = requestAnimationFrame(tick);
-    }
-
-    stopLoop() {
-      if (this.animationFrameId) {
-        cancelAnimationFrame(this.animationFrameId);
-        this.animationFrameId = null;
-      }
-    }
-
-    setEnabled(enabled) {
-      this.isEnabled = enabled;
-      if (enabled) {
-        this.init();
-      } else {
-        this.stopLoop();
-        if (this.container) this.container.innerHTML = '';
-        this.activeGarnishes = [];
-      }
-    }
-  }
-
-  /* ==========================================================================
-     APPLICATION CONTROLLER
+     PRIMARY APPLICATION CONTROLLER
      ========================================================================== */
   class SpellingBeeApp {
     constructor() {
       this.cycleEngine = new ContinuousDailyCycleEngine(
-        CONFIG.dailyCycle.anchorDate,
-        CONFIG.dailyCycle.startIndex
+        APP_CONFIG.dailyCycle.anchorDate,
+        APP_CONFIG.dailyCycle.startIndex
       );
 
       this.puzzles = [...FALLBACK_PUZZLES];
       this.dailyPuzzle = null;
       this.activePuzzle = null;
       this.outerLetters = [];
-      this.inputWord = '';
+      this.inputWord = "";
       this.foundWords = [];
       this.revealedMissedWords = [];
       this.score = 0;
       this.maxScore = 0;
-      this.sortMode = 'alpha';
-      this.hintsMode = 'remaining';
-      this.vaultFilter = 'all';
+      this.sortMode = "alpha";
+      this.hintsMode = "remaining";
+      this.vaultFilter = "all";
       this.lastFocusedElement = null;
-      this.currentView = 'menu';
-      this.previousView = 'menu';
+      this.currentView = "menu";
+      this.previousView = "menu";
       this.feedbackTimer = null;
       this.isSubmitting = false;
       this.deleteHoldTimer = null;
@@ -482,11 +289,6 @@
       this.settings = this.loadSettings();
 
       this.cacheDom();
-
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const shouldAnimate = this.settings.bgAnimation && !prefersReducedMotion;
-      this.atmosphere = new FloatingAtmosphereManager(this.dom.bgFloatingIcons, shouldAnimate);
-
       this.bindEvents();
       this.renderRankTicks();
 
@@ -496,173 +298,164 @@
 
     cacheDom() {
       this.dom = {
-        appRoot: document.getElementById('appRoot'),
-        srAnnouncer: document.getElementById('srAnnouncer'),
-        bgFloatingIcons: document.getElementById('bgFloatingIcons'),
+        appRoot: document.getElementById("appRoot"),
+        srAnnouncer: document.getElementById("srAnnouncer"),
 
-        menuView: document.getElementById('menuView'),
-        gameView: document.getElementById('gameView'),
-        vaultView: document.getElementById('vaultView'),
-        offlineIndicator: document.getElementById('offlineIndicator'),
+        menuView: document.getElementById("menuView"),
+        gameView: document.getElementById("gameView"),
+        vaultView: document.getElementById("vaultView"),
+        offlineIndicator: document.getElementById("offlineIndicator"),
 
-        menuDailyDate: document.getElementById('menuDailyDate'),
-        menuDailyStatus: document.getElementById('menuDailyStatus'),
-        menuDailyProgressFill: document.getElementById('menuDailyProgressFill'),
-        btnPlayDaily: document.getElementById('btnPlayDaily'),
-        btnPlayDailyText: document.getElementById('btnPlayDailyText'),
-        btnOpenVault: document.getElementById('btnOpenVault'),
-        menuVaultCount: document.getElementById('menuVaultCount'),
-        btnOpenSettings: document.getElementById('btnOpenSettings'),
-        btnOpenHowToPlay: document.getElementById('btnOpenHowToPlay'),
+        menuDailyDate: document.getElementById("menuDailyDate"),
+        menuDailyStatus: document.getElementById("menuDailyStatus"),
+        menuDailyProgressFill: document.getElementById("menuDailyProgressFill"),
+        btnPlayDaily: document.getElementById("btnPlayDaily"),
+        btnPlayDailyText: document.getElementById("btnPlayDailyText"),
+        btnOpenVault: document.getElementById("btnOpenVault"),
+        menuVaultCount: document.getElementById("menuVaultCount"),
+        btnOpenSettings: document.getElementById("btnOpenSettings"),
+        btnOpenHowToPlay: document.getElementById("btnOpenHowToPlay"),
 
-        btnMenuStats: document.getElementById('btnMenuStats'),
-        btnMenuShare: document.getElementById('btnMenuShare'),
-        btnMenuPlus: document.getElementById('btnMenuPlus'),
+        btnMenuStats: document.getElementById("btnMenuStats"),
+        btnMenuShare: document.getElementById("btnMenuShare"),
 
-        howToOverlay: document.getElementById('howToOverlay'),
-        howToBackdrop: document.getElementById('howToBackdrop'),
-        howToPanel: document.getElementById('howToPanel'),
-        btnHowToBack: document.getElementById('btnHowToBack'),
+        howToOverlay: document.getElementById("howToOverlay"),
+        howToBackdrop: document.getElementById("howToBackdrop"),
+        howToPanel: document.getElementById("howToPanel"),
+        btnHowToBack: document.getElementById("btnHowToBack"),
 
-        modalSettings: document.getElementById('modalSettings'),
-        btnToggleAnimation: document.getElementById('btnToggleAnimation'),
-        btnToggleHaptics: document.getElementById('btnToggleHaptics'),
+        modalSettings: document.getElementById("modalSettings"),
+        btnToggleAnimation: document.getElementById("btnToggleAnimation"),
+        btnToggleHaptics: document.getElementById("btnToggleHaptics"),
 
-        btnGameBack: document.getElementById('btnGameBack'),
-        gamePuzzleTitle: document.getElementById('gamePuzzleTitle'),
-        btnGameHints: document.getElementById('btnGameHints'),
-        btnGameRules: document.getElementById('btnGameRules'),
-        btnGameShare: document.getElementById('btnGameShare'),
-        btnGameStats: document.getElementById('btnGameStats'),
-        rankStrip: document.querySelector('.rank-strip'),
-        rankName: document.getElementById('rankName'),
-        badgeQueenBee: document.getElementById('badgeQueenBee'),
-        currentScore: document.getElementById('currentScore'),
-        maxScore: document.getElementById('maxScore'),
-        rankFill: document.getElementById('rankFill'),
-        rankTicksLayer: document.getElementById('rankTicksLayer'),
-        rankProgressBar: document.getElementById('rankProgressBar'),
-        feedback: document.getElementById('feedback'),
-        inputDisplay: document.getElementById('inputDisplay'),
-        btnQuickClear: document.getElementById('btnQuickClear'),
-        hiveBoard: document.getElementById('hiveBoard'),
-        cellCenter: document.getElementById('cellCenter'),
+        btnGameBack: document.getElementById("btnGameBack"),
+        btnGameBackLabel: document.getElementById("btnGameBackLabel"),
+        gamePuzzleTitle: document.getElementById("gamePuzzleTitle"),
+        btnGameHints: document.getElementById("btnGameHints"),
+        btnGameRules: document.getElementById("btnGameRules"),
+        btnGameShare: document.getElementById("btnGameShare"),
+        btnGameStats: document.getElementById("btnGameStats"),
+        rankStrip: document.querySelector(".rank-strip"),
+        rankName: document.getElementById("rankName"),
+        badgeQueenBee: document.getElementById("badgeQueenBee"),
+        currentScore: document.getElementById("currentScore"),
+        maxScore: document.getElementById("maxScore"),
+        rankFill: document.getElementById("rankFill"),
+        rankTicksLayer: document.getElementById("rankTicksLayer"),
+        rankProgressBar: document.getElementById("rankProgressBar"),
+        feedback: document.getElementById("feedback"),
+        inputDisplay: document.getElementById("inputDisplay"),
+        btnQuickClear: document.getElementById("btnQuickClear"),
+        hiveBoard: document.getElementById("hiveBoard"),
+        cellCenter: document.getElementById("cellCenter"),
         outerCells: [
-          document.getElementById('cell-0'),
-          document.getElementById('cell-1'),
-          document.getElementById('cell-2'),
-          document.getElementById('cell-3'),
-          document.getElementById('cell-4'),
-          document.getElementById('cell-5')
+          document.getElementById("cell-0"),
+          document.getElementById("cell-1"),
+          document.getElementById("cell-2"),
+          document.getElementById("cell-3"),
+          document.getElementById("cell-4"),
+          document.getElementById("cell-5")
         ],
-        btnDelete: document.getElementById('btnDelete'),
-        btnShuffle: document.getElementById('btnShuffle'),
-        btnEnter: document.getElementById('btnEnter'),
-        foundToggle: document.getElementById('foundToggle'),
-        foundToggleIcon: document.getElementById('foundToggleIcon'),
-        foundListWrap: document.getElementById('foundListWrap'),
-        foundList: document.getElementById('foundList'),
-        foundCount: document.getElementById('foundCount'),
-        btnSortAlpha: document.getElementById('btnSortAlpha'),
-        btnSortRecent: document.getElementById('btnSortRecent'),
-        btnVaultReveal: document.getElementById('btnVaultReveal'),
+        btnDelete: document.getElementById("btnDelete"),
+        btnShuffle: document.getElementById("btnShuffle"),
+        btnEnter: document.getElementById("btnEnter"),
+        foundToggle: document.getElementById("foundToggle"),
+        foundToggleIcon: document.getElementById("foundToggleIcon"),
+        foundListWrap: document.getElementById("foundListWrap"),
+        foundList: document.getElementById("foundList"),
+        foundCount: document.getElementById("foundCount"),
+        btnSortAlpha: document.getElementById("btnSortAlpha"),
+        btnSortRecent: document.getElementById("btnSortRecent"),
+        btnVaultReveal: document.getElementById("btnVaultReveal"),
 
-        btnVaultBack: document.getElementById('btnVaultBack'),
-        vaultHeaderCount: document.getElementById('vaultHeaderCount'),
-        vaultGrid: document.getElementById('vaultGrid'),
-        vaultFilterBtns: document.querySelectorAll('.vault-filter-btn'),
+        btnVaultBack: document.getElementById("btnVaultBack"),
+        vaultHeaderCount: document.getElementById("vaultHeaderCount"),
+        vaultGrid: document.getElementById("vaultGrid"),
+        vaultFilterBtns: document.querySelectorAll(".vault-filter-btn"),
 
-        modalStats: document.getElementById('modalStats'),
-        modalHints: document.getElementById('modalHints'),
-        modalDefinition: document.getElementById('modalDefinition'),
-        modalQueenBee: document.getElementById('modalQueenBee'),
-        hintsSummary: document.getElementById('hintsSummary'),
-        hintsTable: document.getElementById('hintsTable'),
-        hintsTwoLetter: document.getElementById('hintsTwoLetter'),
-        btnHintsModeRemaining: document.getElementById('btnHintsModeRemaining'),
-        btnHintsModeTotal: document.getElementById('btnHintsModeTotal'),
-        statPlayed: document.getElementById('statPlayed'),
-        statWords: document.getElementById('statWords'),
-        statPangrams: document.getElementById('statPangrams'),
-        statPoints: document.getElementById('statPoints'),
-        statCurrentStreak: document.getElementById('statCurrentStreak'),
-        statMaxStreak: document.getElementById('statMaxStreak'),
-        btnExportData: document.getElementById('btnExportData'),
-        btnImportData: document.getElementById('btnImportData'),
-        backupPayloadArea: document.getElementById('backupPayloadArea'),
-        defWordTitle: document.getElementById('defWordTitle'),
-        defMeta: document.getElementById('defMeta'),
-        defMeaningText: document.getElementById('defMeaningText'),
-        defExternalLink: document.getElementById('defExternalLink')
+        modalStats: document.getElementById("modalStats"),
+        modalHints: document.getElementById("modalHints"),
+        modalDefinition: document.getElementById("modalDefinition"),
+        modalQueenBee: document.getElementById("modalQueenBee"),
+        hintsSummary: document.getElementById("hintsSummary"),
+        hintsTable: document.getElementById("hintsTable"),
+        hintsTwoLetter: document.getElementById("hintsTwoLetter"),
+        btnHintsModeRemaining: document.getElementById("btnHintsModeRemaining"),
+        btnHintsModeTotal: document.getElementById("btnHintsModeTotal"),
+        statPlayed: document.getElementById("statPlayed"),
+        statWords: document.getElementById("statWords"),
+        statPangrams: document.getElementById("statPangrams"),
+        statPoints: document.getElementById("statPoints"),
+        statCurrentStreak: document.getElementById("statCurrentStreak"),
+        statMaxStreak: document.getElementById("statMaxStreak"),
+        btnExportData: document.getElementById("btnExportData"),
+        btnImportData: document.getElementById("btnImportData"),
+        backupPayloadArea: document.getElementById("backupPayloadArea"),
+        defWordTitle: document.getElementById("defWordTitle"),
+        defMeta: document.getElementById("defMeta"),
+        defMeaningText: document.getElementById("defMeaningText"),
+        defExternalLink: document.getElementById("defExternalLink")
       };
     }
 
     bindEvents() {
       if (this.dom.btnPlayDaily) {
-        this.dom.btnPlayDaily.addEventListener('click', () => {
+        this.dom.btnPlayDaily.addEventListener("click", () => {
           if (this.dailyPuzzle) {
             this.loadPuzzle(this.dailyPuzzle);
-            this.switchView('game');
+            this.switchView("game");
           }
         });
       }
 
       if (this.dom.btnOpenVault) {
-        this.dom.btnOpenVault.addEventListener('click', () => {
+        this.dom.btnOpenVault.addEventListener("click", () => {
           this.renderVault();
-          this.switchView('vault');
+          this.switchView("vault");
         });
       }
 
       if (this.dom.btnOpenSettings) {
-        this.dom.btnOpenSettings.addEventListener('click', () => {
+        this.dom.btnOpenSettings.addEventListener("click", () => {
           this.openModal(this.dom.modalSettings);
         });
       }
 
       if (this.dom.btnOpenHowToPlay) {
-        this.dom.btnOpenHowToPlay.addEventListener('click', () => this.openHowToPlayPanel());
+        this.dom.btnOpenHowToPlay.addEventListener("click", () => this.openHowToPlayPanel());
       }
       if (this.dom.btnGameRules) {
-        this.dom.btnGameRules.addEventListener('click', () => this.openHowToPlayPanel());
+        this.dom.btnGameRules.addEventListener("click", () => this.openHowToPlayPanel());
       }
       if (this.dom.btnHowToBack) {
-        this.dom.btnHowToBack.addEventListener('click', () => this.closeHowToPlayPanel());
+        this.dom.btnHowToBack.addEventListener("click", () => this.closeHowToPlayPanel());
       }
       if (this.dom.howToBackdrop) {
-        this.dom.howToBackdrop.addEventListener('click', () => this.closeHowToPlayPanel());
+        this.dom.howToBackdrop.addEventListener("click", () => this.closeHowToPlayPanel());
       }
 
       if (this.dom.btnMenuStats) {
-        this.dom.btnMenuStats.addEventListener('click', () => {
+        this.dom.btnMenuStats.addEventListener("click", () => {
           this.renderStats();
           this.openModal(this.dom.modalStats);
         });
       }
       if (this.dom.btnMenuShare) {
-        this.dom.btnMenuShare.addEventListener('click', () => this.shareProgress());
-      }
-      if (this.dom.btnMenuPlus) {
-        this.dom.btnMenuPlus.addEventListener('click', () => {
-          if (CONFIG.app.plusButtonAction.url) {
-            window.open(CONFIG.app.plusButtonAction.url, '_blank', 'noopener,noreferrer');
-          } else {
-            this.showFeedback(CONFIG.app.plusButtonAction.fallbackMessage, 'success');
-          }
-        });
+        this.dom.btnMenuShare.addEventListener("click", () => this.shareProgress());
       }
 
       if (this.dom.btnToggleAnimation) {
-        this.dom.btnToggleAnimation.addEventListener('click', () => {
+        this.dom.btnToggleAnimation.addEventListener("click", () => {
           this.settings.bgAnimation = !this.settings.bgAnimation;
           this.saveSettings();
           this.updateSettingsUi();
-          this.atmosphere.setEnabled(this.settings.bgAnimation);
+          const atmo = document.querySelector(".paper-atmosphere");
+          if (atmo) atmo.style.display = this.settings.bgAnimation ? "block" : "none";
         });
       }
 
       if (this.dom.btnToggleHaptics) {
-        this.dom.btnToggleHaptics.addEventListener('click', () => {
+        this.dom.btnToggleHaptics.addEventListener("click", () => {
           this.settings.haptics = !this.settings.haptics;
           this.saveSettings();
           this.updateSettingsUi();
@@ -671,41 +464,41 @@
       }
 
       if (this.dom.btnGameBack) {
-        this.dom.btnGameBack.addEventListener('click', () => {
-          this.switchView(this.previousView === 'vault' ? 'vault' : 'menu');
+        this.dom.btnGameBack.addEventListener("click", () => {
+          this.switchView(this.previousView === "vault" ? "vault" : "menu");
         });
       }
       if (this.dom.btnVaultBack) {
-        this.dom.btnVaultBack.addEventListener('click', () => {
-          this.switchView('menu');
+        this.dom.btnVaultBack.addEventListener("click", () => {
+          this.switchView("menu");
         });
       }
 
       if (this.dom.vaultFilterBtns) {
         this.dom.vaultFilterBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            this.dom.vaultFilterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            this.vaultFilter = btn.getAttribute('data-filter') || 'all';
+          btn.addEventListener("click", () => {
+            this.dom.vaultFilterBtns.forEach(b => b.classList.remove("filter-chip--active"));
+            btn.classList.add("filter-chip--active");
+            this.vaultFilter = btn.getAttribute("data-filter") || "all";
             this.renderVault();
           });
         });
       }
 
       if (this.dom.vaultGrid) {
-        this.dom.vaultGrid.addEventListener('click', (e) => {
-          const card = e.target.closest('.vault-card');
+        this.dom.vaultGrid.addEventListener("click", (e) => {
+          const card = e.target.closest(".vault-card");
           if (!card) return;
-          const id = card.getAttribute('data-id');
+          const id = card.getAttribute("data-id");
           const puzzle = this.puzzles.find(p => p.id === id);
           if (puzzle) {
             this.loadPuzzle(puzzle);
-            this.switchView('game');
+            this.switchView("game");
           }
         });
-        this.dom.vaultGrid.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            const card = e.target.closest('.vault-card');
+        this.dom.vaultGrid.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            const card = e.target.closest(".vault-card");
             if (card) {
               e.preventDefault();
               card.click();
@@ -715,36 +508,36 @@
       }
 
       if (this.dom.btnSortAlpha) {
-        this.dom.btnSortAlpha.addEventListener('click', () => {
-          this.sortMode = 'alpha';
-          this.dom.btnSortAlpha.classList.add('active');
-          this.dom.btnSortRecent.classList.remove('active');
+        this.dom.btnSortAlpha.addEventListener("click", () => {
+          this.sortMode = "alpha";
+          this.dom.btnSortAlpha.classList.add("filter-chip--active");
+          this.dom.btnSortRecent.classList.remove("filter-chip--active");
           this.renderFoundList();
         });
       }
       if (this.dom.btnSortRecent) {
-        this.dom.btnSortRecent.addEventListener('click', () => {
-          this.sortMode = 'recent';
-          this.dom.btnSortRecent.classList.add('active');
-          this.dom.btnSortAlpha.classList.remove('active');
+        this.dom.btnSortRecent.addEventListener("click", () => {
+          this.sortMode = "recent";
+          this.dom.btnSortRecent.classList.add("filter-chip--active");
+          this.dom.btnSortAlpha.classList.remove("filter-chip--active");
           this.renderFoundList();
         });
       }
 
       if (this.dom.foundList) {
-        this.dom.foundList.addEventListener('click', (e) => {
-          const item = e.target.closest('.found-item');
+        this.dom.foundList.addEventListener("click", (e) => {
+          const item = e.target.closest(".found-item");
           if (item) {
-            const word = item.getAttribute('data-word');
+            const word = item.getAttribute("data-word");
             if (word) this.openWordDefinition(word);
           }
         });
       }
 
       if (this.dom.btnVaultReveal) {
-        this.dom.btnVaultReveal.addEventListener('click', () => {
+        this.dom.btnVaultReveal.addEventListener("click", () => {
           if (!this.activePuzzle) return;
-          if (confirm('Reveal all remaining unfound words for this puzzle?')) {
+          if (confirm("Reveal all remaining unfound words for this historical puzzle?")) {
             const unfound = this.activePuzzle.words.filter(w => !this.foundWords.includes(w));
             this.revealedMissedWords = unfound;
             this.renderFoundList();
@@ -754,68 +547,68 @@
       }
 
       if (this.dom.btnHintsModeRemaining) {
-        this.dom.btnHintsModeRemaining.addEventListener('click', () => {
-          this.hintsMode = 'remaining';
-          this.dom.btnHintsModeRemaining.classList.add('active');
-          this.dom.btnHintsModeTotal.classList.remove('active');
+        this.dom.btnHintsModeRemaining.addEventListener("click", () => {
+          this.hintsMode = "remaining";
+          this.dom.btnHintsModeRemaining.classList.add("filter-chip--active");
+          this.dom.btnHintsModeTotal.classList.remove("filter-chip--active");
           this.renderHints();
         });
       }
       if (this.dom.btnHintsModeTotal) {
-        this.dom.btnHintsModeTotal.addEventListener('click', () => {
-          this.hintsMode = 'total';
-          this.dom.btnHintsModeTotal.classList.add('active');
-          this.dom.btnHintsModeRemaining.classList.remove('active');
+        this.dom.btnHintsModeTotal.addEventListener("click", () => {
+          this.hintsMode = "total";
+          this.dom.btnHintsModeTotal.classList.add("filter-chip--active");
+          this.dom.btnHintsModeRemaining.classList.remove("filter-chip--active");
           this.renderHints();
         });
       }
 
       if (this.dom.btnGameStats) {
-        this.dom.btnGameStats.addEventListener('click', () => {
+        this.dom.btnGameStats.addEventListener("click", () => {
           this.renderStats();
           this.openModal(this.dom.modalStats);
         });
       }
       if (this.dom.btnGameHints) {
-        this.dom.btnGameHints.addEventListener('click', () => {
+        this.dom.btnGameHints.addEventListener("click", () => {
           this.renderHints();
           this.openModal(this.dom.modalHints);
         });
       }
       if (this.dom.btnGameShare) {
-        this.dom.btnGameShare.addEventListener('click', () => this.shareProgress());
+        this.dom.btnGameShare.addEventListener("click", () => this.shareProgress());
       }
 
-      if (this.dom.btnExportData) this.dom.btnExportData.addEventListener('click', () => this.exportBackupData());
-      if (this.dom.btnImportData) this.dom.btnImportData.addEventListener('click', () => this.importBackupData());
+      if (this.dom.btnExportData) this.dom.btnExportData.addEventListener("click", () => this.exportBackupData());
+      if (this.dom.btnImportData) this.dom.btnImportData.addEventListener("click", () => this.importBackupData());
 
-      document.querySelectorAll('[data-close]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-close');
+      document.querySelectorAll("[data-close]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-close");
           const target = document.getElementById(id);
           if (target) this.closeModal(target);
         });
       });
 
-      window.addEventListener('click', e => {
-        if (e.target.classList.contains('modal-backdrop')) {
+      window.addEventListener("click", e => {
+        if (e.target.classList.contains("modal-backdrop")) {
           this.closeModal(e.target);
         }
       });
 
       if (this.dom.foundToggle) {
-        this.dom.foundToggle.addEventListener('click', () => {
+        this.dom.foundToggle.addEventListener("click", () => {
           const isHidden = this.dom.foundListWrap.hidden;
           this.dom.foundListWrap.hidden = !isHidden;
-          this.dom.foundToggle.setAttribute('aria-expanded', String(isHidden));
+          this.dom.foundToggle.setAttribute("aria-expanded", String(isHidden));
           if (this.dom.foundToggleIcon) {
-            this.dom.foundToggleIcon.textContent = isHidden ? '▲' : '▼';
+            this.dom.foundToggleIcon.textContent = isHidden ? "▲" : "▼";
           }
         });
       }
 
       if (this.dom.cellCenter) {
-        this.dom.cellCenter.addEventListener('click', () => {
+        this.dom.cellCenter.addEventListener("click", () => {
           if (this.activePuzzle) {
             this.triggerHaptic(14);
             this.addLetter(this.activePuzzle.centerLetter);
@@ -825,8 +618,8 @@
 
       this.dom.outerCells.forEach(cell => {
         if (cell) {
-          cell.addEventListener('click', () => {
-            const letter = cell.getAttribute('data-letter');
+          cell.addEventListener("click", () => {
+            const letter = cell.getAttribute("data-letter");
             if (letter) {
               this.triggerHaptic(12);
               this.addLetter(letter);
@@ -836,7 +629,7 @@
       });
 
       if (this.dom.btnQuickClear) {
-        this.dom.btnQuickClear.addEventListener('click', () => {
+        this.dom.btnQuickClear.addEventListener("click", () => {
           this.triggerHaptic(15);
           this.clearInput();
         });
@@ -857,77 +650,77 @@
           }
         };
 
-        this.dom.btnDelete.addEventListener('mousedown', startHold);
-        this.dom.btnDelete.addEventListener('touchstart', startHold, { passive: true });
-        this.dom.btnDelete.addEventListener('mouseup', endHold);
-        this.dom.btnDelete.addEventListener('mouseleave', endHold);
-        this.dom.btnDelete.addEventListener('touchend', endHold);
+        this.dom.btnDelete.addEventListener("mousedown", startHold);
+        this.dom.btnDelete.addEventListener("touchstart", startHold, { passive: true });
+        this.dom.btnDelete.addEventListener("mouseup", endHold);
+        this.dom.btnDelete.addEventListener("mouseleave", endHold);
+        this.dom.btnDelete.addEventListener("touchend", endHold);
 
-        this.dom.btnDelete.addEventListener('click', () => {
+        this.dom.btnDelete.addEventListener("click", () => {
           this.triggerHaptic(8);
           this.deleteLetter();
         });
       }
 
       if (this.dom.btnShuffle) {
-        this.dom.btnShuffle.addEventListener('click', () => {
+        this.dom.btnShuffle.addEventListener("click", () => {
           this.triggerHaptic(16);
           this.shuffleLetters();
         });
       }
 
       if (this.dom.btnEnter) {
-        this.dom.btnEnter.addEventListener('click', () => this.submitWord());
+        this.dom.btnEnter.addEventListener("click", () => this.submitWord());
       }
 
       if (this.dom.hiveBoard) {
-        this.dom.hiveBoard.addEventListener('keydown', (e) => this.handleHiveSpatialNav(e));
+        this.dom.hiveBoard.addEventListener("keydown", (e) => this.handleHiveSpatialNav(e));
       }
 
-      window.addEventListener('keydown', e => {
+      window.addEventListener("keydown", e => {
         const activeOverlay = !this.dom.howToOverlay.hidden;
-        if (e.key === 'Escape') {
+        if (e.key === "Escape") {
           if (activeOverlay) {
             this.closeHowToPlayPanel();
             return;
           }
-          const activeModal = document.querySelector('.modal-backdrop:not([hidden])');
+          const activeModal = document.querySelector(".modal-backdrop:not([hidden])");
           if (activeModal) {
             this.closeModal(activeModal);
             return;
           }
         }
 
-        const activeModal = document.querySelector('.modal-backdrop:not([hidden])');
+        const activeModal = document.querySelector(".modal-backdrop:not([hidden])");
         if (activeModal || activeOverlay) return;
 
-        if (this.currentView !== 'game' || !this.activePuzzle) return;
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (this.currentView !== "game" || !this.activePuzzle) return;
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
         if (e.ctrlKey || e.metaKey || e.altKey) return;
 
         const key = e.key.toUpperCase();
         if (/^[A-Z]$/.test(key)) {
           e.preventDefault();
           this.handleKeyStroke(key);
-        } else if (e.key === 'Backspace' || e.key === 'Delete') {
+        } else if (e.key === "Backspace" || e.key === "Delete") {
           e.preventDefault();
           this.deleteLetter();
-        } else if (e.key === 'Enter') {
+        } else if (e.key === "Enter") {
           e.preventDefault();
           this.submitWord();
-        } else if (e.key === ' ' || e.key === '/') {
+        } else if (e.key === " " || e.key === "/") {
           e.preventDefault();
           this.shuffleLetters();
         }
       });
 
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
           this.checkDayRollover();
         }
       });
 
-      window.addEventListener('focus', () => {
+      window.addEventListener("focus", () => {
         this.checkDayRollover();
       });
 
@@ -943,9 +736,9 @@
         this.determineDailyPuzzle();
         this.updateMenuDashboard();
 
-        if (this.currentView === 'vault') {
+        if (this.currentView === "vault") {
           this.renderVault();
-        } else if (this.currentView === 'game' && this.activePuzzle) {
+        } else if (this.currentView === "game" && this.activePuzzle) {
           const isDaily = this.dailyPuzzle && this.dailyPuzzle.id === this.activePuzzle.id;
           if (isDaily && this.dom.gamePuzzleTitle) {
             this.dom.gamePuzzleTitle.textContent = `Daily Challenge • ${this.cycleEngine.formatDisplayDate()}`;
@@ -955,8 +748,8 @@
     }
 
     triggerHaptic(ms = 12) {
-      if (!this.settings.haptics) return;
-      if ('vibrate' in navigator) {
+      if (!this.settings.haptics || !APP_CONFIG.features.enableHapticFeedback) return;
+      if ("vibrate" in navigator) {
         try { navigator.vibrate(ms); } catch (e) {}
       }
     }
@@ -965,39 +758,39 @@
       if (!this.dom.howToOverlay) return;
       this.lastFocusedElement = document.activeElement;
       this.dom.howToOverlay.hidden = false;
-      this.dom.howToOverlay.setAttribute('aria-hidden', 'false');
+      this.dom.howToOverlay.setAttribute("aria-hidden", "false");
 
       void this.dom.howToPanel.offsetWidth;
-      this.dom.howToOverlay.classList.add('open');
+      this.dom.howToOverlay.classList.add("open");
 
       if (this.dom.btnHowToBack) this.dom.btnHowToBack.focus();
     }
 
     closeHowToPlayPanel() {
       if (!this.dom.howToOverlay) return;
-      this.dom.howToOverlay.classList.remove('open');
+      this.dom.howToOverlay.classList.remove("open");
 
       setTimeout(() => {
         this.dom.howToOverlay.hidden = true;
-        this.dom.howToOverlay.setAttribute('aria-hidden', 'true');
-        if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
+        this.dom.howToOverlay.setAttribute("aria-hidden", "true");
+        if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === "function") {
           this.lastFocusedElement.focus();
         }
-      }, 380);
+      }, 350);
     }
 
     updateSettingsUi() {
       if (this.dom.btnToggleAnimation) {
         const on = this.settings.bgAnimation;
-        this.dom.btnToggleAnimation.setAttribute('aria-checked', String(on));
-        const txt = this.dom.btnToggleAnimation.querySelector('.toggle-state-text');
-        if (txt) txt.textContent = on ? 'ON' : 'OFF';
+        this.dom.btnToggleAnimation.setAttribute("aria-checked", String(on));
+        const txt = this.dom.btnToggleAnimation.querySelector(".toggle-state-text");
+        if (txt) txt.textContent = on ? "ON" : "OFF";
       }
       if (this.dom.btnToggleHaptics) {
         const on = this.settings.haptics;
-        this.dom.btnToggleHaptics.setAttribute('aria-checked', String(on));
-        const txt = this.dom.btnToggleHaptics.querySelector('.toggle-state-text');
-        if (txt) txt.textContent = on ? 'ON' : 'OFF';
+        this.dom.btnToggleHaptics.setAttribute("aria-checked", String(on));
+        const txt = this.dom.btnToggleHaptics.querySelector(".toggle-state-text");
+        if (txt) txt.textContent = on ? "ON" : "OFF";
       }
     }
 
@@ -1005,8 +798,8 @@
       this.updateSettingsUi();
 
       try {
-        const res = await fetch(CONFIG.data.csvPath, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Network error');
+        const res = await fetch(APP_CONFIG.endpoints.csvPath, { cache: "no-store" });
+        if (!res.ok) throw new Error("Network response invalid");
         const text = await res.text();
         const parsed = this.parseCSV(text);
         if (parsed.length > 0) {
@@ -1024,15 +817,13 @@
 
     cachePuzzlesLocally(puzzles) {
       try {
-        localStorage.setItem(CONFIG.data.storageKeys.cachedPuzzles, JSON.stringify(puzzles));
-      } catch (e) {
-        console.warn('Unable to cache puzzles locally:', e);
-      }
+        localStorage.setItem(APP_CONFIG.endpoints.storageKeys.cachedPuzzles, JSON.stringify(puzzles));
+      } catch (e) {}
     }
 
     loadCachedPuzzles() {
       try {
-        const raw = localStorage.getItem(CONFIG.data.storageKeys.cachedPuzzles);
+        const raw = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.cachedPuzzles);
         if (raw) {
           const cached = JSON.parse(raw);
           if (Array.isArray(cached) && cached.length > 0) {
@@ -1065,7 +856,7 @@
       const rank = SpellingBeeEngine.getRank(score, max);
 
       if (this.dom.menuDailyStatus) {
-        const qbNotice = rank.name === 'Queen Bee' ? ' 👑' : '';
+        const qbNotice = rank.name === "Queen Bee" ? " 👑" : "";
         this.dom.menuDailyStatus.textContent = `${rank.name}${qbNotice} • ${progress.foundWords.length} words (${score} pts)`;
       }
       if (this.dom.menuDailyProgressFill) {
@@ -1078,7 +869,7 @@
       }
 
       if (this.dom.btnPlayDailyText) {
-        this.dom.btnPlayDailyText.textContent = progress.foundWords.length > 0 ? 'Continue Spelling Bee' : 'Play Spelling Bee';
+        this.dom.btnPlayDailyText.textContent = progress.foundWords.length > 0 ? "Continue Daily Hive" : "Open Daily Hive";
       }
     }
 
@@ -1086,19 +877,19 @@
       this.previousView = this.currentView;
       this.currentView = targetView;
 
-      if (this.dom.menuView) this.dom.menuView.hidden = targetView !== 'menu';
-      if (this.dom.gameView) this.dom.gameView.hidden = targetView !== 'game';
-      if (this.dom.vaultView) this.dom.vaultView.hidden = targetView !== 'vault';
+      if (this.dom.menuView) this.dom.menuView.hidden = targetView !== "menu";
+      if (this.dom.gameView) this.dom.gameView.hidden = targetView !== "game";
+      if (this.dom.vaultView) this.dom.vaultView.hidden = targetView !== "vault";
 
-      if (targetView === 'game') {
-        if (this.dom.btnGameBack) {
-          const backLabel = this.previousView === 'vault' ? 'Vault' : 'Menu';
-          this.dom.btnGameBack.innerHTML = `<span aria-hidden="true">←</span> ${backLabel}`;
-          this.dom.btnGameBack.setAttribute('aria-label', `Back to ${backLabel}`);
+      if (targetView === "game") {
+        if (this.dom.btnGameBackLabel) {
+          const backLabel = this.previousView === "vault" ? "Vault" : "Menu";
+          this.dom.btnGameBackLabel.textContent = backLabel;
+          this.dom.btnGameBack.setAttribute("aria-label", `Back to ${backLabel}`);
         }
-      } else if (targetView === 'menu') {
+      } else if (targetView === "menu") {
         this.updateMenuDashboard();
-      } else if (targetView === 'vault') {
+      } else if (targetView === "vault") {
         this.renderVault();
       }
       window.scrollTo(0, 0);
@@ -1108,15 +899,15 @@
       const lines = text.trim().split(/\r?\n/).filter(line => line.trim().length > 0);
       if (lines.length < 2) return [];
 
-      const headerParts = lines[0].split(',').map(s => s.trim().toLowerCase());
+      const headerParts = lines[0].split(",").map(s => s.trim().toLowerCase());
       let centerIdx = -1;
       let outerIdx = -1;
       let wordsIdx = -1;
 
       headerParts.forEach((header, idx) => {
-        if (header.includes('center')) centerIdx = idx;
-        else if (header.includes('outer')) outerIdx = idx;
-        else if (header.includes('word')) wordsIdx = idx;
+        if (header.includes("center")) centerIdx = idx;
+        else if (header.includes("outer")) outerIdx = idx;
+        else if (header.includes("word")) wordsIdx = idx;
       });
 
       if (centerIdx === -1 || outerIdx === -1 || wordsIdx === -1) {
@@ -1129,33 +920,33 @@
       let puzzleCounter = 1;
 
       for (let i = 1; i < lines.length; i++) {
-        const parts = lines[i].split(',');
+        const parts = lines[i].split(",");
         if (parts.length <= Math.max(centerIdx, outerIdx, wordsIdx)) continue;
 
-        const centerLetter = (parts[centerIdx] || '').trim().toUpperCase();
-        const outerLetters = (parts[outerIdx] || '').trim().toUpperCase().replace(/[^A-Z]/g, '').split('');
+        const centerLetter = (parts[centerIdx] || "").trim().toUpperCase();
+        const outerLetters = (parts[outerIdx] || "").trim().toUpperCase().replace(/[^A-Z]/g, "").split("");
 
         if (outerLetters.length !== 6 || centerLetter.length !== 1) continue;
 
         const validLetters = new Set([centerLetter, ...outerLetters]);
         if (validLetters.size !== 7) continue;
 
-        const rawWords = parts.slice(wordsIdx).join(',').replace(/["\r]/g, '').trim().toUpperCase().split(/[\s,]+/).filter(Boolean);
+        const rawWords = parts.slice(wordsIdx).join(",").replace(/["\r]/g, "").trim().toUpperCase().split(/[\s,]+/).filter(Boolean);
         const words = [...new Set(rawWords.filter(w => {
           if (w.length < 4) return false;
           if (!w.includes(centerLetter)) return false;
-          return w.split('').every(ch => validLetters.has(ch));
+          return w.split("").every(ch => validLetters.has(ch));
         }))];
 
         if (words.length === 0) continue;
 
         const pangrams = words.filter(w => {
-          const unique = new Set(w.split(''));
+          const unique = new Set(w.split(""));
           return [centerLetter, ...outerLetters].every(c => unique.has(c));
         });
 
         puzzles.push({
-          id: `hive_${centerLetter}_${outerLetters.join('')}_${puzzleCounter}`,
+          id: `hive_${centerLetter}_${outerLetters.join("")}_${puzzleCounter}`,
           puzzleNumber: puzzleCounter,
           centerLetter,
           outerLetters,
@@ -1187,8 +978,8 @@
       this.maxScore = SpellingBeeEngine.calculateMaxScore(puzzle);
       this.score = SpellingBeeEngine.calculateWordsScore(this.foundWords, puzzle);
 
-      const draft = sessionStorage.getItem(CONFIG.data.storageKeys.draftPrefix + puzzle.id);
-      this.inputWord = draft || '';
+      const draft = sessionStorage.getItem(APP_CONFIG.endpoints.storageKeys.draftPrefix + puzzle.id);
+      this.inputWord = draft || "";
 
       const isDaily = this.dailyPuzzle && this.dailyPuzzle.id === puzzle.id;
       if (this.dom.gamePuzzleTitle) {
@@ -1202,13 +993,13 @@
       }
 
       if (this.dom.foundListWrap) this.dom.foundListWrap.hidden = true;
-      if (this.dom.foundToggle) this.dom.foundToggle.setAttribute('aria-expanded', 'false');
-      if (this.dom.foundToggleIcon) this.dom.foundToggleIcon.textContent = '▼';
+      if (this.dom.foundToggle) this.dom.foundToggle.setAttribute("aria-expanded", "false");
+      if (this.dom.foundToggleIcon) this.dom.foundToggleIcon.textContent = "▼";
 
       if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
       if (this.dom.feedback) {
-        this.dom.feedback.textContent = '';
-        this.dom.feedback.className = 'feedback';
+        this.dom.feedback.textContent = "";
+        this.dom.feedback.className = "feedback";
       }
 
       this.renderHive();
@@ -1219,13 +1010,13 @@
 
     renderRankTicks() {
       if (!this.dom.rankTicksLayer) return;
-      this.dom.rankTicksLayer.innerHTML = '';
+      this.dom.rankTicksLayer.innerHTML = "";
       RANKS.forEach(rank => {
         if (rank.pct > 0 && rank.pct < 1) {
-          const tick = document.createElement('div');
-          tick.className = 'rank-tick';
+          const tick = document.createElement("div");
+          tick.className = "rank-tick";
           tick.style.left = `${rank.pct * 100}%`;
-          tick.setAttribute('data-rank-pct', rank.pct);
+          tick.setAttribute("data-rank-pct", rank.pct);
           this.dom.rankTicksLayer.appendChild(tick);
         }
       });
@@ -1235,36 +1026,36 @@
       if (!this.activePuzzle) return;
 
       if (this.dom.cellCenter) {
-        const svgText = this.dom.cellCenter.querySelector('.hex-svg-letter');
+        const svgText = this.dom.cellCenter.querySelector(".hex-svg-letter");
         if (svgText) svgText.textContent = this.activePuzzle.centerLetter;
-        this.dom.cellCenter.setAttribute('data-letter', this.activePuzzle.centerLetter);
-        this.dom.cellCenter.setAttribute('aria-label', `Center letter ${this.activePuzzle.centerLetter}`);
+        this.dom.cellCenter.setAttribute("data-letter", this.activePuzzle.centerLetter);
+        this.dom.cellCenter.setAttribute("aria-label", `Required center letter ${this.activePuzzle.centerLetter}`);
       }
 
       this.dom.outerCells.forEach((cell, idx) => {
         if (!cell) return;
-        const letter = this.outerLetters[idx] || '';
-        const svgText = cell.querySelector('.hex-svg-letter');
+        const letter = this.outerLetters[idx] || "";
+        const svgText = cell.querySelector(".hex-svg-letter");
         if (svgText) svgText.textContent = letter;
-        cell.setAttribute('data-letter', letter);
-        cell.setAttribute('aria-label', `Outer letter ${letter}`);
+        cell.setAttribute("data-letter", letter);
+        cell.setAttribute("aria-label", `Outer letter ${letter}`);
       });
     }
 
     renderInput() {
       if (!this.dom.inputDisplay) return;
-      this.dom.inputDisplay.innerHTML = '';
+      this.dom.inputDisplay.innerHTML = "";
       for (const ch of this.inputWord) {
-        const span = document.createElement('span');
+        const span = document.createElement("span");
         span.textContent = ch;
         if (this.activePuzzle && ch === this.activePuzzle.centerLetter) {
-          span.classList.add('center-ch');
+          span.classList.add("center-ch");
         }
         this.dom.inputDisplay.appendChild(span);
       }
-      const cursor = document.createElement('span');
-      cursor.className = 'cursor';
-      cursor.setAttribute('aria-hidden', 'true');
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.setAttribute("aria-hidden", "true");
       this.dom.inputDisplay.appendChild(cursor);
 
       if (this.dom.btnQuickClear) {
@@ -1298,7 +1089,7 @@
 
     clearInput() {
       if (!this.inputWord) return;
-      this.inputWord = '';
+      this.inputWord = "";
       this.renderInput();
       this.persistDraftInput();
     }
@@ -1306,19 +1097,19 @@
     persistDraftInput() {
       if (!this.activePuzzle) return;
       try {
-        sessionStorage.setItem(CONFIG.data.storageKeys.draftPrefix + this.activePuzzle.id, this.inputWord);
+        sessionStorage.setItem(APP_CONFIG.endpoints.storageKeys.draftPrefix + this.activePuzzle.id, this.inputWord);
       } catch (e) {}
     }
 
     shuffleLetters() {
       this.dom.outerCells.forEach(cell => {
         if (!cell) return;
-        cell.classList.remove('shuffling');
+        cell.classList.remove("shuffling");
         void cell.offsetWidth;
-        cell.classList.add('shuffling');
+        cell.classList.add("shuffling");
       });
 
-      const initial = this.outerLetters.join('');
+      const initial = this.outerLetters.join("");
       let attempts = 0;
       do {
         for (let i = this.outerLetters.length - 1; i > 0; i--) {
@@ -1326,10 +1117,10 @@
           [this.outerLetters[i], this.outerLetters[j]] = [this.outerLetters[j], this.outerLetters[i]];
         }
         attempts++;
-      } while (this.outerLetters.join('') === initial && attempts < 10);
+      } while (this.outerLetters.join("") === initial && attempts < 10);
 
       this.renderHive();
-      this.announceScreenReader('Letters shuffled');
+      this.announceScreenReader("Hive outer letters shuffled");
     }
 
     submitWord() {
@@ -1343,7 +1134,7 @@
       );
 
       if (!result.valid) {
-        this.showFeedback(result.error, 'error');
+        this.showFeedback(result.error, "error");
         this.shakeInput();
         this.announceScreenReader(`Word rejected: ${result.error}`);
         setTimeout(() => { this.isSubmitting = false; }, 180);
@@ -1355,25 +1146,21 @@
 
       this.foundWords.push(word);
       this.score += points;
-      this.inputWord = '';
+      this.inputWord = "";
       this.persistDraftInput();
 
       this.saveProgress();
       this.updateStreakIfNeeded();
 
-      let feedbackMsg = `+${points}`;
-      let feedbackType = 'success';
+      let feedbackMsg = `+${points} points`;
+      let feedbackType = "success";
 
       if (isPerfectPangram) {
-        feedbackMsg = `Perfect Pangram! +${points}`;
-        feedbackType = 'perfect-pangram';
+        feedbackMsg = `Perfect Pangram! +${points} pts`;
+        feedbackType = "perfect-pangram";
       } else if (isPangram) {
-        feedbackMsg = `Pangram! +${points}`;
-        feedbackType = 'pangram';
-      }
-
-      if (isPangram && this.dom.inputDisplay) {
-        this.dom.inputDisplay.classList.add('pangram-glow');
+        feedbackMsg = `Pangram! +${points} pts`;
+        feedbackType = "pangram";
       }
 
       this.showFeedback(feedbackMsg, feedbackType);
@@ -1383,12 +1170,9 @@
 
       const newRank = SpellingBeeEngine.getRank(this.score, this.maxScore);
       if (newRank.name !== prevRank.name && this.dom.rankStrip) {
-        this.dom.rankStrip.classList.remove('rank-pulse');
-        void this.dom.rankStrip.offsetWidth;
-        this.dom.rankStrip.classList.add('rank-pulse');
-        if (newRank.name !== 'Queen Bee') {
+        if (newRank.name !== "Queen Bee") {
           setTimeout(() => {
-            this.showFeedback(`Rank Up: ${newRank.name}!`, 'success');
+            this.showFeedback(`Rank Up: ${newRank.name}!`, "success");
           }, 1100);
         }
       }
@@ -1404,9 +1188,9 @@
 
     shakeInput() {
       if (this.dom.inputDisplay) {
-        this.dom.inputDisplay.classList.remove('shake');
+        this.dom.inputDisplay.classList.remove("shake");
         void this.dom.inputDisplay.offsetWidth;
-        this.dom.inputDisplay.classList.add('shake');
+        this.dom.inputDisplay.classList.add("shake");
       }
     }
 
@@ -1420,24 +1204,24 @@
       if (this.dom.rankFill) this.dom.rankFill.style.width = `${pct}%`;
 
       if (this.dom.rankTicksLayer) {
-        const ticks = this.dom.rankTicksLayer.querySelectorAll('.rank-tick');
+        const ticks = this.dom.rankTicksLayer.querySelectorAll(".rank-tick");
         ticks.forEach(tick => {
-          const tPct = parseFloat(tick.getAttribute('data-rank-pct') || '0') * 100;
+          const tPct = parseFloat(tick.getAttribute("data-rank-pct") || "0") * 100;
           if (pct >= tPct) {
-            tick.classList.add('passed');
+            tick.classList.add("passed");
           } else {
-            tick.classList.remove('passed');
+            tick.classList.remove("passed");
           }
         });
       }
 
       if (this.dom.badgeQueenBee) {
-        this.dom.badgeQueenBee.hidden = rank.name !== 'Queen Bee';
+        this.dom.badgeQueenBee.hidden = rank.name !== "Queen Bee";
       }
 
       if (this.dom.rankProgressBar) {
-        this.dom.rankProgressBar.setAttribute('aria-valuenow', pct);
-        this.dom.rankProgressBar.setAttribute('aria-valuetext', `${rank.name}, ${this.score} of ${this.maxScore} points`);
+        this.dom.rankProgressBar.setAttribute("aria-valuenow", pct);
+        this.dom.rankProgressBar.setAttribute("aria-valuetext", `${rank.name}, ${this.score} of ${this.maxScore} points`);
       }
     }
 
@@ -1445,42 +1229,38 @@
       if (this.dom.foundCount) this.dom.foundCount.textContent = this.foundWords.length;
       if (!this.dom.foundList) return;
 
-      this.dom.foundList.innerHTML = '';
+      this.dom.foundList.innerHTML = "";
 
       if (this.foundWords.length === 0 && this.revealedMissedWords.length === 0) {
-        const empty = document.createElement('p');
-        empty.className = 'empty-found-msg';
-        empty.textContent = 'No words found yet.';
+        const empty = document.createElement("p");
+        empty.className = "empty-found-msg";
+        empty.textContent = "No words recorded in this ledger yet.";
         this.dom.foundList.appendChild(empty);
         return;
       }
 
-      const displayList = this.sortMode === 'recent'
+      const displayList = this.sortMode === "recent"
         ? [...this.foundWords].reverse()
         : [...this.foundWords].sort();
 
       displayList.forEach(w => {
-        const item = document.createElement('span');
-        item.className = 'found-item';
-        item.setAttribute('data-word', w);
-        item.setAttribute('role', 'button');
-        item.setAttribute('tabindex', '0');
+        const item = document.createElement("span");
+        item.className = "found-item interactive-tactile";
+        item.setAttribute("data-word", w);
+        item.setAttribute("role", "button");
+        item.setAttribute("tabindex", "0");
 
         const isPangram = this.activePuzzle && this.activePuzzle.pangrams.includes(w);
         const isPerfect = isPangram && w.length === 7;
 
         if (isPerfect) {
-          item.classList.add('is-perfect-pangram');
-          item.setAttribute('title', `${w}: Perfect Pangram (Tap for definition)`);
+          item.classList.add("is-perfect-pangram");
+          item.setAttribute("title", `${w}: Perfect Pangram (Tap for dictionary definition)`);
         } else if (isPangram) {
-          item.classList.add('is-pangram');
-          item.setAttribute('title', `${w}: Pangram (Tap for definition)`);
+          item.classList.add("is-pangram");
+          item.setAttribute("title", `${w}: Pangram (Tap for dictionary definition)`);
         } else {
-          item.setAttribute('title', `${w} (Tap for definition)`);
-        }
-
-        if (w === recentlyAddedWord) {
-          item.classList.add('highlight-new');
+          item.setAttribute("title", `${w} (Tap for dictionary definition)`);
         }
 
         item.textContent = w;
@@ -1489,13 +1269,13 @@
 
       if (this.revealedMissedWords.length > 0) {
         this.revealedMissedWords.sort().forEach(w => {
-          const item = document.createElement('span');
-          item.className = 'found-item is-revealed-missed';
-          item.setAttribute('data-word', w);
-          item.setAttribute('role', 'button');
-          item.setAttribute('tabindex', '0');
-          item.setAttribute('title', `${w} (Missed word - Tap for definition)`);
-          item.textContent = w + ' ✕';
+          const item = document.createElement("span");
+          item.className = "found-item is-revealed-missed interactive-tactile";
+          item.setAttribute("data-word", w);
+          item.setAttribute("role", "button");
+          item.setAttribute("tabindex", "0");
+          item.setAttribute("title", `${w} (Missed word - Tap for meaning)`);
+          item.textContent = w + " ✕";
           this.dom.foundList.appendChild(item);
         });
       }
@@ -1510,7 +1290,7 @@
 
       this.feedbackTimer = setTimeout(() => {
         if (this.dom.feedback) {
-          this.dom.feedback.classList.remove('active');
+          this.dom.feedback.classList.remove("active");
         }
       }, 1600);
     }
@@ -1524,28 +1304,28 @@
     async openWordDefinition(word) {
       if (!this.dom.modalDefinition) return;
       if (this.dom.defWordTitle) this.dom.defWordTitle.textContent = word;
-      if (this.dom.defMeta) this.dom.defMeta.textContent = 'Looking up dictionary definition...';
-      if (this.dom.defMeaningText) this.dom.defMeaningText.textContent = 'Please wait...';
+      if (this.dom.defMeta) this.dom.defMeta.textContent = "Querying dictionary ledger...";
+      if (this.dom.defMeaningText) this.dom.defMeaningText.textContent = "Please wait...";
       if (this.dom.defExternalLink) {
-        this.dom.defExternalLink.setAttribute('href', `https://en.wiktionary.org/wiki/${encodeURIComponent(word.toLowerCase())}`);
+        this.dom.defExternalLink.setAttribute("href", `https://en.wiktionary.org/wiki/${encodeURIComponent(word.toLowerCase())}`);
       }
 
       this.openModal(this.dom.modalDefinition);
 
       try {
-        const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.toLowerCase())}`);
-        if (!res.ok) throw new Error('No definition found');
+        const res = await fetch(`${APP_CONFIG.endpoints.dictionaryApiUrl}${encodeURIComponent(word.toLowerCase())}`);
+        if (!res.ok) throw new Error("No definition found");
         const data = await res.json();
         const entry = data[0];
-        const part = entry?.meanings?.[0]?.partOfSpeech || 'word';
-        const def = entry?.meanings?.[0]?.definitions?.[0]?.definition || 'Definition available on Wiktionary.';
+        const part = entry?.meanings?.[0]?.partOfSpeech || "vocabulary term";
+        const def = entry?.meanings?.[0]?.definitions?.[0]?.definition || "Definition available on Wiktionary.";
 
-        if (this.dom.defMeta) this.dom.defMeta.textContent = `Part of speech: ${part}`;
+        if (this.dom.defMeta) this.dom.defMeta.textContent = `Grammar: ${part}`;
         if (this.dom.defMeaningText) this.dom.defMeaningText.textContent = def;
       } catch (err) {
-        if (this.dom.defMeta) this.dom.defMeta.textContent = 'Dictionary lookup unavailable';
+        if (this.dom.defMeta) this.dom.defMeta.textContent = "Dictionary lookup unavailable";
         if (this.dom.defMeaningText) {
-          this.dom.defMeaningText.textContent = `"${word}" is a valid solution in this puzzle. You can view full etymology and usage notes on Wiktionary.`;
+          this.dom.defMeaningText.textContent = `"${word}" is an authorized solution in this puzzle ledger. You can inspect full etymology and usage citations on Wiktionary.`;
         }
       }
     }
@@ -1560,12 +1340,12 @@
       if (this.dom.hintsSummary) {
         this.dom.hintsSummary.innerHTML = `
           <strong>Total Words:</strong> ${puzzle.words.length} (${this.foundWords.length} found, ${remaining.length} remaining)<br>
-          <strong>Total Points:</strong> ${this.maxScore} (${this.score} current)<br>
+          <strong>Total Points:</strong> ${this.maxScore} (${this.score} currently documented)<br>
           <strong>Pangrams:</strong> ${pangramCount} (${pangramsFound} found)
         `;
       }
 
-      const activeWordList = this.hintsMode === 'remaining' ? remaining : puzzle.words;
+      const activeWordList = this.hintsMode === "remaining" ? remaining : puzzle.words;
       const lengths = [...new Set(puzzle.words.map(w => w.length))].sort((a, b) => a - b);
       const letters = [puzzle.centerLetter, ...puzzle.outerLetters].sort();
 
@@ -1583,8 +1363,8 @@
         let rowSum = 0;
         lengths.forEach(len => {
           const count = wordsForLtr.filter(w => w.length === len).length;
-          const isComplete = this.hintsMode === 'remaining' && count === 0;
-          tableHtml += `<td class="${isComplete ? 'cell-complete' : ''}">${count > 0 ? count : (isComplete ? '✓' : '-')}</td>`;
+          const isComplete = this.hintsMode === "remaining" && count === 0;
+          tableHtml += `<td class="${isComplete ? "cell-complete" : ""}">${count > 0 ? count : (isComplete ? "✓" : "-")}</td>`;
           colTotals[len] += count;
           rowSum += count;
         });
@@ -1621,27 +1401,27 @@
           .map(([pref, cnt]) => {
             const remCnt = remainingPrefixMap[pref] || 0;
             const isDone = remCnt === 0;
-            const displayCount = this.hintsMode === 'remaining' ? remCnt : cnt;
-            return `<span class="two-letter-chip ${isDone ? 'chip-done' : ''}">${pref}-${displayCount}</span>`;
+            const displayCount = this.hintsMode === "remaining" ? remCnt : cnt;
+            return `<span class="two-letter-chip ${isDone ? "chip-done" : ""}">${pref}-${displayCount}</span>`;
           })
-          .join('');
+          .join("");
       }
     }
 
     renderVault() {
       if (!this.dom.vaultGrid) return;
-      this.dom.vaultGrid.innerHTML = '';
+      this.dom.vaultGrid.innerHTML = "";
 
       let vaultPuzzles = [...this.puzzles];
 
-      if (this.vaultFilter === 'unplayed') {
+      if (this.vaultFilter === "unplayed") {
         vaultPuzzles = vaultPuzzles.filter(p => !(this.storage.puzzles[p.id]?.foundWords?.length > 0));
-      } else if (this.vaultFilter === 'inprogress') {
+      } else if (this.vaultFilter === "inprogress") {
         vaultPuzzles = vaultPuzzles.filter(p => {
           const count = this.storage.puzzles[p.id]?.foundWords?.length || 0;
           return count > 0 && count < p.words.length;
         });
-      } else if (this.vaultFilter === 'completed') {
+      } else if (this.vaultFilter === "completed") {
         vaultPuzzles = vaultPuzzles.filter(p => {
           const prog = this.storage.puzzles[p.id];
           if (!prog || !prog.foundWords) return false;
@@ -1653,44 +1433,44 @@
       }
 
       if (this.dom.vaultHeaderCount) {
-        this.dom.vaultHeaderCount.textContent = vaultPuzzles.length;
+        this.dom.vaultHeaderCount.textContent = `${vaultPuzzles.length} Hives`;
       }
 
       if (vaultPuzzles.length === 0) {
-        const empty = document.createElement('p');
-        empty.className = 'empty-found-msg';
-        empty.textContent = 'No matching honeycombs in archive.';
+        const empty = document.createElement("p");
+        empty.className = "empty-found-msg";
+        empty.textContent = APP_CONFIG.content.emptyStates.noSearchResultsHeading;
         this.dom.vaultGrid.appendChild(empty);
         return;
       }
 
       vaultPuzzles.forEach(puzzle => {
-        const card = document.createElement('div');
-        card.className = 'vault-card';
-        card.setAttribute('role', 'button');
-        card.setAttribute('tabindex', '0');
-        card.setAttribute('data-id', puzzle.id);
-        card.setAttribute('aria-label', `Play Hive #${puzzle.puzzleNumber}`);
+        const card = document.createElement("div");
+        card.className = "vault-card interactive-tactile";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("data-id", puzzle.id);
+        card.setAttribute("aria-label", `Open Hive #${puzzle.puzzleNumber}`);
 
         const prog = this.storage.puzzles[puzzle.id] || { foundWords: [] };
         const max = SpellingBeeEngine.calculateMaxScore(puzzle);
         const score = SpellingBeeEngine.calculateWordsScore(prog.foundWords, puzzle);
         const rank = SpellingBeeEngine.getRank(score, max);
 
-        const isQB = rank.name === 'Queen Bee';
+        const isQB = rank.name === "Queen Bee";
         const isGenius = rank.pct >= 0.85 && !isQB;
         const isDaily = this.dailyPuzzle && this.dailyPuzzle.id === puzzle.id;
 
         card.innerHTML = `
           <div class="vault-card-info">
-            <span class="vault-date">Hive #${puzzle.puzzleNumber}${isDaily ? ' • Today\'s Daily' : ''}</span>
+            <span class="vault-date">Hive #${puzzle.puzzleNumber}${isDaily ? " • Today's Challenge" : ""}</span>
             <span class="vault-letters">
-              <span class="center-ltr">${puzzle.centerLetter}</span> ${puzzle.outerLetters.join(' ')}
+              <span class="center-ltr">${puzzle.centerLetter}</span> ${puzzle.outerLetters.join(" ")}
             </span>
           </div>
           <div class="vault-card-right">
-            <span class="vault-progress-tag ${isQB ? 'queen-bee' : (isGenius ? 'completed' : '')}">
-              ${isQB ? '👑 ' : ''}${prog.foundWords.length}/${puzzle.words.length} • ${rank.name}
+            <span class="vault-progress-tag ${isQB ? "queen-bee" : (isGenius ? "completed" : "")}">
+              ${isQB ? "👑 " : ""}${prog.foundWords.length}/${puzzle.words.length} • ${rank.name}
             </span>
           </div>
         `;
@@ -1749,7 +1529,7 @@
       if (stats.lastCompletedDailyDate === today) return;
 
       if (stats.lastCompletedDailyDate) {
-        const lastParts = stats.lastCompletedDailyDate.split('-');
+        const lastParts = stats.lastCompletedDailyDate.split("-");
         const lastMidnight = Date.UTC(parseInt(lastParts[0], 10), parseInt(lastParts[1], 10) - 1, parseInt(lastParts[2], 10));
         const currMidnight = this.cycleEngine.getLocalMidnightEpoch();
         const diffDays = Math.round((currMidnight - lastMidnight) / 86400000);
@@ -1759,7 +1539,7 @@
         } else if (diffDays === 2 && (stats.graceDaysRemaining || 0) > 0) {
           stats.graceDaysRemaining -= 1;
           stats.currentStreak += 1;
-          this.showFeedback('Streak Shield Protected!', 'success');
+          this.showFeedback(APP_CONFIG.content.notifications.streakProtected, "success");
         } else if (diffDays > 1) {
           stats.currentStreak = 1;
         }
@@ -1783,22 +1563,22 @@
       const puzzleLabel = isDaily ? `Daily Challenge • ${this.cycleEngine.formatDisplayDate()}` : `Hive #${puzzle.puzzleNumber}`;
 
       const summaryText = [
-        `🐝 Spelling Bee • ${puzzleLabel}`,
+        `🐝 ${APP_CONFIG.identity.appName} • ${puzzleLabel}`,
         `Rank: ${rank.name} (${this.score} pts)`,
         `Words: ${this.foundWords.length}/${puzzle.words.length}`,
-        `Pangrams: ${pangramsFound}/${pangramCount} ${'★'.repeat(pangramsFound)}`
-      ].join('\n');
+        `Pangrams: ${pangramsFound}/${pangramCount} ${"★".repeat(pangramsFound)}`
+      ].join("\n");
 
       if (navigator.share) {
         navigator.share({
-          title: 'Spelling Bee Daily Progress',
+          title: `${APP_CONFIG.identity.appName} Progress`,
           text: summaryText
         }).catch(() => {});
       } else if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(summaryText).then(() => {
-          this.showFeedback('Progress copied to clipboard!', 'success');
+          this.showFeedback(APP_CONFIG.content.notifications.copySuccess, "success");
         }).catch(() => {
-          this.showFeedback('Unable to copy to clipboard', 'error');
+          this.showFeedback("Unable to copy summary to clipboard", "error");
         });
       }
     }
@@ -1811,7 +1591,7 @@
       this.dom.backupPayloadArea.select();
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(json);
-        this.showFeedback('Backup copied to clipboard!', 'success');
+        this.showFeedback(APP_CONFIG.content.notifications.copySuccess, "success");
       }
     }
 
@@ -1819,9 +1599,9 @@
       if (!this.dom.backupPayloadArea) return;
       if (this.dom.backupPayloadArea.hidden) {
         this.dom.backupPayloadArea.hidden = false;
-        this.dom.backupPayloadArea.value = '';
+        this.dom.backupPayloadArea.value = "";
         this.dom.backupPayloadArea.focus();
-        this.showFeedback('Paste backup text and click Import again', 'success');
+        this.showFeedback("Paste backup text and click Import Ledger again", "success");
         return;
       }
 
@@ -1829,7 +1609,7 @@
         const text = this.dom.backupPayloadArea.value.trim();
         if (!text) return;
         const parsed = JSON.parse(text);
-        if (parsed && typeof parsed === 'object' && parsed.stats) {
+        if (parsed && typeof parsed === "object" && parsed.stats) {
           this.storage = {
             version: 6,
             stats: {
@@ -1842,31 +1622,31 @@
           };
           this.saveSafeStorage();
           this.renderStats();
-          this.showFeedback('Backup restored successfully!', 'success');
+          this.showFeedback("Ledger restored successfully!", "success");
           this.dom.backupPayloadArea.hidden = true;
         } else {
-          throw new Error('Invalid format');
+          throw new Error("Invalid format");
         }
       } catch (err) {
-        this.showFeedback('Invalid backup text data', 'error');
+        this.showFeedback("Invalid ledger backup format", "error");
       }
     }
 
     handleHiveSpatialNav(e) {
-      if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+      if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
       e.preventDefault();
 
       const active = document.activeElement;
       const id = active?.id;
 
       const navMap = {
-        'cell-0': { ArrowRight: 'cell-1', ArrowDown: 'cell-2', ArrowLeft: 'cell-1' },
-        'cell-1': { ArrowLeft: 'cell-0', ArrowDown: 'cellCenter', ArrowRight: 'cell-0' },
-        'cell-2': { ArrowUp: 'cell-0', ArrowRight: 'cellCenter', ArrowDown: 'cell-4' },
-        'cellCenter': { ArrowLeft: 'cell-2', ArrowRight: 'cell-3', ArrowUp: 'cell-0', ArrowDown: 'cell-4' },
-        'cell-3': { ArrowLeft: 'cellCenter', ArrowUp: 'cell-1', ArrowDown: 'cell-5' },
-        'cell-4': { ArrowUp: 'cell-2', ArrowRight: 'cell-5', ArrowLeft: 'cell-5' },
-        'cell-5': { ArrowUp: 'cell-3', ArrowLeft: 'cell-4', ArrowRight: 'cell-4' }
+        "cell-0": { ArrowRight: "cell-1", ArrowDown: "cell-2", ArrowLeft: "cell-1" },
+        "cell-1": { ArrowLeft: "cell-0", ArrowDown: "cellCenter", ArrowRight: "cell-0" },
+        "cell-2": { ArrowUp: "cell-0", ArrowRight: "cellCenter", ArrowDown: "cell-4" },
+        "cellCenter": { ArrowLeft: "cell-2", ArrowRight: "cell-3", ArrowUp: "cell-0", ArrowDown: "cell-4" },
+        "cell-3": { ArrowLeft: "cellCenter", ArrowUp: "cell-1", ArrowDown: "cell-5" },
+        "cell-4": { ArrowUp: "cell-2", ArrowRight: "cell-5", ArrowLeft: "cell-5" },
+        "cell-5": { ArrowUp: "cell-3", ArrowLeft: "cell-4", ArrowRight: "cell-4" }
       };
 
       const targetId = navMap[id]?.[e.key];
@@ -1880,22 +1660,14 @@
       if (!modal) return;
       this.lastFocusedElement = document.activeElement;
       modal.hidden = false;
-      if (this.dom.appRoot) {
-        const views = this.dom.appRoot.querySelectorAll('.view');
-        views.forEach(v => v.setAttribute('aria-hidden', 'true'));
-      }
-      const firstBtn = modal.querySelector('button, [href], input, textarea, [tabindex]:not([tabindex="-1"])');
+      const firstBtn = modal.querySelector("button, [href], input, textarea, [tabindex]:not([tabindex='-1'])");
       if (firstBtn) firstBtn.focus();
     }
 
     closeModal(modal) {
       if (!modal) return;
       modal.hidden = true;
-      if (this.dom.appRoot) {
-        const views = this.dom.appRoot.querySelectorAll('.view');
-        views.forEach(v => v.removeAttribute('aria-hidden'));
-      }
-      if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
+      if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === "function") {
         this.lastFocusedElement.focus();
       }
     }
@@ -1906,7 +1678,7 @@
         haptics: true
       };
       try {
-        const raw = localStorage.getItem(CONFIG.data.storageKeys.settings);
+        const raw = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.settings);
         if (raw) {
           const parsed = JSON.parse(raw);
           return {
@@ -1920,10 +1692,8 @@
 
     saveSettings() {
       try {
-        localStorage.setItem(CONFIG.data.storageKeys.settings, JSON.stringify(this.settings));
-      } catch (e) {
-        console.warn('Unable to save settings:', e);
-      }
+        localStorage.setItem(APP_CONFIG.endpoints.storageKeys.settings, JSON.stringify(this.settings));
+      } catch (e) {}
     }
 
     loadSafeStorage() {
@@ -1939,12 +1709,12 @@
       };
 
       try {
-        let raw = localStorage.getItem(CONFIG.data.storageKeys.save);
-        if (!raw) raw = localStorage.getItem('cocktail_spelling_bee_save_v5');
+        let raw = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.save);
+        if (!raw) raw = localStorage.getItem("cocktail_spelling_bee_save_v6");
         if (!raw) return fallback;
 
         const data = JSON.parse(raw);
-        if (!data || typeof data !== 'object') return fallback;
+        if (!data || typeof data !== "object") return fallback;
 
         return {
           version: 6,
@@ -1954,7 +1724,7 @@
             lastCompletedDailyDate: data.stats?.lastCompletedDailyDate || null,
             graceDaysRemaining: Number(data.stats?.graceDaysRemaining) ?? 1
           },
-          puzzles: (data.puzzles && typeof data.puzzles === 'object') ? data.puzzles : {}
+          puzzles: (data.puzzles && typeof data.puzzles === "object") ? data.puzzles : {}
         };
       } catch (err) {
         return fallback;
@@ -1963,10 +1733,8 @@
 
     saveSafeStorage() {
       try {
-        localStorage.setItem(CONFIG.data.storageKeys.save, JSON.stringify(this.storage));
-      } catch (err) {
-        console.warn('LocalStorage save error:', err);
-      }
+        localStorage.setItem(APP_CONFIG.endpoints.storageKeys.save, JSON.stringify(this.storage));
+      } catch (err) {}
     }
 
     saveProgress() {
@@ -1979,8 +1747,8 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new SpellingBeeApp());
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => new SpellingBeeApp());
   } else {
     new SpellingBeeApp();
   }

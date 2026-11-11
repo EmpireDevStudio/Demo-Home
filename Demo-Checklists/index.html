@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Checkpoint — Precision operational verification protocol and checklist execution suite with real-time telemetry.">
-  <meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0B0F17" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Checkpoint — Precision operational verification protocol and checklist execution suite with tactile ergonomics.">
+  <meta name="theme-color" content="#F5F3ED">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Checkpoint — Operations Workspace</title>
@@ -13,108 +12,115 @@
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- Accessible Skip Navigation -->
-  <a href="#mainWorkspace" class="skip-link">Skip to active checklist</a>
+  <a href="#mainWorkspace" class="skip-link">Skip to active procedure</a>
 
-  <!-- Ambient Light Mesh Backdrop -->
+  <!-- Ambient Light Backing -->
   <div class="ambient-canvas" aria-hidden="true">
     <div class="ambient-glow ambient-glow-1"></div>
     <div class="ambient-glow ambient-glow-2"></div>
-    <div class="ambient-glow ambient-glow-3"></div>
-    <div class="subtle-noise-overlay"></div>
+    <div class="subtle-paper-grain"></div>
   </div>
 
   <div class="app-shell">
 
-    <!-- Translucent Frosted Header -->
-    <header class="ops-header" role="banner">
-      <div class="header-inner">
+    <!-- Standardized Top Application Header -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__inner">
         
-        <!-- Mobile Drawer / Catalog Trigger -->
-        <button type="button" id="mobileDrawerBtn" class="glass-icon-btn mobile-menu-trigger" aria-label="Open checklist library drawer" aria-expanded="false" aria-controls="sidebarPanel">
-          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="3.5" y1="7" x2="20.5" y2="7"></line>
-            <line x1="3.5" y1="12" x2="16.5" y2="12"></line>
-            <line x1="3.5" y1="17" x2="20.5" y2="17"></line>
-          </svg>
-          <span class="trigger-label">Library</span>
-          <span class="mobile-badge" id="mobileListCountBadge">0</span>
-        </button>
+        <!-- Controls Bar: Back Nav & Global Context Actions -->
+        <div class="app-page-header__controls">
+          <div class="header-nav-cluster">
+            <!-- Mobile Drawer / Catalog Toggle -->
+            <button type="button" id="mobileDrawerBtn" class="interactive-tactile btn-back-nav mobile-drawer-trigger" aria-label="Open procedure catalog drawer" aria-expanded="false" aria-controls="sidebarPanel">
+              <svg class="control-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3.5" y1="7" x2="20.5" y2="7"></line>
+                <line x1="3.5" y1="12" x2="16.5" y2="12"></line>
+                <line x1="3.5" y1="17" x2="20.5" y2="17"></line>
+              </svg>
+              <span class="btn-back-nav__label" id="mobileDrawerBtnLabel">Catalog</span>
+              <span class="catalog-badge" id="mobileListCountBadge">0</span>
+            </button>
 
-        <!-- Brand Identity / Squircle App Icon -->
-        <div class="brand-cluster">
-          <div class="app-squircle" aria-hidden="true">
-            <div class="squircle-specular"></div>
-            <svg class="squircle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4.5 12.75l5 5L19.5 7.5"></path>
-            </svg>
+            <!-- Standardized View Back Button (When viewing deeply nested steps) -->
+            <button type="button" id="universalBackBtn" class="interactive-tactile btn-back-nav desktop-only-btn" aria-label="Reset active view focus">
+              <svg class="control-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span class="btn-back-nav__label" id="universalBackLabel">Procedures</span>
+            </button>
           </div>
-          <div class="brand-titles">
-            <div class="brand-headline">
-              <span class="brand-title">Checkpoint</span>
-              <span class="brand-edition" id="appVersionBadge">Pro</span>
+
+          <!-- Brand Identity Cluster -->
+          <div class="brand-signature">
+            <div class="brand-seal" aria-hidden="true">
+              <div class="seal-specular"></div>
+              <svg class="seal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 12.75l5 5L19.5 7.5"></path>
+              </svg>
             </div>
-            <p class="brand-strap">Procedural Operations &amp; Verification Protocol</p>
-          </div>
-        </div>
-
-        <!-- Global Telemetry & Header Actions -->
-        <div class="header-telemetry">
-          
-          <div class="telemetry-pill" title="Total active procedures in catalog">
-            <span class="pill-label">Procedures</span>
-            <span class="pill-val" id="globalChecklistCount">0</span>
+            <div class="brand-text-block">
+              <div class="brand-heading">
+                <span class="brand-name" id="appBrandTitle">Checkpoint</span>
+                <span class="brand-stamp-pill" id="appVersionBadge">v2.5</span>
+              </div>
+              <span class="brand-motto" id="appBrandTagline">Procedural Operations &amp; Verification Protocol</span>
+            </div>
           </div>
 
-          <div class="telemetry-pill" title="Total operational tasks indexed">
-            <span class="pill-label">Total Steps</span>
-            <span class="pill-val" id="globalTaskCount">0</span>
-          </div>
+          <!-- Contextual Global Actions Tray -->
+          <div class="header-context-tray">
+            <div class="telemetry-pill" title="Total active operational checklists in catalog">
+              <span class="pill-label">Procedures</span>
+              <span class="pill-val" id="globalChecklistCount">0</span>
+            </div>
 
-          <div class="header-divider" aria-hidden="true"></div>
+            <div class="telemetry-pill" title="Total individual procedural tasks cataloged">
+              <span class="pill-label">Total Steps</span>
+              <span class="pill-val" id="globalTaskCount">0</span>
+            </div>
 
-          <!-- Sound Feedback Toggle -->
-          <button type="button" id="audioToggleBtn" class="glass-icon-btn" title="Toggle tactile audio chime" aria-label="Toggle tactile audio chime" aria-pressed="true">
-            <svg id="audioIconOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-            </svg>
-            <svg id="audioIconOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <line x1="23" y1="9" x2="17" y2="15"></line>
-              <line x1="17" y1="9" x2="23" y2="15"></line>
-            </svg>
-          </button>
+            <div class="header-divider" aria-hidden="true"></div>
 
-          <!-- Sync Trigger -->
-          <div class="sync-cluster">
-            <button type="button" id="syncRepoBtn" class="apple-btn sync-btn" aria-label="Synchronize procedures">
-              <svg id="syncIcon" class="sync-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <!-- Tactile Audio Toggle -->
+            <button type="button" id="audioToggleBtn" class="interactive-tactile icon-action-btn" title="Toggle tactile audio feedback" aria-label="Toggle tactile audio feedback" aria-pressed="true">
+              <svg id="audioIconOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+              <svg id="audioIconOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+              </svg>
+            </button>
+
+            <!-- Sync Trigger -->
+            <button type="button" id="syncRepoBtn" class="interactive-tactile tactile-btn btn-secondary" title="Re-sync procedures from source" aria-label="Synchronize procedures">
+              <svg id="syncIcon" class="sync-symbol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                 <path d="M3 3v5h5"></path>
                 <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
                 <path d="M16 21h5v-5"></path>
               </svg>
-              <span>Sync</span>
+              <span id="syncStatusNotice">Sync</span>
             </button>
-            <span class="sync-indicator" id="syncStatusNotice">Ready</span>
+
+            <!-- Source Settings -->
+            <button type="button" id="repoConfigTrigger" class="interactive-tactile icon-action-btn" title="Configure repository source" aria-label="Configure repository source">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="3.2"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </button>
           </div>
-
-          <!-- Repository Source Trigger -->
-          <button type="button" id="repoConfigTrigger" class="glass-icon-btn" title="Configure source repository" aria-label="Configure source repository">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="3.2"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-          </button>
-
         </div>
 
       </div>
@@ -126,12 +132,12 @@
       <!-- Drawer Overlay Backdrop (Mobile) -->
       <div id="drawerOverlay" class="drawer-overlay" aria-hidden="true"></div>
 
-      <!-- Checklist Library Navigation Sidebar -->
+      <!-- Procedures Catalog Sidebar -->
       <aside id="sidebarPanel" class="sidebar-panel" aria-label="Procedure Catalog">
         <div class="sidebar-top">
           <div class="sidebar-headline">
-            <span class="editorial-label">Procedure Catalog</span>
-            <button type="button" id="drawerCloseBtn" class="drawer-close" aria-label="Close catalog drawer">
+            <span class="editorial-label">Documented Procedures</span>
+            <button type="button" id="drawerCloseBtn" class="drawer-close-btn" aria-label="Close procedure catalog drawer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -139,36 +145,36 @@
             </button>
           </div>
 
-          <!-- Glassmorphic Search Field -->
-          <div class="glass-search-box">
-            <label for="checklistFilterInput" class="visually-hidden">Search procedures</label>
-            <svg class="input-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- Sunken Search Well -->
+          <div class="paper-search-well">
+            <label for="checklistFilterInput" class="visually-hidden">Search catalog checklists</label>
+            <svg class="search-well-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="7.5"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
             <input 
               type="search" 
               id="checklistFilterInput" 
-              placeholder="Search procedures…" 
+              placeholder="Search catalog…" 
               autocomplete="off"
               autocapitalize="none"
               spellcheck="false"
             />
-            <button type="button" id="clearChecklistFilterBtn" class="clear-search-trigger" aria-label="Clear procedure search" hidden>&times;</button>
+            <button type="button" id="clearChecklistFilterBtn" class="clear-well-trigger" aria-label="Clear catalog search" hidden>&times;</button>
           </div>
         </div>
 
-        <!-- Scrollable Procedures Stack -->
-        <nav class="checklist-nav-viewport" aria-label="Available operational procedures">
+        <!-- Scrollable Procedures Navigation Stack -->
+        <nav class="checklist-nav-viewport" aria-label="Available operational checklists">
           <ul id="checklistItemsList" class="checklist-items-stack" role="tablist" aria-orientation="vertical">
-            <!-- Dynamically populated from discovered CSV files -->
+            <!-- Dynamically populated from discovered and bundled CSV files -->
           </ul>
         </nav>
 
         <!-- Sidebar Base Actions & Source Telemetry -->
         <div class="sidebar-footer">
           <div class="sidebar-footer-actions">
-            <label for="localCsvUpload" class="sidebar-action-btn" title="Upload local CSV checklist">
+            <label for="localCsvUpload" class="interactive-tactile sidebar-action-btn" title="Import local CSV procedure">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="17 8 12 3 7 8"></polyline>
@@ -180,81 +186,83 @@
           </div>
 
           <div class="repo-telemetry-badge">
-            <span class="status-pulsar" aria-hidden="true"></span>
+            <span class="status-dot status-dot--sage" aria-hidden="true"></span>
             <span class="telemetry-target" id="repoTargetDisplay">Scanning repository…</span>
           </div>
         </div>
       </aside>
 
-      <!-- Active Checklist Execution Canvas -->
+      <!-- Active Operational Stage -->
       <main id="mainWorkspace" class="main-stage" role="main">
 
-        <!-- Active Checklist Glass Billboard Plaque -->
-        <section class="ops-billboard" aria-labelledby="activeChecklistTitle">
-          <div class="billboard-primary">
-            <div class="billboard-meta">
-              <span class="status-stamp" id="activeStatusBadge">Operational Protocol</span>
-              <span class="file-stamp" id="activeFileIndicator">NO_CSV_LOADED</span>
+        <!-- Active Procedure Plaque (Paper Card) -->
+        <section class="paper-billboard-card" aria-labelledby="activeChecklistTitle">
+          <div class="billboard-top">
+            <div class="billboard-meta-strip">
+              <span class="status-stamp status-stamp--sage" id="activeStatusBadge">Operational Protocol</span>
+              <span class="file-stamp-code" id="activeFileIndicator">CLOSING.CSV</span>
             </div>
-            <h1 id="activeChecklistTitle" class="billboard-title">Select a Checklist</h1>
-            <p id="activeChecklistDescription" class="billboard-desc">Select an operational procedure from your indexed library to begin execution.</p>
+            <h1 id="activeChecklistTitle" class="billboard-heading">Closing Checklist</h1>
+            <p id="activeChecklistDescription" class="billboard-subhead">
+              Perform complete evening operational shut-down, refrigeration verification, and sanitisation protocol.
+            </p>
           </div>
 
-          <!-- Refined Telemetry Ribbon -->
-          <div class="telemetry-ribbon" role="region" aria-label="Procedure progress metrics">
+          <!-- Tactile Metric Ribbon -->
+          <div class="telemetry-ribbon" role="region" aria-label="Procedure completion statistics">
             <div class="stat-card">
               <span class="stat-num" id="statTotalCount">0</span>
               <span class="stat-tag">Total Steps</span>
             </div>
-            <div class="stat-card stat-card-done">
+            <div class="stat-card stat-card--sage">
               <span class="stat-num" id="statCompletedCount">0</span>
               <span class="stat-tag">Completed</span>
             </div>
-            <div class="stat-card stat-card-pending">
+            <div class="stat-card stat-card--ochre">
               <span class="stat-num" id="statRemainingCount">0</span>
               <span class="stat-tag">Pending</span>
             </div>
-            <div class="stat-card stat-card-pct">
+            <div class="stat-card stat-card--terracotta">
               <span class="stat-num" id="statPercentValue">0%</span>
-              <span class="stat-tag">Progress</span>
+              <span class="stat-tag">Verification Rate</span>
             </div>
           </div>
 
-          <!-- Glass Capsule Progress Bar -->
-          <div class="progress-container">
-            <div class="progress-bar-track" role="progressbar" id="progressBarTrack" aria-label="Procedure completion percentage" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-              <div id="progressBarFill" class="progress-bar-fill" style="width: 0%;"></div>
+          <!-- Sunken Progress Track -->
+          <div class="progress-block">
+            <div class="paper-progress-track" role="progressbar" id="progressBarTrack" aria-label="Procedure verification percentage" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div id="progressBarFill" class="paper-progress-fill" style="width: 0%;"></div>
             </div>
 
-            <!-- Complete Celebration Card -->
-            <div id="completionBanner" class="completion-stamp-banner" hidden>
-              <div class="stamp-icon" aria-hidden="true">
+            <!-- Complete Verification Banner -->
+            <div id="completionBanner" class="paper-verification-banner" hidden>
+              <div class="stamp-seal" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 6L9 17L4 12"></path>
                 </svg>
               </div>
-              <div class="stamp-info">
-                <span class="stamp-title">Protocol Verified</span>
-                <span class="stamp-subtitle">All procedure tasks have been checked and completed successfully. Ready for operational sign-off.</span>
+              <div class="stamp-details">
+                <span class="stamp-title">Protocol Certified &amp; Completed</span>
+                <span class="stamp-sub">Every required step in this checklist has been verified. The operational log is eligible for sign-off.</span>
               </div>
             </div>
           </div>
         </section>
 
         <!-- Command Filter & Search Toolbar -->
-        <section class="task-command-bar" aria-label="Task filters and procedure controls">
+        <section class="task-command-bar" aria-label="Task filters and operational actions">
           
           <!-- Segmented Filter Control -->
-          <div class="segmented-control" role="tablist" aria-label="Task completion filter">
-            <button type="button" class="segment-tab is-active" data-filter="all" role="tab" aria-selected="true">
-              <span>All</span>
+          <div class="paper-segmented-control" role="tablist" aria-label="Step completion filter">
+            <button type="button" class="paper-segment-tab is-active" data-filter="all" role="tab" aria-selected="true">
+              <span>All Steps</span>
               <span class="tab-tally" id="filterCountAll">0</span>
             </button>
-            <button type="button" class="segment-tab" data-filter="remaining" role="tab" aria-selected="false">
+            <button type="button" class="paper-segment-tab" data-filter="remaining" role="tab" aria-selected="false">
               <span>Pending</span>
               <span class="tab-tally" id="filterCountRemaining">0</span>
             </button>
-            <button type="button" class="segment-tab" data-filter="completed" role="tab" aria-selected="false">
+            <button type="button" class="paper-segment-tab" data-filter="completed" role="tab" aria-selected="false">
               <span>Done</span>
               <span class="tab-tally" id="filterCountCompleted">0</span>
             </button>
@@ -262,9 +270,9 @@
 
           <!-- Search & Action Toolbar -->
           <div class="search-command-cluster">
-            <div class="task-search-field" role="search">
+            <div class="paper-search-well task-search-field" role="search">
               <label for="taskSearchInput" class="visually-hidden">Search tasks in active checklist</label>
-              <svg class="search-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <svg class="search-well-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="11" cy="11" r="7.5"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
@@ -276,13 +284,11 @@
                 autocapitalize="none"
                 spellcheck="false"
               />
-              <button type="button" id="clearSearchBtn" class="clear-search-trigger" aria-label="Clear task search query" hidden>
-                &times;
-              </button>
+              <button type="button" id="clearSearchBtn" class="clear-well-trigger" aria-label="Clear step search query" hidden>&times;</button>
             </div>
 
-            <!-- Export Audit Report Action -->
-            <button type="button" id="exportAuditBtn" class="apple-btn secondary" title="Export audit sign-off log">
+            <!-- Export Audit Report -->
+            <button type="button" id="exportAuditBtn" class="interactive-tactile tactile-btn btn-secondary" title="Export certified sign-off audit log">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -291,8 +297,8 @@
               <span>Audit Log</span>
             </button>
 
-            <!-- Reset Action Button -->
-            <button type="button" id="resetChecklistBtn" class="apple-btn subtle-reset-btn" title="Reset all steps in this checklist">
+            <!-- Reset Action -->
+            <button type="button" id="resetChecklistBtn" class="interactive-tactile tactile-btn btn-danger-subtle" title="Reset all verified steps in this checklist">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                 <path d="M3 3v5h5"></path>
@@ -303,50 +309,50 @@
 
         </section>
 
-        <!-- Tasks Canvas Area -->
-        <section class="task-canvas" aria-label="Task items execution list">
+        <!-- Tasks Feed Canvas -->
+        <section class="task-canvas card-feed-container" aria-label="Task items execution list">
           
           <!-- Live Interactive Cards -->
           <div id="taskListContainer" class="task-cards-stack" role="list">
-            <!-- Dynamically populated from CSV rows -->
+            <!-- Hydrated from CSV task items -->
           </div>
 
-          <!-- Empty State (No Search Match) -->
-          <div id="emptyTaskState" class="empty-notice-card" hidden>
-            <div class="empty-glass-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <!-- Empty Search State -->
+          <div id="emptyTaskState" class="paper-card empty-notice-card" hidden>
+            <div class="empty-icon-well" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
             </div>
-            <h2 class="empty-heading">No Matching Steps</h2>
-            <p class="empty-para">No checklist steps match the current search term or active filter status.</p>
-            <button type="button" id="resetFiltersAction" class="apple-btn primary">Reset Filters</button>
+            <h2 class="empty-heading">No Matching Steps Documented</h2>
+            <p class="empty-para">No operational steps match the current search term or filter status.</p>
+            <button type="button" id="resetFiltersAction" class="interactive-tactile tactile-btn btn-primary">Clear Active Filters</button>
           </div>
 
           <!-- Zero Checklists Discovered State -->
-          <div id="noChecklistsState" class="empty-notice-card" hidden>
-            <div class="empty-glass-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <div id="noChecklistsState" class="paper-card empty-notice-card" hidden>
+            <div class="empty-icon-well" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
                 <line x1="12" y1="18" x2="12" y2="12"></line>
                 <line x1="9" y1="15" x2="15" y2="15"></line>
               </svg>
             </div>
-            <h2 class="empty-heading">No CSV Checklists Detected</h2>
+            <h2 class="empty-heading">No Operational Checklists Detected</h2>
             <p class="empty-para">
-              No <code>.csv</code> operational checklists were found. Connect your repository source or import local CSV files directly to begin verification.
+              Configure your source repository or import local CSV files directly to begin operational verification.
             </p>
             
             <div class="manual-connect-box">
-              <button type="button" id="openConfigBtn" class="apple-btn primary">
+              <button type="button" id="openConfigBtn" class="interactive-tactile tactile-btn btn-primary">
                 Configure Source Repository
               </button>
               
               <div class="file-picker-fallback">
                 <span class="or-separator">or load local files</span>
-                <label for="localCsvUploadFallback" class="apple-btn secondary custom-file-trigger">
+                <label for="localCsvUploadFallback" class="interactive-tactile tactile-btn btn-secondary custom-file-trigger">
                   <span>Browse CSV Files</span>
                   <input type="file" id="localCsvUploadFallback" accept=".csv,text/csv" multiple class="visually-hidden">
                 </label>
@@ -354,10 +360,10 @@
             </div>
           </div>
 
-          <!-- Loading Placeholder -->
+          <!-- Tactile Loading Placeholder -->
           <div id="loadingIndicator" class="loading-box" aria-live="polite">
-            <div class="apple-spinner" aria-hidden="true"></div>
-            <p class="loading-label">Scanning repository checklists…</p>
+            <div class="tactile-spinner" aria-hidden="true"></div>
+            <p class="loading-label">Indexing procedures and operational logs…</p>
           </div>
 
         </section>
@@ -366,39 +372,86 @@
 
     </div>
 
+    <!-- Sticky Mobile Thumb-Zone Dock -->
+    <nav class="app-bottom-dock" aria-label="Ergonomic mobile navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <button type="button" class="nav-tab-item nav-tab-item--active" id="dockBtnProcedures" aria-label="View procedures catalog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>Catalog</span>
+          <div class="nav-tab-item__indicator" aria-hidden="true"></div>
+        </button>
+
+        <button type="button" class="nav-tab-item" id="dockBtnFilterAll" aria-label="Show all steps">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span>All Steps</span>
+        </button>
+
+        <button type="button" class="nav-tab-item" id="dockBtnAudit" aria-label="Export audit report">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Audit Log</span>
+        </button>
+
+        <button type="button" class="nav-tab-item" id="dockBtnConfig" aria-label="Configure repository source">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Source</span>
+        </button>
+      </div>
+    </nav>
+
     <!-- Repository Configuration Modal -->
     <div id="repoModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="repoModalTitle" hidden>
-      <div class="glass-modal-card">
+      <div class="paper-modal-card">
         <div class="modal-header">
-          <span class="modal-tag">Settings</span>
-          <button type="button" id="closeRepoModalBtn" class="modal-close" aria-label="Close configuration modal">&times;</button>
+          <span class="status-stamp status-stamp--ochre">Repository Source</span>
+          <button type="button" id="closeRepoModalBtn" class="modal-close-btn" aria-label="Close configuration modal">&times;</button>
         </div>
-        <h2 id="repoModalTitle" class="modal-heading">Repository Source</h2>
+        <h2 id="repoModalTitle" class="modal-heading">Configure Procedure Source</h2>
         <p class="modal-description">
-          Connect your GitHub repository to index and verify operational procedures dynamically via the GitHub API.
+          Specify a GitHub repository coordinate to dynamically index operational CSV procedures via GitHub's API.
         </p>
 
         <form id="repoConfigForm" class="modal-form">
-          <div class="form-field">
-            <label for="inputOwner">Owner / Organization</label>
-            <input type="text" id="inputOwner" placeholder="e.g. acme-corp" required autocomplete="off" autocapitalize="none" spellcheck="false">
+          <div class="paper-input-group">
+            <label class="paper-label" for="inputOwner">Owner / Organization</label>
+            <input class="paper-input" type="text" id="inputOwner" placeholder="e.g. acme-corp" required autocomplete="off" autocapitalize="none" spellcheck="false">
           </div>
-          <div class="form-field">
-            <label for="inputRepo">Repository Name</label>
-            <input type="text" id="inputRepo" placeholder="e.g. operations-checklists" required autocomplete="off" autocapitalize="none" spellcheck="false">
+          <div class="paper-input-group">
+            <label class="paper-label" for="inputRepo">Repository Name</label>
+            <input class="paper-input" type="text" id="inputRepo" placeholder="e.g. operations-checklists" required autocomplete="off" autocapitalize="none" spellcheck="false">
           </div>
-          <div class="form-field">
-            <label for="inputBranch">Branch</label>
-            <input type="text" id="inputBranch" placeholder="main" autocomplete="off" autocapitalize="none" spellcheck="false">
+          <div class="paper-input-group">
+            <label class="paper-label" for="inputBranch">Branch</label>
+            <input class="paper-input" type="text" id="inputBranch" placeholder="main" autocomplete="off" autocapitalize="none" spellcheck="false">
           </div>
-          <div class="form-field">
-            <label for="inputFolder">Directory Path (Optional)</label>
-            <input type="text" id="inputFolder" placeholder="e.g. procedures or checklists" autocomplete="off" autocapitalize="none" spellcheck="false">
+          <div class="paper-input-group">
+            <label class="paper-label" for="inputFolder">Directory Path (Optional)</label>
+            <input class="paper-input" type="text" id="inputFolder" placeholder="procedures (leave blank for root)" autocomplete="off" autocapitalize="none" spellcheck="false">
           </div>
 
           <div class="modal-actions">
-            <button type="button" id="cancelRepoModalBtn" class="apple-btn secondary">Cancel</button>
-            <button type="submit" class="apple-btn primary">Save &amp; Discover</button>
+            <button type="button" id="cancelRepoModalBtn" class="interactive-tactile tactile-btn btn-secondary">Discard</button>
+            <button type="submit" class="interactive-tactile tactile-btn btn-primary">Connect &amp; Scan</button>
           </div>
         </form>
       </div>
@@ -406,29 +459,29 @@
 
     <!-- Reset Confirmation Modal -->
     <div id="resetModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle" hidden>
-      <div class="glass-modal-card">
+      <div class="paper-modal-card">
         <div class="modal-header">
-          <span class="modal-tag alert-tag">Reset Action</span>
-          <button type="button" id="closeResetModalBtn" class="modal-close" aria-label="Close reset modal">&times;</button>
+          <span class="status-stamp status-stamp--terracotta">Verification Action</span>
+          <button type="button" id="closeResetModalBtn" class="modal-close-btn" aria-label="Close reset modal">&times;</button>
         </div>
-        <h2 id="resetModalTitle" class="modal-heading">Reset Progress?</h2>
+        <h2 id="resetModalTitle" class="modal-heading">Reset Operational Steps?</h2>
         <p class="modal-description">
-          All completed steps in <strong id="resetTargetChecklistName">this procedure</strong> will be reset to unchecked. Other checklists will remain unaffected.
+          All completed steps in <strong id="resetTargetChecklistName">this procedure</strong> will be returned to unverified status. Other checklists remain unaffected.
         </p>
         <div class="modal-actions">
-          <button type="button" id="cancelResetBtn" class="apple-btn secondary">Cancel</button>
-          <button type="button" id="confirmResetBtn" class="apple-btn danger">Reset All Steps</button>
+          <button type="button" id="cancelResetBtn" class="interactive-tactile tactile-btn btn-secondary">Keep Progress</button>
+          <button type="button" id="confirmResetBtn" class="interactive-tactile tactile-btn btn-danger">Confirm Reset</button>
         </div>
       </div>
     </div>
 
-    <!-- Tactile Apple Floating Toast -->
-    <div id="autosaveToast" class="glass-toast" role="status" aria-live="polite" hidden>
-      <div class="toast-indicator" aria-hidden="true"></div>
-      <span id="toastMessage">Changes Saved</span>
+    <!-- Tactile Physical Notice Toast -->
+    <div id="autosaveToast" class="tactile-paper-toast" role="status" aria-live="polite" hidden>
+      <span class="status-dot status-dot--sage" aria-hidden="true"></span>
+      <span id="toastMessage">Verification Saved</span>
     </div>
 
-    <!-- Print Footer (Only renders when printed) -->
+    <!-- Print Footer (Only renders on physical media) -->
     <footer class="print-only-footer" aria-hidden="true">
       <p>Checkpoint Operational Verification Sign-Off Protocol — Certified Verification Sheet</p>
     </footer>

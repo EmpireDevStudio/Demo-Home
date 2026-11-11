@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="description" content="Editorial Ledger &amp; Spec Studio — Intelligent CSV Builder for Cocktail Sequence Training.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Spec Studio — Sequence Architecture &amp; Curation Ledger</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500;1,6..72,600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ROOT APPLICATION SHELL -->
+  <div id="app" class="app-layout">
+    
+    <!-- STANDARDIZED PAGE HEADER -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__controls">
+        <button id="btn-back-nav" type="button" class="btn-back-nav interactive-tactile" aria-label="Navigate back">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="btn-back-nav-label">Back</span>
+        </button>
+
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <button id="btn-quick-export" type="button" class="btn-paper-subtle interactive-tactile" aria-label="Export dataset to CSV">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span class="btn-label-desktop">Export CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">CURATION CONSOLE</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Workspace Overview</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Review current operational records, metrics, and material flow.
+        </p>
+      </div>
+    </header>
+
+    <!-- MAIN SCROLLABLE CONTENT CANVAS -->
+    <main class="app-main" id="main-content">
+
+      <!-- ==============================================================
+           VIEW 1: START SCREEN (3 DISCRETE PATHWAYS)
+           ============================================================== -->
+      <section id="view-start" class="app-view view-start" aria-labelledby="start-heading">
+        <div class="view-start__container">
+          
+          <div class="welcome-banner paper-card">
+            <div class="welcome-banner__seal" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m4.93 4.93 4.24 4.24M14.83 9.17l4.24-4.24M14.83 14.83l4.24 4.24M9.17 14.83l-4.24 4.24"></path>
+              </svg>
+            </div>
+            <div class="welcome-banner__content">
+              <span class="badge badge-ochre">Specification Architecture</span>
+              <h2 id="start-heading" class="welcome-banner__title">Create, Refine &amp; Verify Cocktail Specs</h2>
+              <p class="welcome-banner__description">
+                Design canonical 5-step cocktail sequences without formatting errors, broken commas, or manual quotation escaping. Fully RFC 4180 compliant.
+              </p>
+            </div>
+          </div>
+
+          <!-- The Three Primary Actions -->
+          <div class="launch-matrix">
+            <!-- Option A: Append CSV -->
+            <article class="paper-card launch-card interactive-tactile" id="card-action-append" tabindex="0" role="button" aria-label="Upload existing CSV ledger to append specifications">
+              <div class="launch-card__icon-well">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="12"></line>
+                  <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+              </div>
+              <div class="launch-card__body">
+                <h3 class="launch-card__title">Add to Existing CSV</h3>
+                <p class="launch-card__text">Upload an active <code>puzzles.csv</code> or custom dataset to safely append new cocktail specifications.</p>
+              </div>
+              <span class="launch-card__action-hint">Upload &amp; Expand →</span>
+            </article>
+
+            <!-- Option B: Fresh CSV -->
+            <article class="paper-card launch-card interactive-tactile" id="card-action-fresh" tabindex="0" role="button" aria-label="Create a fresh empty cocktail specification ledger">
+              <div class="launch-card__icon-well">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </div>
+              <div class="launch-card__body">
+                <h3 class="launch-card__title">Create Fresh CSV</h3>
+                <p class="launch-card__text">Initialize a clean ledger pre-configured with the complete 19-column schema, ready for your first entry.</p>
+              </div>
+              <span class="launch-card__action-hint">Initialize Empty →</span>
+            </article>
+
+            <!-- Option C: Review & Edit Vault -->
+            <article class="paper-card launch-card interactive-tactile" id="card-action-manage" tabindex="0" role="button" aria-label="Open specification ledger to review and edit records">
+              <div class="launch-card__icon-well">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+              <div class="launch-card__body">
+                <h3 class="launch-card__title">Review &amp; Edit Vault</h3>
+                <p class="launch-card__text">Inspect existing specifications, audit clues, verify decoy distractors, and balance curriculum difficulty.</p>
+              </div>
+              <span class="launch-card__action-hint">Manage Records →</span>
+            </article>
+          </div>
+
+          <!-- Hidden Native File Picker -->
+          <input type="file" id="file-uploader" accept=".csv,text/csv" class="sr-only" aria-hidden="true">
+
+          <!-- Quick Actions Toolstrip -->
+          <div class="paper-card starter-strip">
+            <span class="starter-strip__label">Starter Actions:</span>
+            <div class="starter-strip__actions">
+              <button id="btn-load-sample" class="interactive-tactile btn-paper-subtle btn-sm" type="button">Load Built-in Classics</button>
+              <span class="bullet-separator" aria-hidden="true">•</span>
+              <button id="btn-download-blank-tmpl" class="interactive-tactile btn-paper-subtle btn-sm" type="button">Download Blank CSV Schema</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==============================================================
+           VIEW 2: GUIDED SPECIFICATION WIZARD
+           ============================================================== -->
+      <section id="view-editor" class="app-view view-editor hidden" aria-labelledby="wizard-step-title">
+        <div class="view-editor__container">
+          
+          <!-- Stepper Header Card -->
+          <div class="paper-card wizard-stepper-card">
+            <div class="wizard-stepper-card__top">
+              <div>
+                <span class="badge badge-terracotta" id="wizard-mode-badge">NEW ENTRY</span>
+                <h2 class="wizard-stepper-card__title" id="wizard-step-title">Create Cocktail Sequence</h2>
+              </div>
+              <div class="wizard-stepper-card__count">
+                <span id="step-number-text">Stage 1</span> of 3
+              </div>
+            </div>
+
+            <!-- Progress Meter -->
+            <div class="stepper-progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1" id="wizard-progress-bar">
+              <div class="stepper-progress-fill" id="wizard-progress-fill"></div>
+            </div>
+          </div>
+
+          <form id="form-puzzle" class="wizard-form" autocomplete="off" novalidate>
+            
+            <!-- STAGE 1: IDENTITY & GUIDANCE -->
+            <div id="step-pane-1" class="step-pane">
+              <div class="pane-headline">
+                <h3 class="pane-headline__title">Identity &amp; Objective Clues</h3>
+                <p class="pane-headline__caption">Configure the drink name, primary clue, hint reveal, and canonical historical lore.</p>
+              </div>
+
+              <!-- Archetype Selection Tray -->
+              <div class="archetype-tray paper-card">
+                <span class="archetype-tray__title">Structural Archetypes (Fast Autofill):</span>
+                <div class="archetype-tray__chips">
+                  <button type="button" class="chip-archetype interactive-tactile" data-preset="classic-sour">Sour (Spirit / Sweet / Acid / Method / Glass)</button>
+                  <button type="button" class="chip-archetype interactive-tactile" data-preset="spirit-forward">Spirit-Forward (Spirit / Modifier / Bitters / Method / Glass)</button>
+                  <button type="button" class="chip-archetype interactive-tactile" data-preset="effervescent">Highball / Fizz (Spirit / Acid / Lengthener / Ice / Garnish)</button>
+                </div>
+              </div>
+
+              <div class="paper-card form-group-card">
+                <div class="form-group-card__head">
+                  <label for="input-title" class="paper-label">Cocktail Title <span class="required-mark" aria-hidden="true">*</span></label>
+                  <span class="schema-col-tag">CSV: <code>title</code></span>
+                </div>
+                <p class="paper-field-hint">The canonical drink name presented during victory screens and vault listings.</p>
+                <input type="text" id="input-title" class="paper-input" placeholder="e.g. Sazerac, Boulevardier, Aviation" required>
+                <div class="field-feedback-msg" id="feedback-title" role="alert"></div>
+              </div>
+
+              <div class="paper-card form-group-card">
+                <div class="form-group-card__head">
+                  <label for="input-clue" class="paper-label">Objective Sequence Clue <span class="required-mark" aria-hidden="true">*</span></label>
+                  <span class="schema-col-tag">CSV: <code>clue</code></span>
+                </div>
+                <p class="paper-field-hint">The primary prompt displayed above active slots during training gameplay.</p>
+                <textarea id="input-clue" class="paper-textarea" rows="2" placeholder="e.g. Construct New Orleans' canonical rye and absinthe ritual." required></textarea>
+                <div class="field-feedback-msg" id="feedback-clue" role="alert"></div>
+              </div>
+
+              <div class="paper-card form-group-card">
+                <div class="form-group-card__head">
+                  <label for="input-hint" class="paper-label">Tasting Note Hint <span class="required-mark" aria-hidden="true">*</span></label>
+                  <span class="schema-col-tag">CSV: <code>hint</code></span>
+                </div>
+                <p class="paper-field-hint">Automatically revealed to the player after two failed attempts to provide structural guidance.</p>
+                <textarea id="input-hint" class="paper-textarea" rows="2" placeholder="e.g. Peychaud's bitters and herbsaint rinse define this legendary Creole formula." required></textarea>
+                <div class="field-feedback-msg" id="feedback-hint" role="alert"></div>
+              </div>
+
+              <div class="paper-card form-group-card">
+                <div class="form-group-card__head">
+                  <label for="input-notes" class="paper-label">Historical Lore &amp; Canonical Notes</label>
+                  <span class="schema-col-tag">CSV: <code>notes</code></span>
+                </div>
+                <p class="paper-field-hint">Rich archival lore displayed upon successful sequence completion.</p>
+                <textarea id="input-notes" class="paper-textarea" rows="3" placeholder="e.g. Traced to Antoine Peychaud in 1830s New Orleans; initially composed with French brandy before phylloxera forced the transition to Maryland rye."></textarea>
+              </div>
+            </div>
+
+            <!-- STAGE 2: THE 5 SEQUENCE SLOTS -->
+            <div id="step-pane-2" class="step-pane hidden">
+              <div class="pane-headline">
+                <h3 class="pane-headline__title">The Five Sequence Elements</h3>
+                <p class="pane-headline__caption">Slots I through V require a descriptive stage title, an authentic answer, and an authentic decoy.</p>
+              </div>
+
+              <!-- 5 Slot Cards -->
+              <div class="slots-editor-feed" id="slots-container">
+                <!-- Slot 1 -->
+                <div class="paper-card slot-card" data-slot="1">
+                  <div class="slot-card__header">
+                    <span class="slot-roman-badge">I</span>
+                    <div class="slot-card__titles">
+                      <h4 class="slot-card__title">Slot 1: Foundation</h4>
+                      <span class="slot-card__subtitle">Typically Base Spirit, Primary Distillate, or Initial Glass Prep</span>
+                    </div>
+                  </div>
+                  <div class="slot-card__fields">
+                    <div class="paper-input-group">
+                      <label for="slot-1-name" class="paper-label">Stage 1 Label <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-1-name" class="paper-input slot-name-input" value="Base Spirit" required>
+                      <div class="quick-chip-strip">
+                        <button type="button" class="btn-quick-tag interactive-tactile">Base Spirit</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Foundation</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Glass Prep</button>
+                      </div>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-1-answer" class="paper-label"><span class="token-marker token-marker--authentic">✦</span> Authentic Answer <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-1-answer" class="paper-input slot-ans-input" placeholder="e.g. Straight Rye Whiskey" required>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-1-decoy" class="paper-label"><span class="token-marker token-marker--decoy">◆</span> Decoy Distractor <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-1-decoy" class="paper-input slot-decoy-input" placeholder="e.g. Peated Islay Scotch" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slot 2 -->
+                <div class="paper-card slot-card" data-slot="2">
+                  <div class="slot-card__header">
+                    <span class="slot-roman-badge">II</span>
+                    <div class="slot-card__titles">
+                      <h4 class="slot-card__title">Slot 2: Sweetener &amp; Modifiers</h4>
+                      <span class="slot-card__subtitle">Syrup, liqueur, cordial, or modifier</span>
+                    </div>
+                  </div>
+                  <div class="slot-card__fields">
+                    <div class="paper-input-group">
+                      <label for="slot-2-name" class="paper-label">Stage 2 Label <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-2-name" class="paper-input slot-name-input" value="Modifier" required>
+                      <div class="quick-chip-strip">
+                        <button type="button" class="btn-quick-tag interactive-tactile">Sweetener</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Liqueur</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Fortified Wine</button>
+                      </div>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-2-answer" class="paper-label"><span class="token-marker token-marker--authentic">✦</span> Authentic Answer <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-2-answer" class="paper-input slot-ans-input" placeholder="e.g. Demerara Sugar Cube" required>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-2-decoy" class="paper-label"><span class="token-marker token-marker--decoy">◆</span> Decoy Distractor <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-2-decoy" class="paper-input slot-decoy-input" placeholder="e.g. Rich Grenadine" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slot 3 -->
+                <div class="paper-card slot-card" data-slot="3">
+                  <div class="slot-card__header">
+                    <span class="slot-roman-badge">III</span>
+                    <div class="slot-card__titles">
+                      <h4 class="slot-card__title">Slot 3: Acid &amp; Seasoning</h4>
+                      <span class="slot-card__subtitle">Aromatic bitters, citrus juice, or saline</span>
+                    </div>
+                  </div>
+                  <div class="slot-card__fields">
+                    <div class="paper-input-group">
+                      <label for="slot-3-name" class="paper-label">Stage 3 Label <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-3-name" class="paper-input slot-name-input" value="Seasoning" required>
+                      <div class="quick-chip-strip">
+                        <button type="button" class="btn-quick-tag interactive-tactile">Seasoning</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Citrus</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Bitters</button>
+                      </div>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-3-answer" class="paper-label"><span class="token-marker token-marker--authentic">✦</span> Authentic Answer <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-3-answer" class="paper-input slot-ans-input" placeholder="e.g. Peychaud's Aromatic Bitters" required>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-3-decoy" class="paper-label"><span class="token-marker token-marker--decoy">◆</span> Decoy Distractor <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-3-decoy" class="paper-input slot-decoy-input" placeholder="e.g. Orange Bitters" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slot 4 -->
+                <div class="paper-card slot-card" data-slot="4">
+                  <div class="slot-card__header">
+                    <span class="slot-roman-badge">IV</span>
+                    <div class="slot-card__titles">
+                      <h4 class="slot-card__title">Slot 4: Method &amp; Agitation</h4>
+                      <span class="slot-card__subtitle">Chilling method, dilution technique, or aeration</span>
+                    </div>
+                  </div>
+                  <div class="slot-card__fields">
+                    <div class="paper-input-group">
+                      <label for="slot-4-name" class="paper-label">Stage 4 Label <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-4-name" class="paper-input slot-name-input" value="Method" required>
+                      <div class="quick-chip-strip">
+                        <button type="button" class="btn-quick-tag interactive-tactile">Method</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Technique</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Lengthener</button>
+                      </div>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-4-answer" class="paper-label"><span class="token-marker token-marker--authentic">✦</span> Authentic Answer <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-4-answer" class="paper-input slot-ans-input" placeholder="e.g. Stir with cracked ice until chilled" required>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-4-decoy" class="paper-label"><span class="token-marker token-marker--decoy">◆</span> Decoy Distractor <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-4-decoy" class="paper-input slot-decoy-input" placeholder="e.g. Shake vigorously with crushed ice" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slot 5 -->
+                <div class="paper-card slot-card" data-slot="5">
+                  <div class="slot-card__header">
+                    <span class="slot-roman-badge">V</span>
+                    <div class="slot-card__titles">
+                      <h4 class="slot-card__title">Slot 5: Vessel &amp; Garnish Finish</h4>
+                      <span class="slot-card__subtitle">Glassware service, aromatic peel expression, or crown</span>
+                    </div>
+                  </div>
+                  <div class="slot-card__fields">
+                    <div class="paper-input-group">
+                      <label for="slot-5-name" class="paper-label">Stage 5 Label <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-5-name" class="paper-input slot-name-input" value="Glass &amp; Garnish" required>
+                      <div class="quick-chip-strip">
+                        <button type="button" class="btn-quick-tag interactive-tactile">Glass &amp; Garnish</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Presentation</button>
+                        <button type="button" class="btn-quick-tag interactive-tactile">Finish</button>
+                      </div>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-5-answer" class="paper-label"><span class="token-marker token-marker--authentic">✦</span> Authentic Answer <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-5-answer" class="paper-input slot-ans-input" placeholder="e.g. Chilled rocks glass with expressed lemon peel" required>
+                    </div>
+                    <div class="paper-input-group">
+                      <label for="slot-5-decoy" class="paper-label"><span class="token-marker token-marker--decoy">◆</span> Decoy Distractor <span class="required-mark">*</span></label>
+                      <input type="text" id="slot-5-decoy" class="paper-input slot-decoy-input" placeholder="e.g. Coupe with brandied cherry" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STAGE 3: LIVE SIMULATOR & VERIFICATION AUDIT -->
+            <div id="step-pane-3" class="step-pane hidden">
+              <div class="pane-headline">
+                <h3 class="pane-headline__title">Live Game Simulation &amp; Audit</h3>
+                <p class="pane-headline__caption">Review how this specification presents on the digital puzzle board and confirm schema compliance.</p>
+              </div>
+
+              <!-- Physical Board Simulation Card -->
+              <div class="paper-card sim-board-card">
+                <div class="sim-board-card__header">
+                  <span class="badge badge-sage">PUZZLE ENGINE PREVIEW</span>
+                  <h4 id="sim-title" class="sim-board-card__title">Cocktail Title</h4>
+                </div>
+
+                <div class="sim-clue-banner">
+                  <span class="sim-banner-eyebrow">Objective Clue</span>
+                  <p id="sim-clue" class="sim-clue-body">Primary clue prompt.</p>
+                  
+                  <div class="sim-hint-card">
+                    <span class="sim-banner-eyebrow">Tasting Hint (Revealed on Attempt 3):</span>
+                    <p id="sim-hint" class="sim-hint-body">Tasting note hint text.</p>
+                  </div>
+                </div>
+
+                <!-- 5 Authentic Sequence Rows -->
+                <div class="sim-sequence-stack">
+                  <div class="sim-sequence-row" id="sim-slot-1">
+                    <span class="sim-row-roman">I</span>
+                    <div class="sim-row-content">
+                      <span class="sim-row-label" id="sim-slot-1-label">Base Spirit</span>
+                      <strong class="sim-row-value" id="sim-slot-1-val">Bourbon or Rye</strong>
+                    </div>
+                    <span class="sim-row-badge">✦</span>
+                  </div>
+
+                  <div class="sim-sequence-row" id="sim-slot-2">
+                    <span class="sim-row-roman">II</span>
+                    <div class="sim-row-content">
+                      <span class="sim-row-label" id="sim-slot-2-label">Sweetener</span>
+                      <strong class="sim-row-value" id="sim-slot-2-val">Demerara Sugar</strong>
+                    </div>
+                    <span class="sim-row-badge">✦</span>
+                  </div>
+
+                  <div class="sim-sequence-row" id="sim-slot-3">
+                    <span class="sim-row-roman">III</span>
+                    <div class="sim-row-content">
+                      <span class="sim-row-label" id="sim-slot-3-label">Seasoning</span>
+                      <strong class="sim-row-value" id="sim-slot-3-val">Aromatic Bitters</strong>
+                    </div>
+                    <span class="sim-row-badge">✦</span>
+                  </div>
+
+                  <div class="sim-sequence-row" id="sim-slot-4">
+                    <span class="sim-row-roman">IV</span>
+                    <div class="sim-row-content">
+                      <span class="sim-row-label" id="sim-slot-4-label">Method</span>
+                      <strong class="sim-row-value" id="sim-slot-4-val">Stir with Ice</strong>
+                    </div>
+                    <span class="sim-row-badge">✦</span>
+                  </div>
+
+                  <div class="sim-sequence-row" id="sim-slot-5">
+                    <span class="sim-row-roman">V</span>
+                    <div class="sim-row-content">
+                      <span class="sim-row-label" id="sim-slot-5-label">Glass &amp; Garnish</span>
+                      <strong class="sim-row-value" id="sim-slot-5-val">Rocks Glass with Orange Peel</strong>
+                    </div>
+                    <span class="sim-row-badge">✦</span>
+                  </div>
+                </div>
+
+                <!-- 10 Shuffled Token Pool -->
+                <div class="sim-token-pool">
+                  <span class="sim-banner-eyebrow">Shuffled 10-Token Interaction Pool (5 Authentic + 5 Decoys):</span>
+                  <div class="sim-tokens-grid" id="sim-pool-tiles"></div>
+                </div>
+
+                <!-- Lore Card -->
+                <div class="sim-lore-box">
+                  <span class="sim-banner-eyebrow">Archival Victory Lore:</span>
+                  <p id="sim-lore" class="sim-lore-text">Historical background information.</p>
+                </div>
+              </div>
+
+              <!-- Pre-Flight Audit Checklist Card -->
+              <div class="paper-card audit-report-card" id="sim-validation-card">
+                <div class="audit-report-card__head">
+                  <span class="audit-report-card__eyebrow">Pre-Flight Schema Diagnostics</span>
+                  <span id="audit-status-badge" class="badge">Auditing...</span>
+                </div>
+                <ul id="audit-issues-list" class="audit-report-card__list" aria-live="polite"></ul>
+              </div>
+            </div>
+
+            <!-- Persistent Wizard Controls -->
+            <div class="wizard-nav-controls">
+              <button type="button" id="btn-step-prev" class="btn-paper-secondary interactive-tactile hidden">
+                ← Previous Stage
+              </button>
+              <div class="wizard-nav-controls__right">
+                <button type="button" id="btn-step-cancel" class="btn-paper-outline interactive-tactile">
+                  Discard
+                </button>
+                <button type="button" id="btn-step-next" class="btn-paper-primary interactive-tactile">
+                  Proceed to Slots →
+                </button>
+                <button type="button" id="btn-save-record" class="btn-paper-primary interactive-tactile hidden">
+                  Save Specification
+                </button>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </section>
+
+      <!-- ==============================================================
+           VIEW 3: DATASET LEDGER & VAULT
+           ============================================================== -->
+      <section id="view-ledger" class="app-view view-ledger hidden" aria-labelledby="ledger-main-title">
+        <div class="view-ledger__container">
+          
+          <div class="ledger-header-panel">
+            <div class="ledger-header-panel__titles">
+              <span class="badge badge-ochre">ACTIVE REPOSITORY</span>
+              <h2 id="ledger-main-title" class="ledger-header-panel__title">Specification Ledger</h2>
+              <p class="ledger-header-panel__caption" id="ledger-stats-caption">0 specifications loaded.</p>
+            </div>
+            <div class="ledger-header-panel__actions">
+              <button id="btn-ledger-add" class="btn-paper-primary interactive-tactile" type="button">
+                + New Specification
+              </button>
+              <button id="btn-ledger-export" class="btn-paper-secondary interactive-tactile" type="button">
+                Export CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter & Search Toolbar -->
+          <div class="paper-card ledger-toolbar">
+            <div class="search-field-well">
+              <svg class="search-field-well__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="input-search" class="search-field-well__input" placeholder="Search by cocktail title, spirit, or notes...">
+              <button id="btn-search-clear" class="btn-search-clear interactive-tactile hidden" type="button" aria-label="Clear search input">&times;</button>
+            </div>
+
+            <div class="view-mode-tabs" role="group" aria-label="Dataset Layout Modes">
+              <button id="btn-mode-friendly" class="btn-view-tab interactive-tactile active" type="button" aria-pressed="true">Card View</button>
+              <button id="btn-mode-table" class="btn-view-tab interactive-tactile" type="button" aria-pressed="false">Table View</button>
+              <button id="btn-mode-technical" class="btn-view-tab interactive-tactile" type="button" aria-pressed="false">Raw CSV</button>
+            </div>
+          </div>
+
+          <!-- Ledger Main Output Slot -->
+          <div id="ledger-content" class="ledger-render-area" aria-live="polite"></div>
+
+          <!-- Pagination Bar -->
+          <nav id="ledger-pagination" class="paper-card ledger-pagination-nav hidden" aria-label="Ledger pagination">
+            <button id="btn-page-prev" class="btn-paper-subtle interactive-tactile" type="button" aria-label="Previous page">
+              ‹ Previous
+            </button>
+            <span id="page-indicator" class="page-indicator-text">Page 1 of 1</span>
+            <button id="btn-page-next" class="btn-paper-subtle interactive-tactile" type="button" aria-label="Next page">
+              Next ›
+            </button>
+          </nav>
+
+        </div>
+      </section>
+
+      <!-- ==============================================================
+           VIEW 4: EXPORT CENTER
+           ============================================================== -->
+      <section id="view-export" class="app-view view-export hidden" aria-labelledby="export-main-title">
+        <div class="view-export__container">
+          
+          <div class="export-hero-panel">
+            <span class="badge badge-sage">PRODUCTION EXPORT</span>
+            <h2 id="export-main-title" class="export-hero-panel__title">Export Specification Dataset</h2>
+            <p class="export-hero-panel__caption">
+              Generate fully compliant, 19-column RFC 4180 CSV files calibrated for immediate ingestion by the Sequence engine.
+            </p>
+          </div>
+
+          <!-- Pre-flight Audit Banner -->
+          <div id="export-audit-card" class="paper-card export-audit-card">
+            <div class="export-audit-card__row">
+              <span id="export-validation-status" class="badge badge-sage">All Records Valid</span>
+              <span id="export-count-summary" class="export-audit-card__meta">0 Puzzles Total</span>
+            </div>
+            <p id="export-audit-msg" class="export-audit-card__desc">
+              All records strictly conform to schema parameters. Ready for deployment.
+            </p>
+          </div>
+
+          <!-- Target Filename Configuration -->
+          <div class="paper-card export-filename-panel">
+            <label for="export-filename-input" class="paper-label">Target CSV Filename</label>
+            <div class="filename-input-compound">
+              <input type="text" id="export-filename-input" class="paper-input filename-input-compound__field" value="puzzles.csv">
+              <span class="filename-input-compound__ext" aria-hidden="true">.csv</span>
+            </div>
+            <p class="paper-field-hint">The Sequence runtime automatically reads <code>puzzles.csv</code> from its assets folder.</p>
+          </div>
+
+          <!-- Download Options Grid -->
+          <div class="export-cards-grid">
+            <article class="paper-card export-download-card">
+              <h3 class="export-download-card__title">Complete Dataset</h3>
+              <p class="export-download-card__text">Download the full repository of baseline and newly authored cocktail specifications.</p>
+              <button id="btn-download-all" class="btn-paper-primary btn-block interactive-tactile" type="button">
+                Download Complete CSV
+              </button>
+            </article>
+
+            <article class="paper-card export-download-card">
+              <h3 class="export-download-card__title">Session Additions Only</h3>
+              <p class="export-download-card__text">Download only records authored or modified during this browser session.</p>
+              <button id="btn-download-new" class="btn-paper-secondary btn-block interactive-tactile" type="button">
+                Download New Only (<span id="new-count-badge">0</span>)
+              </button>
+            </article>
+
+            <article class="paper-card export-download-card">
+              <h3 class="export-download-card__title">Copy CSV String</h3>
+              <p class="export-download-card__text">Copy the entire formatted RFC 4180 CSV text directly into your system clipboard.</p>
+              <button id="btn-copy-csv" class="btn-paper-secondary btn-block interactive-tactile" type="button">
+                Copy Raw CSV String
+              </button>
+            </article>
+
+            <article class="paper-card export-download-card">
+              <h3 class="export-download-card__title">Blank Schema Template</h3>
+              <p class="export-download-card__text">Download a clean, zero-row CSV template with all 19 standardized column headers.</p>
+              <button id="btn-download-template" class="btn-paper-outline btn-block interactive-tactile" type="button">
+                Download Blank Template
+              </button>
+            </article>
+          </div>
+
+          <!-- Live Raw Code Output Preview -->
+          <div class="paper-card raw-csv-preview-panel">
+            <div class="raw-csv-preview-panel__head">
+              <span class="paper-label">RFC 4180 Serialization Preview (First 5 Rows)</span>
+              <button id="btn-expand-preview" class="btn-paper-subtle btn-sm interactive-tactile" type="button">
+                Toggle Full File
+              </button>
+            </div>
+            <pre id="raw-csv-preview" class="raw-csv-preview-panel__code" tabindex="0"><code>title,clue,hint,notes,slot_1_name...</code></pre>
+          </div>
+
+          <div class="export-footer-nav">
+            <button id="btn-export-back-ledger" class="btn-paper-secondary interactive-tactile" type="button">
+              ← Return to Ledger
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- UNIFORM BOTTOM THUMB-ZONE NAVIGATION DOCK (MOBILE-FIRST) -->
+    <nav class="app-bottom-dock" aria-label="Thumb Zone Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Dynamically hydrated from APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+
+    <!-- ACCESSIBLE NOTIFICATION TOAST -->
+    <div id="toast" class="paper-toast hidden" role="status" aria-live="polite"></div>
+
+    <!-- MODAL CONFIRMATION DIALOG -->
+    <div id="modal-confirm" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-confirm-title">
+      <div class="paper-card modal-window">
+        <span class="badge badge-terracotta">CONFIRMATION REQUIRED</span>
+        <h3 id="modal-confirm-title" class="modal-window__title">Confirm Action</h3>
+        <p id="modal-confirm-msg" class="modal-window__message">Are you certain you wish to proceed?</p>
+        <div class="modal-window__actions">
+          <button id="btn-modal-cancel" class="btn-paper-outline interactive-tactile" type="button">Cancel</button>
+          <button id="btn-modal-proceed" class="btn-paper-primary interactive-tactile" type="button">Proceed</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

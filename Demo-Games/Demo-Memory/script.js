@@ -1,59 +1,141 @@
 /**
- * Memory Match — Cocktail Lounge Reserve Edition
- * Continuous Sequential Daily Puzzle Cycle Release
+ * =========================================================================
+ * CLIENT CONFIGURATION ENGINE (APP_CONFIG)
+ * Production-Ready White-Label Master Configuration
+ * All application copy, branding, endpoints, and toggles are managed here.
+ * =========================================================================
  */
+const APP_CONFIG = Object.freeze({
+  // 1. APPLICATION IDENTITY & METADATA
+  identity: {
+    appId: "memory-match-reserve",
+    appName: "Memory Match",
+    appTagline: "Artisanal Botanical Recall & Tactile Ledger",
+    collectionName: "The Reserve Collection",
+    version: "2.4.0",
+    environment: "production",
+    canonicalUrl: "../",
+    language: "en-US",
+    locale: "en-US",
+    currency: "USD",
+  },
+
+  // 2. BRANDING & VISUAL PALETTE OVERRIDES
+  branding: {
+    logoUrl: "",
+    logoAlt: "Reserve Tasting Seal",
+    faviconUrl: "./favicon.ico",
+    appIconApple: "./apple-touch-icon.png",
+    accentColor: "#A25750",      // Terracotta
+    accentSecondary: "#526F56",  // Sage
+    accentHighlight: "#7B641F",  // Warm Ochre
+    fontFamilyBase: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamilySerif: "'Cormorant Garamond', Charter, Georgia, serif",
+  },
+
+  // 3. GLOBAL NAVIGATION ARCHITECTURE
+  navigation: {
+    enableTopBackNavigation: true,
+    defaultFallbackRoute: "menu",
+    items: [
+      { id: "menu", label: "Overview", icon: "icon-overview", enabled: true, showInBottomBar: true },
+      { id: "vault", label: "Vault", icon: "icon-vault", enabled: true, showInBottomBar: true },
+      { id: "stats", label: "Ledger", icon: "icon-ledger", enabled: true, showInBottomBar: true },
+      { id: "settings", label: "Settings", icon: "icon-settings", enabled: true, showInBottomBar: true },
+    ],
+  },
+
+  // 4. APPLICATION COPY & CONTENT MATRIX (ZERO-PLACEHOLDER PRODUCTION DATA)
+  content: {
+    headers: {
+      defaultTitle: "Memory Match",
+      defaultEyebrow: "The Reserve Collection",
+      defaultSubtitle: "Curated daily botanical pairings and tactile memory ledger.",
+      vaultTitle: "Reserve Vault",
+      vaultEyebrow: "Cellar Archive",
+      vaultSubtitle: "The complete reserve catalog of artisanal botanical boards.",
+      gameTitle: "Daily Tasting",
+      gameEyebrow: "Active Tasting",
+      gameSubtitle: "Uncover and pair all 8 botanical ingredients.",
+    },
+    emptyStates: {
+      noDataHeading: "No Reserve Plates Available",
+      noDataDescription: "Unable to retrieve the reserve catalog. Verify network access and retry.",
+    },
+    actions: {
+      confirm: "Confirm & Proceed",
+      cancel: "Keep Playing",
+      save: "Save Entry",
+      reset: "Restart Tasting",
+      retry: "Retry Connection",
+      back: "Back",
+    },
+    notifications: {
+      saveSuccess: "Ledger record committed.",
+      importedSuccess: "Records imported successfully.",
+      importedError: "Invalid backup record string.",
+      copySuccess: "Result copied to clipboard.",
+      copyError: "Unable to copy result.",
+      audioEnabled: "Audio feedback enabled.",
+      audioMuted: "Audio feedback muted.",
+      animActive: "Botanicals active.",
+      animPaused: "Botanicals paused.",
+      hapticsActive: "Tactile haptics enabled.",
+      hapticsPaused: "Tactile haptics paused.",
+      offlineMode: "Playing in offline reserve mode.",
+      dailyUnlocked: "Today's Reserve Selection has unlocked!",
+    },
+    ratings: {
+      threeStarThreshold: 12,
+      twoStarThreshold: 18,
+      masterfulText: "Masterful Recall",
+      distinguishedText: "Distinguished Game",
+      clearedText: "Tasting Cleared",
+    },
+  },
+
+  // 5. EXTERNAL LINKS, SUPPORT & SOCIAL
+  support: {
+    contactEmail: "concierge@editorialledger.com",
+    supportDeskUrl: "https://tileworksgamesstudio.github.io/86/",
+    operatingHours: "Daily 00:00 – 24:00 Local",
+  },
+
+  // 6. FEATURE SWITCHES & UX BEHAVIOURAL CONTROLS
+  features: {
+    enableHapticFeedback: true,
+    enableSmoothPageTransitions: true,
+    enableAutoSave: true,
+    enableDetailedDiagnostics: false,
+    enableStickyBottomBar: true,
+    enableSoundEffects: true,
+    enableBgBotanicals: true,
+  },
+
+  // 7. API ENDPOINTS, STORAGE & PUZZLE CYCLE
+  endpoints: {
+    csvPath: "./puzzles.csv",
+    storageKeys: {
+      vaultStorage: "memory_match_vault_v2",
+      soundPref: "memory_match_sound_enabled",
+      bgAnimPref: "memory_match_bg_anim_enabled",
+      hapticsPref: "memory_match_haptics_enabled",
+      offlineCache: "memory_match_csv_offline_cache",
+    },
+  },
+
+  // 8. DETERMINISTIC DAILY CHALLENGE ENGINE
+  dailyCycle: {
+    anchorDate: "2026-01-01",
+    cycleStartIndex: 0,
+    requiredPairs: 8,
+    totalCards: 16,
+    rolloverCheckIntervalMs: 1000,
+  },
+});
 
 (function () {
   'use strict';
-
-  // ==========================================================================
-  // DEVELOPER CONFIGURATION
-  // ==========================================================================
-  const CONFIG = {
-    // A. Application Settings
-    app: {
-      name: 'Memory Match',
-      collectionName: 'The Reserve Collection',
-      storageKey: 'memory_match_vault_v2',
-      soundPrefKey: 'memory_match_sound_enabled',
-      bgAnimPrefKey: 'memory_match_bg_anim_enabled'
-    },
-
-    // B. Data Configuration
-    data: {
-      csvPath: './puzzles.csv',
-      offlineCacheKey: 'memory_match_csv_offline_cache',
-      requiredPairs: 8,
-      totalCards: 16
-    },
-
-    // C. Daily Challenge Configuration
-    dailyCycle: {
-      anchorDate: '2026-01-01',
-      cycleStartIndex: 0,
-      rolloverCheckIntervalMs: 1000
-    },
-
-    // D. Display Configuration
-    display: {
-      dateLocale: 'en-US',
-      dateFormatOptions: {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      },
-      ratings: {
-        threeStarThreshold: 12,
-        twoStarThreshold: 18
-      }
-    },
-
-    // E. Development & Diagnostics
-    diagnostics: {
-      enableDebugLogging: false
-    }
-  };
 
   // ==========================================================================
   // GAME PHASES & RUNTIME STATE
@@ -68,6 +150,7 @@
 
   const state = {
     phase: GamePhase.IDLE,
+    currentView: 'view-menu',
     puzzles: [],
     todayDateString: '',
     todayCycleIndex: 0,
@@ -82,8 +165,9 @@
     evalTimer: null,
     mismatchTimer: null,
     countdownTimer: null,
-    soundEnabled: true,
-    bgAnimEnabled: true,
+    soundEnabled: APP_CONFIG.features.enableSoundEffects,
+    bgAnimEnabled: APP_CONFIG.features.enableBgBotanicals,
+    hapticsEnabled: APP_CONFIG.features.enableHapticFeedback,
     lastActiveElement: null,
     audioCtx: null,
     dailySession: null,
@@ -117,7 +201,12 @@
 
   function formatLocalDateDisplay(d) {
     try {
-      return new Intl.DateTimeFormat(CONFIG.display.dateLocale, CONFIG.display.dateFormatOptions).format(d);
+      return new Intl.DateTimeFormat(APP_CONFIG.identity.locale, {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }).format(d);
     } catch (e) {
       return formatLocalDateISO(d);
     }
@@ -138,8 +227,8 @@
 
   function calculateCycleIndex(puzzleCount, localDate) {
     if (puzzleCount <= 0) return 0;
-    const dayDiff = getDaysBetweenAnchorAndDate(CONFIG.dailyCycle.anchorDate, localDate);
-    const adjusted = dayDiff + CONFIG.dailyCycle.cycleStartIndex;
+    const dayDiff = getDaysBetweenAnchorAndDate(APP_CONFIG.dailyCycle.anchorDate, localDate);
+    const adjusted = dayDiff + APP_CONFIG.dailyCycle.cycleStartIndex;
     return ((adjusted % puzzleCount) + puzzleCount) % puzzleCount;
   }
 
@@ -187,84 +276,97 @@
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(640, now);
-        osc.frequency.exponentialRampToValueAtTime(320, now + 0.07);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(260, now + 0.06);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.07);
+        osc.stop(now + 0.06);
       } else if (type === 'match') {
-        [880, 1320].forEach((freq, i) => {
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + (i * 0.025));
-          gain.gain.setValueAtTime(0.12, now + (i * 0.025));
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+          const t = now + (i * 0.035);
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
           osc.connect(gain);
           gain.connect(ctx.destination);
-          osc.start(now + (i * 0.025));
-          osc.stop(now + 0.43);
+          osc.start(t);
+          osc.stop(t + 0.39);
         });
       } else if (type === 'mismatch') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(196, now);
-        osc.frequency.exponentialRampToValueAtTime(140, now + 0.12);
-        gain.gain.setValueAtTime(0.07, now);
+        osc.frequency.setValueAtTime(185, now);
+        osc.frequency.exponentialRampToValueAtTime(130, now + 0.12);
+        gain.gain.setValueAtTime(0.05, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.12);
       } else if (type === 'complete') {
-        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        const notes = [523.25, 659.25, 783.99, 1046.50];
         notes.forEach((freq, idx) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'sine';
-          const t = now + (idx * 0.09);
+          const t = now + (idx * 0.08);
           osc.frequency.setValueAtTime(freq, t);
-          gain.gain.setValueAtTime(0.14, t);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+          gain.gain.setValueAtTime(0.09, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start(t);
-          osc.stop(t + 0.4);
+          osc.stop(t + 0.42);
         });
       }
     } catch (e) {}
   }
 
+  // ==========================================================================
+  // TACTILE HAPTICS PROTOCOL (12ms mechanical pulse)
+  // ==========================================================================
   function triggerHaptic(type) {
-    if (!navigator.vibrate) return;
+    if (!state.hapticsEnabled || typeof navigator === 'undefined' || !navigator.vibrate) return;
     try {
-      if (type === 'tap') navigator.vibrate(10);
-      else if (type === 'match') navigator.vibrate([12, 28, 16]);
-      else if (type === 'mismatch') navigator.vibrate(30);
-      else if (type === 'complete') navigator.vibrate([25, 35, 25, 35, 45]);
+      if (type === 'tap') navigator.vibrate(12);
+      else if (type === 'match') navigator.vibrate([12, 24, 12]);
+      else if (type === 'mismatch') navigator.vibrate(28);
+      else if (type === 'complete') navigator.vibrate([16, 32, 16, 32, 40]);
     } catch (e) {}
   }
 
   function toggleSound() {
     state.soundEnabled = !state.soundEnabled;
     try {
-      localStorage.setItem(CONFIG.app.soundPrefKey, state.soundEnabled ? '1' : '0');
+      localStorage.setItem(APP_CONFIG.endpoints.storageKeys.soundPref, state.soundEnabled ? '1' : '0');
     } catch (e) {}
     updateSoundUI();
-    showToast(state.soundEnabled ? 'Bar audio enabled' : 'Bar audio muted');
+    showToast(state.soundEnabled ? APP_CONFIG.content.notifications.audioEnabled : APP_CONFIG.content.notifications.audioMuted);
   }
 
   function toggleBgAnimation() {
     state.bgAnimEnabled = !state.bgAnimEnabled;
     try {
-      localStorage.setItem(CONFIG.app.bgAnimPrefKey, state.bgAnimEnabled ? '1' : '0');
+      localStorage.setItem(APP_CONFIG.endpoints.storageKeys.bgAnimPref, state.bgAnimEnabled ? '1' : '0');
     } catch (e) {}
     updateBgAnimUI();
-    showToast(state.bgAnimEnabled ? 'Botanicals active' : 'Botanicals paused');
+    showToast(state.bgAnimEnabled ? APP_CONFIG.content.notifications.animActive : APP_CONFIG.content.notifications.animPaused);
+  }
+
+  function toggleHaptics() {
+    state.hapticsEnabled = !state.hapticsEnabled;
+    try {
+      localStorage.setItem(APP_CONFIG.endpoints.storageKeys.hapticsPref, state.hapticsEnabled ? '1' : '0');
+    } catch (e) {}
+    updateHapticsUI();
+    showToast(state.hapticsEnabled ? APP_CONFIG.content.notifications.hapticsActive : APP_CONFIG.content.notifications.hapticsPaused);
   }
 
   function updateSoundUI() {
@@ -290,22 +392,25 @@
     }
   }
 
+  function updateHapticsUI() {
+    const btnToggle = document.getElementById('btn-toggle-haptics');
+    const lblToggle = document.getElementById('lbl-haptics-setting');
+    if (btnToggle && lblToggle) {
+      btnToggle.setAttribute('aria-pressed', state.hapticsEnabled ? 'true' : 'false');
+      lblToggle.textContent = state.hapticsEnabled ? 'On' : 'Off';
+    }
+  }
+
   // ==========================================================================
-  // BOTANICAL FLOATING CANVAS
+  // FLOATING BOTANICAL GRAIN CANVAS
   // ==========================================================================
   const BOTANICAL_SVGS = [
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#E86A2D" stroke-width="2.5" stroke-linecap="round"><path d="M12 36c4-12 12-22 24-22 6 0 8 5 3 10s-16 6-18 12c-2 6 4 9 11 6" /><path d="M14 34c3-10 10-18 20-18" stroke="#F5DE8C" stroke-width="1.2"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#F5DE8C" stroke-width="2.2" stroke-linecap="round"><path d="M14 38c6-14 16-24 22-22s-2 12-10 16-14 2-12 6c1 3 5 4 10 2" /><path d="M17 32c4-9 11-15 17-15" stroke="#FFF1BE" stroke-width="1"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#CCA048" stroke-width="2"><circle cx="24" cy="24" r="18" stroke="#87B048" stroke-width="2.2"/><circle cx="24" cy="24" r="14" stroke="#CCA048" stroke-width="1"/><circle cx="24" cy="24" r="2.5" fill="#87B048"/><line x1="24" y1="10" x2="24" y2="21.5" stroke="#CCA048"/><line x1="24" y1="26.5" x2="24" y2="38" stroke="#CCA048"/><line x1="10" y1="24" x2="21.5" y2="24" stroke="#CCA048"/><line x1="26.5" y1="24" x2="38" y2="24" stroke="#CCA048"/><line x1="14" y1="14" x2="22" y2="22" stroke="#CCA048"/><line x1="26" y1="26" x2="34" y2="34" stroke="#CCA048"/><line x1="34" y1="14" x2="26" y2="22" stroke="#CCA048"/><line x1="22" y1="26" x2="14" y2="34" stroke="#CCA048"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#DF8235" stroke-width="2"><circle cx="24" cy="24" r="19" stroke="#E86A2D" stroke-width="2.2"/><circle cx="24" cy="24" r="14.5" stroke="#F5DE8C" stroke-width="1"/><circle cx="24" cy="24" r="2.8" fill="#E86A2D"/><line x1="24" y1="9.5" x2="24" y2="21.2"/><line x1="24" y1="26.8" x2="24" y2="38.5"/><line x1="9.5" y1="24" x2="21.2" y2="24"/><line x1="26.8" y1="24" x2="38.5" y2="24"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#C4511D" stroke-width="2"><circle cx="24" cy="24" r="18" stroke="#E86A2D" stroke-width="2.5"/><circle cx="24" cy="24" r="13" stroke="#9E3812" stroke-width="1.2"/><circle cx="24" cy="24" r="2" fill="#9E3812"/><path d="M15 15l18 18M33 15l-18 18M24 11v26M11 24h26" stroke="#C4511D" stroke-width="1"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#A5772D" stroke-width="1.8"><circle cx="24" cy="24" r="18" stroke="#CCA048" stroke-width="2"/><circle cx="24" cy="24" r="13" stroke="#73501D" stroke-dasharray="2 3"/><circle cx="24" cy="24" r="3" stroke="#CCA048"/><line x1="24" y1="11" x2="24" y2="37"/><line x1="11" y1="24" x2="37" y2="24"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke-linecap="round"><circle cx="20" cy="30" r="11" fill="rgba(196, 81, 29, 0.45)" stroke="#C4511D" stroke-width="2.2"/><path d="M22 19c2-9 10-13 16-13" stroke="#CCA048" stroke-width="2"/><circle cx="16" cy="26" r="2.5" fill="#FFF1BE" opacity="0.6"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke-linecap="round"><circle cx="16" cy="32" r="9" fill="rgba(196, 81, 29, 0.35)" stroke="#C4511D" stroke-width="2"/><circle cx="32" cy="30" r="8.5" fill="rgba(196, 81, 29, 0.35)" stroke="#C4511D" stroke-width="2"/><path d="M18 23c4-11 8-15 14-17" stroke="#CCA048" stroke-width="1.8"/><path d="M30 22c-2-8-2-12 2-16" stroke="#CCA048" stroke-width="1.8"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#87B048" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 40c0-14 4-22 14-26M24 28c-6-2-12-8-10-14 6 0 10 4 10 14M24 20c6-3 10-8 8-14-6 0-8 5-8 14"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#7A9A4A" stroke-width="1.8" stroke-linecap="round"><path d="M14 40c6-10 14-20 22-30" stroke="#CCA048" stroke-width="2"/><path d="M20 33l-7-4M22 30l8-5M26 23l-7-5M28 20l8-4M31 14l-6-5M33 11l6-3"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke-linecap="round"><ellipse cx="24" cy="24" rx="12" ry="16" transform="rotate(-25 24 24)" fill="rgba(110, 148, 71, 0.35)" stroke="#87B048" stroke-width="2.2"/><circle cx="21" cy="21" r="3.5" fill="#E86A2D"/><line x1="8" y1="40" x2="40" y2="8" stroke="#CCA048" stroke-width="1.8"/></svg>`,
-    `<svg viewBox="0 0 48 48" fill="none" stroke="#87B048" stroke-width="2.2" stroke-linecap="round"><path d="M10 16c8-4 16 2 18 10s8 12 14 6" /><path d="M10 20c8-4 16 2 18 10s8 12 14 6" stroke="#CCA048" stroke-width="1"/></svg>`
+    `<svg viewBox="0 0 48 48" fill="none" stroke="#A25750" stroke-width="2.2" stroke-linecap="round"><path d="M12 36c4-12 12-22 24-22 6 0 8 5 3 10s-16 6-18 12c-2 6 4 9 11 6" /><path d="M14 34c3-10 10-18 20-18" stroke="#7B641F" stroke-width="1.2"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke="#526F56" stroke-width="2" stroke-linecap="round"><circle cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="13" stroke-dasharray="2 3"/><circle cx="24" cy="24" r="2.5" fill="#526F56"/><line x1="24" y1="10" x2="24" y2="38"/><line x1="10" y1="24" x2="38" y2="24"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke="#7B641F" stroke-width="2"><circle cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="14" stroke-width="1"/><circle cx="24" cy="24" r="2.5" fill="#7B641F"/><line x1="14" y1="14" x2="22" y2="22"/><line x1="26" y1="26" x2="34" y2="34"/><line x1="34" y1="14" x2="26" y2="22"/><line x1="22" y1="26" x2="14" y2="34"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke="#526F56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 40c0-14 4-22 14-26M24 28c-6-2-12-8-10-14 6 0 10 4 10 14M24 20c6-3 10-8 8-14-6 0-8 5-8 14"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke-linecap="round"><circle cx="20" cy="30" r="10" fill="rgba(162, 87, 80, 0.25)" stroke="#A25750" stroke-width="2"/><path d="M22 20c2-9 10-13 16-13" stroke="#7B641F" stroke-width="2"/></svg>`,
+    `<svg viewBox="0 0 48 48" fill="none" stroke-linecap="round"><ellipse cx="24" cy="24" rx="12" ry="16" transform="rotate(-25 24 24)" fill="rgba(82, 111, 86, 0.2)" stroke="#526F56" stroke-width="2"/><circle cx="21" cy="21" r="3" fill="#A25750"/><line x1="8" y1="40" x2="40" y2="8" stroke="#7B641F" stroke-width="1.8"/></svg>`
   ];
 
   function initFloatingBackground() {
@@ -316,8 +421,8 @@
     const populationCount = 8;
     const depthTiers = [
       { className: 'garnish-depth-far', durationRange: [32, 42], size: 28 },
-      { className: 'garnish-depth-mid', durationRange: [24, 32], size: 40 },
-      { className: 'garnish-depth-near', durationRange: [18, 25], size: 52 }
+      { className: 'garnish-depth-mid', durationRange: [24, 32], size: 38 },
+      { className: 'garnish-depth-near', durationRange: [18, 25], size: 48 }
     ];
 
     for (let i = 0; i < populationCount; i++) {
@@ -348,7 +453,7 @@
   }
 
   // ==========================================================================
-  // SVG SANITIZATION
+  // SVG SANITIZATION & CREATION
   // ==========================================================================
   function sanitizeAndCreateSVG(svgStr) {
     if (!svgStr || typeof svgStr !== 'string') return null;
@@ -413,13 +518,16 @@
 
   function loadPersistence() {
     try {
-      const soundPref = localStorage.getItem(CONFIG.app.soundPrefKey);
+      const soundPref = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.soundPref);
       if (soundPref !== null) state.soundEnabled = soundPref === '1';
 
-      const bgAnimPref = localStorage.getItem(CONFIG.app.bgAnimPrefKey);
+      const bgAnimPref = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.bgAnimPref);
       if (bgAnimPref !== null) state.bgAnimEnabled = bgAnimPref === '1';
 
-      const raw = localStorage.getItem(CONFIG.app.storageKey);
+      const hapticsPref = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.hapticsPref);
+      if (hapticsPref !== null) state.hapticsEnabled = hapticsPref === '1';
+
+      const raw = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.vaultStorage);
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object') {
@@ -433,7 +541,7 @@
         }
       }
     } catch (err) {
-      if (CONFIG.diagnostics.enableDebugLogging) console.warn('Storage read error:', err);
+      if (APP_CONFIG.features.enableDetailedDiagnostics) console.warn('Storage read error:', err);
     }
   }
 
@@ -444,9 +552,9 @@
         dailySession: state.dailySession,
         vaultSession: state.vaultSession
       };
-      localStorage.setItem(CONFIG.app.storageKey, JSON.stringify(payload));
+      localStorage.setItem(APP_CONFIG.endpoints.storageKeys.vaultStorage, JSON.stringify(payload));
     } catch (err) {
-      if (CONFIG.diagnostics.enableDebugLogging) console.warn('Storage save error:', err);
+      if (APP_CONFIG.features.enableDetailedDiagnostics) console.warn('Storage save error:', err);
     }
   }
 
@@ -474,7 +582,7 @@
   }
 
   // ==========================================================================
-  // CSV PARSING & SEQUENTIAL PUZZLE COLLECTION
+  // CSV PARSING & DATA INGESTION
   // ==========================================================================
   function parseCSV(text) {
     text = text.replace(/^\uFEFF/, '');
@@ -550,15 +658,15 @@
       const items = [];
       const icons = [];
 
-      for (let i = 1; i <= CONFIG.data.requiredPairs; i++) {
-        const itemVal = findVal('item', i) || `Item ${i}`;
+      for (let i = 1; i <= APP_CONFIG.dailyCycle.requiredPairs; i++) {
+        const itemVal = findVal('item', i) || `Botanical ${i}`;
         const iconVal = findVal('svg', i) || findVal('icon', i) || findVal('itemsvg', i) || '';
         items.push(itemVal);
         icons.push(iconVal);
       }
 
       const uniqueItems = new Set(items.map(s => s.trim().toLowerCase()));
-      if (uniqueItems.size !== CONFIG.data.requiredPairs) {
+      if (uniqueItems.size !== APP_CONFIG.dailyCycle.requiredPairs) {
         return;
       }
 
@@ -578,25 +686,25 @@
     let text = '';
 
     try {
-      const res = await fetch(CONFIG.data.csvPath, { cache: 'no-cache' });
+      const res = await fetch(APP_CONFIG.endpoints.csvPath, { cache: 'no-cache' });
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       text = await res.text();
       try {
-        localStorage.setItem(CONFIG.data.offlineCacheKey, text);
+        localStorage.setItem(APP_CONFIG.endpoints.storageKeys.offlineCache, text);
       } catch (e) {}
     } catch (netErr) {
-      const cached = localStorage.getItem(CONFIG.data.offlineCacheKey);
+      const cached = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.offlineCache);
       if (cached) {
         text = cached;
-        showToast('Playing in offline cellar mode');
+        showToast(APP_CONFIG.content.notifications.offlineMode);
       } else {
-        throw new Error('Unable to connect and no offline puzzles found.');
+        throw new Error(APP_CONFIG.content.emptyStates.noDataHeading);
       }
     }
 
     const rows = parseCSV(text);
     const parsed = mapAndValidateRecords(rows);
-    if (!parsed.length) throw new Error('No valid puzzle records found in collection.');
+    if (!parsed.length) throw new Error(APP_CONFIG.content.emptyStates.noDataHeading);
 
     state.puzzles = parsed;
     updateActiveDailySelection();
@@ -610,7 +718,7 @@
   }
 
   // ==========================================================================
-  // CARD RENDERING & ACCESSIBILITY
+  // CARD RENDERING & ARIA ANNOUNCEMENTS
   // ==========================================================================
   function renderCardDOM(btn, card, index) {
     btn.innerHTML = '';
@@ -672,12 +780,49 @@
   }
 
   // ==========================================================================
-  // VIEW ROUTING & TOAST NOTIFICATIONS
+  // VIEW ROUTING & HEADER SYNCHRONIZATION
   // ==========================================================================
+  function updateHeaderForView(viewId) {
+    const eyebrow = document.getElementById('pageEyebrowSlot');
+    const title = document.getElementById('pageTitleSlot');
+    const subtitle = document.getElementById('pageSubtitleSlot');
+    const backBtn = document.getElementById('btnGlobalBack');
+
+    if (viewId === 'view-menu') {
+      eyebrow.textContent = APP_CONFIG.content.headers.defaultEyebrow;
+      title.textContent = APP_CONFIG.content.headers.defaultTitle;
+      subtitle.textContent = APP_CONFIG.content.headers.defaultSubtitle;
+      backBtn.classList.add('hidden');
+    } else if (viewId === 'view-vault') {
+      eyebrow.textContent = APP_CONFIG.content.headers.vaultEyebrow;
+      title.textContent = APP_CONFIG.content.headers.vaultTitle;
+      subtitle.textContent = APP_CONFIG.content.headers.vaultSubtitle;
+      backBtn.classList.remove('hidden');
+    } else if (viewId === 'view-game') {
+      const isReplay = state.isReplay;
+      eyebrow.textContent = isReplay ? 'PRACTICE TASTING' : APP_CONFIG.content.headers.gameEyebrow;
+      title.textContent = state.activePuzzle ? state.activePuzzle.title : APP_CONFIG.content.headers.gameTitle;
+      subtitle.textContent = APP_CONFIG.content.headers.gameSubtitle;
+      backBtn.classList.remove('hidden');
+    }
+
+    // Update bottom dock active tab
+    const routeId = viewId.replace('view-', '');
+    document.querySelectorAll('.nav-tab-item').forEach(tab => {
+      const isActive = tab.dataset.route === routeId || (routeId === 'game' && tab.dataset.route === 'menu');
+      tab.classList.toggle('nav-tab-item--active', isActive);
+      if (isActive) tab.setAttribute('aria-current', 'page');
+      else tab.removeAttribute('aria-current');
+    });
+  }
+
   function showView(viewId) {
+    state.currentView = viewId;
     document.querySelectorAll('.app-main .view').forEach(v => v.classList.add('hidden'));
     const target = document.getElementById(viewId);
     if (target) target.classList.remove('hidden');
+
+    updateHeaderForView(viewId);
 
     if (viewId === 'view-menu') {
       renderMenuView();
@@ -696,7 +841,7 @@
   }
 
   // ==========================================================================
-  // MAIN MENU CONTROLLER
+  // MAIN MENU OVERVIEW CONTROLLER
   // ==========================================================================
   function renderMenuView() {
     updateActiveDailySelection();
@@ -718,16 +863,16 @@
 
     if (completed) {
       statusDesc.textContent = `Completed in ${completed.turns} turns (Rating: ${'★'.repeat(completed.stars || 2)})`;
-      playLabel.textContent = 'Replay Memory Match';
+      playLabel.textContent = 'Replay Daily Tasting';
       countdownWrap.classList.remove('hidden');
       updateCountdownDisplays();
     } else if (state.dailySession && state.dailySession.puzzleId === p.id && state.dailySession.date === state.todayDateString) {
       statusDesc.textContent = `In Progress (${state.dailySession.matchedCardCount / 2} / 8 pairs found)`;
-      playLabel.textContent = 'Resume Memory Match';
+      playLabel.textContent = 'Resume Daily Tasting';
       countdownWrap.classList.add('hidden');
     } else {
-      statusDesc.textContent = 'Ready to play';
-      playLabel.textContent = 'Play Memory Match';
+      statusDesc.textContent = 'Ready to begin';
+      playLabel.textContent = 'Begin Daily Matching';
       countdownWrap.classList.add('hidden');
     }
 
@@ -748,7 +893,7 @@
   }
 
   // ==========================================================================
-  // VAULT (CELLAR ARCHIVE) CONTROLLER
+  // VAULT (RESERVE ARCHIVE) CONTROLLER
   // ==========================================================================
   function renderVaultView() {
     const container = document.getElementById('vault-list');
@@ -756,7 +901,7 @@
     container.innerHTML = '';
 
     if (!state.puzzles.length) {
-      container.innerHTML = '<div class="lounge-card status-card"><p class="status-text">No reserve puzzles found in the collection.</p></div>';
+      container.innerHTML = `<div class="paper-card status-card"><p class="status-text">${APP_CONFIG.content.emptyStates.noDataHeading}</p></div>`;
       return;
     }
 
@@ -775,11 +920,11 @@
 
       item.innerHTML = `
         <div class="vault-info">
-          <span class="meta-date">Edition #${index + 1}</span>
+          <span class="meta-date">Reserve Plate #${index + 1}</span>
           <span class="vault-title">${p.title}</span>
           <span class="vault-badge">${statusText}</span>
         </div>
-        <button class="btn btn-sm ${record ? '' : 'btn-primary'}" type="button">
+        <button class="interactive-tactile btn-sm ${record ? '' : 'btn-primary'}" type="button">
           ${record ? 'Replay' : 'Play'}
         </button>
       `;
@@ -814,9 +959,6 @@
     const pastRecord = state.stats.history[puzzle.id];
     state.isReplay = !!pastRecord;
 
-    document.getElementById('gameplay-title').textContent = puzzle.title;
-    document.getElementById('game-practice-badge').classList.toggle('hidden', !state.isReplay);
-
     const raw = [];
     puzzle.items.forEach((label, id) => {
       const icon = (puzzle.icons && puzzle.icons[id]) ? puzzle.icons[id] : '';
@@ -829,7 +971,7 @@
 
     const sessionKey = isDaily ? 'dailySession' : 'vaultSession';
     const existing = state[sessionKey];
-    const isResuming = existing && existing.puzzleId === puzzle.id && existing.matchedCardCount < CONFIG.data.totalCards;
+    const isResuming = existing && existing.puzzleId === puzzle.id && existing.matchedCardCount < APP_CONFIG.dailyCycle.totalCards;
 
     if (isResuming) {
       state.turns = existing.turns || 0;
@@ -848,8 +990,8 @@
     }
 
     document.getElementById('stat-turns').textContent = state.turns;
-    document.getElementById('stat-pairs').textContent = `${state.matchedCardCount / 2} / ${CONFIG.data.requiredPairs}`;
-    document.getElementById('game-feedback').textContent = 'Flip cards to match all 8 pairs.';
+    document.getElementById('stat-pairs').textContent = `${state.matchedCardCount / 2} / ${APP_CONFIG.dailyCycle.requiredPairs}`;
+    document.getElementById('game-feedback').textContent = 'Turn tiles to uncover matching botanicals.';
 
     const board = document.getElementById('game-board');
     board.innerHTML = '';
@@ -906,7 +1048,7 @@
       state.evalTimer = setTimeout(() => {
         state.evalTimer = null;
         evaluateCardPair();
-      }, 360);
+      }, 340);
     }
   }
 
@@ -938,8 +1080,8 @@
 
       state.matchedCardCount += 2;
       const pairs = state.matchedCardCount / 2;
-      document.getElementById('stat-pairs').textContent = `${pairs} / ${CONFIG.data.requiredPairs}`;
-      document.getElementById('game-feedback').textContent = `Match: ${card1.name}!`;
+      document.getElementById('stat-pairs').textContent = `${pairs} / ${APP_CONFIG.dailyCycle.requiredPairs}`;
+      document.getElementById('game-feedback').textContent = `Match confirmed: ${card1.name}!`;
 
       setTimeout(() => {
         btn1.classList.remove('pulse-match');
@@ -958,9 +1100,9 @@
         savePersistence();
       }
 
-      if (state.matchedCardCount === CONFIG.data.totalCards) {
+      if (state.matchedCardCount === APP_CONFIG.dailyCycle.totalCards) {
         state.phase = GamePhase.COMPLETED;
-        setTimeout(handlePuzzleCompletion, 450);
+        setTimeout(handlePuzzleCompletion, 420);
       }
     } else {
       playSound('mismatch');
@@ -977,13 +1119,13 @@
         state.flippedIndices = [];
         state.phase = GamePhase.IDLE;
         state.mismatchTimer = null;
-        document.getElementById('game-feedback').textContent = 'Flip cards to match all 8 pairs.';
-      }, 850);
+        document.getElementById('game-feedback').textContent = 'Turn tiles to uncover matching botanicals.';
+      }, 780);
     }
   }
 
   // ==========================================================================
-  // ARROW-KEY ACCESSIBILITY
+  // ARROW-KEY ACCESSIBILITY & FOCUS MANAGEMENT
   // ==========================================================================
   function handleGridKeydown(e) {
     const board = document.getElementById('game-board');
@@ -994,19 +1136,19 @@
 
     switch (e.key) {
       case 'ArrowRight':
-        next = (cur + 1) % CONFIG.data.totalCards;
+        next = (cur + 1) % APP_CONFIG.dailyCycle.totalCards;
         e.preventDefault();
         break;
       case 'ArrowLeft':
-        next = (cur - 1 + CONFIG.data.totalCards) % CONFIG.data.totalCards;
+        next = (cur - 1 + APP_CONFIG.dailyCycle.totalCards) % APP_CONFIG.dailyCycle.totalCards;
         e.preventDefault();
         break;
       case 'ArrowDown':
-        next = (cur + 4) % CONFIG.data.totalCards;
+        next = (cur + 4) % APP_CONFIG.dailyCycle.totalCards;
         e.preventDefault();
         break;
       case 'ArrowUp':
-        next = (cur - 4 + CONFIG.data.totalCards) % CONFIG.data.totalCards;
+        next = (cur - 4 + APP_CONFIG.dailyCycle.totalCards) % APP_CONFIG.dailyCycle.totalCards;
         e.preventDefault();
         break;
       case 'Home':
@@ -1014,7 +1156,7 @@
         e.preventDefault();
         break;
       case 'End':
-        next = CONFIG.data.totalCards - 1;
+        next = APP_CONFIG.dailyCycle.totalCards - 1;
         e.preventDefault();
         break;
       default:
@@ -1067,13 +1209,13 @@
     const s = state.stats;
 
     let stars = 1;
-    let ratingText = 'Solved!';
-    if (turns <= CONFIG.display.ratings.threeStarThreshold) {
+    let ratingText = APP_CONFIG.content.ratings.clearedText;
+    if (turns <= APP_CONFIG.content.ratings.threeStarThreshold) {
       stars = 3;
-      ratingText = 'Masterful Recall!';
-    } else if (turns <= CONFIG.display.ratings.twoStarThreshold) {
+      ratingText = APP_CONFIG.content.ratings.masterfulText;
+    } else if (turns <= APP_CONFIG.content.ratings.twoStarThreshold) {
       stars = 2;
-      ratingText = 'Distinguished Game!';
+      ratingText = APP_CONFIG.content.ratings.distinguishedText;
     }
 
     let isNewBest = false;
@@ -1128,21 +1270,21 @@
     const p = state.activePuzzle || state.todayPuzzle;
     const turns = state.turns || (state.stats.history[p.id] ? state.stats.history[p.id].turns : 0);
     const dateFormatted = formatLocalDateDisplay(getLocalDate());
-    const shareText = `Memory Match — ${dateFormatted}\nSolved in ${turns} turns!\n🍸🍸🍸🍸\n🍸🍸🍸🍸`;
+    const shareText = `Memory Match — ${dateFormatted}\nSolved in ${turns} turns!\n🌱🌱🌱🌱\n🌱🌱🌱🌱`;
 
     if (navigator.share) {
       navigator.share({
-        title: 'Memory Match — Cocktail Lounge Result',
+        title: `${APP_CONFIG.identity.appName} — Daily Result`,
         text: shareText
       }).catch(() => {});
     } else if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(shareText).then(() => {
-        showToast('Result copied to clipboard');
+        showToast(APP_CONFIG.content.notifications.copySuccess);
       }).catch(() => {
-        showToast('Unable to copy result');
+        showToast(APP_CONFIG.content.notifications.copyError);
       });
     } else {
-      showToast('Sharing not supported on this browser');
+      showToast(APP_CONFIG.content.notifications.copyError);
     }
   }
 
@@ -1183,7 +1325,7 @@
   }
 
   // ==========================================================================
-  // MODALS & FOCUS MANAGEMENT
+  // MODALS & ACCESSIBLE DIALOG TRAPS
   // ==========================================================================
   function openModal(modalId) {
     state.lastActiveElement = document.activeElement;
@@ -1236,7 +1378,7 @@
   }
 
   // ==========================================================================
-  // STATS & BACKUP IMPORT/EXPORT
+  // LEDGER STATS & BACKUP IMPORT/EXPORT
   // ==========================================================================
   function renderStatsModal() {
     const s = state.stats;
@@ -1257,7 +1399,7 @@
     const payload = JSON.stringify(state.stats);
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(payload).then(() => {
-        showToast('Backup JSON copied to clipboard');
+        showToast('Ledger backup JSON copied to clipboard');
       }).catch(() => {
         showToast('Failed copying to clipboard.');
       });
@@ -1277,14 +1419,14 @@
       savePersistence();
       renderStatsModal();
       txtArea.value = '';
-      showToast('Records imported successfully');
+      showToast(APP_CONFIG.content.notifications.importedSuccess);
     } catch (e) {
-      showToast('Invalid backup code');
+      showToast(APP_CONFIG.content.notifications.importedError);
     }
   }
 
   // ==========================================================================
-  // MIDNIGHT ROLLOVER & INACTIVITY REFRESH
+  // MIDNIGHT ROLLOVER & VISIBILITY
   // ==========================================================================
   function checkDayRollover() {
     const currentISO = formatLocalDateISO(getLocalDate());
@@ -1294,39 +1436,66 @@
       if (menuView && !menuView.classList.contains('hidden')) {
         renderMenuView();
       }
-      showToast("Today's Reserve Selection has unlocked!");
+      showToast(APP_CONFIG.content.notifications.dailyUnlocked);
     }
   }
 
   // ==========================================================================
-  // EVENT REGISTRATION
+  // EVENT REGISTRATION & UNIFIED ROUTING
   // ==========================================================================
   function setupEvents() {
+    // Top Nav Controls
+    document.getElementById('btnGlobalBack').onclick = () => {
+      cancelPendingTimers();
+      showView(APP_CONFIG.navigation.defaultFallbackRoute ? 'view-' + APP_CONFIG.navigation.defaultFallbackRoute : 'view-menu');
+    };
+
     document.getElementById('btn-sound-toggle').onclick = toggleSound;
+    document.getElementById('btn-header-rules').onclick = openHowToPlayPanel;
+
+    // Setting Toggles
     document.getElementById('btn-toggle-sound-setting').onclick = toggleSound;
     document.getElementById('btn-toggle-bg-anim').onclick = toggleBgAnimation;
+    document.getElementById('btn-toggle-haptics').onclick = toggleHaptics;
     updateSoundUI();
     updateBgAnimUI();
+    updateHapticsUI();
 
+    // Menu Actions
     document.getElementById('btn-play-game').onclick = () => loadPuzzle(state.todayPuzzle);
     document.getElementById('btn-open-vault').onclick = () => showView('view-vault');
-    document.getElementById('btn-open-settings').onclick = () => openModal('modal-settings');
-    document.getElementById('btn-open-how-to-play').onclick = openHowToPlayPanel;
-
-    document.getElementById('btn-util-stats').onclick = () => {
+    document.getElementById('btn-open-stats').onclick = () => {
       renderStatsModal();
       openModal('modal-stats');
     };
+    document.getElementById('btn-open-settings').onclick = () => openModal('modal-settings');
+    document.getElementById('btn-open-how-to-play').onclick = openHowToPlayPanel;
+
+    // Utility Row Actions
     document.getElementById('btn-util-share').onclick = shareResult;
     document.getElementById('btn-util-plus').onclick = () => openModal('modal-plus');
 
-    document.getElementById('btn-vault-back').onclick = () => showView('view-menu');
+    // Bottom Dock Tabs
+    document.querySelectorAll('.nav-tab-item').forEach(tab => {
+      tab.onclick = () => {
+        const route = tab.dataset.route;
+        triggerHaptic('tap');
+        if (route === 'menu') {
+          cancelPendingTimers();
+          showView('view-menu');
+        } else if (route === 'vault') {
+          cancelPendingTimers();
+          showView('view-vault');
+        } else if (route === 'stats') {
+          renderStatsModal();
+          openModal('modal-stats');
+        } else if (route === 'settings') {
+          openModal('modal-settings');
+        }
+      };
+    });
 
-    document.getElementById('btn-game-back').onclick = () => {
-      cancelPendingTimers();
-      showView('view-menu');
-    };
-    document.getElementById('btn-game-rules').onclick = openHowToPlayPanel;
+    // In-Game Controls
     document.getElementById('btn-reset-board').onclick = () => openModal('modal-reset');
     document.getElementById('btn-reset-cancel').onclick = closeAllModals;
     document.getElementById('btn-reset-confirm').onclick = () => {
@@ -1341,9 +1510,11 @@
 
     document.getElementById('game-board').addEventListener('keydown', handleGridKeydown);
 
+    // Slide Panel Controls
     document.getElementById('btn-close-htp').onclick = closeHowToPlayPanel;
     document.getElementById('btn-htp-got-it').onclick = closeHowToPlayPanel;
 
+    // Completion Dialog Actions
     document.getElementById('btn-complete-share').onclick = shareResult;
     document.getElementById('btn-complete-vault').onclick = () => {
       closeAllModals();
@@ -1354,12 +1525,14 @@
       showView('view-menu');
     };
 
+    // Modal Dismissals
     document.getElementById('modal-overlay').onclick = closeAllModals;
-    document.querySelectorAll('.btn-close').forEach(b => {
+    document.querySelectorAll('.btn-close, .btn-close-modal').forEach(b => {
       b.onclick = closeAllModals;
     });
     document.addEventListener('keydown', handleModalTrap);
 
+    // Backup Actions
     document.getElementById('btn-export-backup').onclick = exportBackupData;
     document.getElementById('btn-import-backup-toggle').onclick = () => {
       const blk = document.getElementById('import-block');
@@ -1367,6 +1540,7 @@
     };
     document.getElementById('btn-import-apply').onclick = applyImportedData;
 
+    // Visibility & Lifecycle
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         checkDayRollover();
@@ -1381,7 +1555,7 @@
     state.countdownTimer = setInterval(() => {
       updateCountdownDisplays();
       checkDayRollover();
-    }, CONFIG.dailyCycle.rolloverCheckIntervalMs);
+    }, APP_CONFIG.dailyCycle.rolloverCheckIntervalMs);
   }
 
   // ==========================================================================
@@ -1396,9 +1570,9 @@
       await loadPuzzles();
       showView('view-menu');
     } catch (err) {
-      if (CONFIG.diagnostics.enableDebugLogging) console.error('Initialization error:', err);
+      if (APP_CONFIG.features.enableDetailedDiagnostics) console.error('Initialization error:', err);
       const msgEl = document.getElementById('status-message');
-      msgEl.textContent = 'Unable to connect to puzzle collection.';
+      msgEl.textContent = APP_CONFIG.content.emptyStates.noDataHeading;
       const retryBtn = document.getElementById('btn-retry');
       retryBtn.classList.remove('hidden');
       retryBtn.onclick = () => {

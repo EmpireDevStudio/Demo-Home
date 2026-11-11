@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
-  <meta name="description" content="System Directory — Minimalist Glass Portal Navigation with Central Spinning Vinyl Core">
-  <meta name="theme-color" content="#050608">
+  <meta name="description" content="System Directory — Tactile Paper Material Portal with Central Vinyl Core">
+  <meta name="theme-color" content="#F5F3ED">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>System Directory</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -18,31 +18,51 @@
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
     <div class="orb orb-4"></div>
-    <div class="canvas-noise"></div>
+    <div class="canvas-grain"></div>
   </div>
 
   <!-- Intro Screen Overlay -->
   <aside class="intro-screen" id="introScreen" aria-label="Welcome Portal" role="dialog" aria-modal="true">
-    <div class="intro-wrap">
+    <div class="intro-wrap paper-surface-elevated">
       <div class="intro-monogram" aria-hidden="true">
         <svg viewBox="0 0 44 44" fill="none">
-          <circle cx="22" cy="22" r="20" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3.5"/>
-          <circle cx="22" cy="22" r="10" stroke="currentColor" stroke-width="0.8" stroke-opacity="0.4"/>
+          <circle cx="22" cy="22" r="20" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3.5"/>
+          <circle cx="22" cy="22" r="10" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
           <circle cx="22" cy="22" r="4.5" fill="currentColor"/>
         </svg>
       </div>
       <h1 class="intro-title" id="introTitle">SYSTEM DIRECTORY</h1>
       <div class="intro-hairline" aria-hidden="true"></div>
       <p class="intro-subtitle" id="introSubtitle">Archives &bull; Broadcasts &bull; Simulations &bull; Protocols</p>
-      <span class="intro-hint">Tap anywhere to enter</span>
+      <button type="button" class="intro-hint-button interactive-tactile" id="introDismissBtn">
+        Enter Workspace &rarr;
+      </button>
     </div>
   </aside>
 
-  <!-- Top Masthead Header -->
-  <header class="top-masthead" role="banner">
-    <span class="masthead-title">SYSTEM DIRECTORY</span>
-    <span class="masthead-dot" aria-hidden="true"></span>
-    <span class="masthead-label" id="systemStatus">ONLINE</span>
+  <!-- Standardized Universal Top Masthead -->
+  <header class="app-page-header" role="banner">
+    <div class="app-page-header__controls">
+      <button type="button" class="btn-back-nav interactive-tactile" id="mastheadBackBtn" aria-label="Navigate back">
+        <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span class="btn-back-nav__label" id="backNavLabel">Back</span>
+      </button>
+
+      <div class="masthead-status-badge" id="mastheadStatusBadge">
+        <span class="status-pulse-dot" aria-hidden="true"></span>
+        <span class="masthead-label" id="systemStatus">ONLINE</span>
+      </div>
+    </div>
+
+    <div class="app-page-header__title-block">
+      <span class="app-page-header__eyebrow" id="pageEyebrowSlot">SYSTEM ARCHITECTURE</span>
+      <h1 class="app-page-header__title" id="pageTitleSlot">Operational Directory</h1>
+      <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+        Curated records, visual broadcasts, simulation chambers, and operational workflows.
+      </p>
+    </div>
   </header>
 
   <!-- Centered Interactive Stage Container -->
@@ -50,13 +70,12 @@
     <main class="square-stage" id="squareStage" role="navigation" aria-label="Sector Directory Navigation">
 
       <!-- Sector 01: Top-Left (Library) -->
-      <a href="library.html" 
-         class="square-tile tile-tl tile-library" 
+      <a href="./Demo-Library/" 
+         class="square-tile tile-tl tile-library interactive-tactile" 
          data-target="library"
          role="button"
          aria-label="Sector 01: Library — Curated records and system documentation"
          tabindex="0">
-        <div class="tile-glass"></div>
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
         
@@ -65,7 +84,7 @@
             <div class="tile-meta-line">
               <span class="tile-index">01</span>
               <span class="tile-divider">/</span>
-              <span class="tile-category">ARCHIVE</span>
+              <span class="tile-category" id="catLabelLibrary">ARCHIVE</span>
             </div>
             <div class="tile-emblem" aria-hidden="true">
               <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -76,8 +95,8 @@
           </div>
 
           <div class="tile-content-group">
-            <h2 class="tile-name">LIBRARY</h2>
-            <p class="tile-desc">Curated records &amp; system documentation</p>
+            <h2 class="tile-name" id="nameLabelLibrary">LIBRARY</h2>
+            <p class="tile-desc" id="descLabelLibrary">Curated records &amp; system documentation</p>
             <div class="tile-cue" aria-hidden="true">
               <span>ACCESS</span>
               <span class="cue-arrow">&nearr;</span>
@@ -87,20 +106,19 @@
       </a>
 
       <!-- Sector 02: Top-Right (Videos) -->
-      <a href="videos.html" 
-         class="square-tile tile-tr tile-videos" 
+      <a href="./Demo-Videos/" 
+         class="square-tile tile-tr tile-videos interactive-tactile" 
          data-target="videos"
          role="button"
          aria-label="Sector 02: Videos — Visual broadcasts and cinematic releases"
          tabindex="0">
-        <div class="tile-glass"></div>
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
         
         <div class="tile-inner">
           <div class="tile-header-group">
             <div class="tile-meta-line">
-              <span class="tile-category">CINEMA</span>
+              <span class="tile-category" id="catLabelVideos">CINEMA</span>
               <span class="tile-divider">/</span>
               <span class="tile-index">02</span>
             </div>
@@ -113,8 +131,8 @@
           </div>
 
           <div class="tile-content-group">
-            <h2 class="tile-name">VIDEOS</h2>
-            <p class="tile-desc">Visual broadcasts &amp; cinematic releases</p>
+            <h2 class="tile-name" id="nameLabelVideos">VIDEOS</h2>
+            <p class="tile-desc" id="descLabelVideos">Visual broadcasts &amp; cinematic releases</p>
             <div class="tile-cue" aria-hidden="true">
               <span class="cue-arrow">&nwarr;</span>
               <span>ACCESS</span>
@@ -125,12 +143,11 @@
 
       <!-- Sector 03: Bottom-Left (Games) -->
       <a href="https://tileworksgamesstudio.github.io/86/" 
-         class="square-tile tile-bl tile-games" 
+         class="square-tile tile-bl tile-games interactive-tactile" 
          data-target="games"
          role="button"
          aria-label="Sector 03: Games — Interactive chambers and combat sandboxes"
          tabindex="0">
-        <div class="tile-glass"></div>
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
         
@@ -144,8 +161,8 @@
                 <circle cx="32" cy="24" r="1.75" fill="currentColor"/>
               </svg>
             </div>
-            <h2 class="tile-name">GAMES</h2>
-            <p class="tile-desc">Interactive chambers &amp; combat sandboxes</p>
+            <h2 class="tile-name" id="nameLabelGames">GAMES</h2>
+            <p class="tile-desc" id="descLabelGames">Interactive chambers &amp; combat sandboxes</p>
             <div class="tile-cue" aria-hidden="true">
               <span>LAUNCH</span>
               <span class="cue-arrow">&searr;</span>
@@ -156,20 +173,19 @@
             <div class="tile-meta-line">
               <span class="tile-index">03</span>
               <span class="tile-divider">/</span>
-              <span class="tile-category">SIMULATION</span>
+              <span class="tile-category" id="catLabelGames">SIMULATION</span>
             </div>
           </div>
         </div>
       </a>
 
       <!-- Sector 04: Bottom-Right (Checklists) -->
-      <a href="checklists.html" 
-         class="square-tile tile-br tile-checklists" 
+      <a href="./Demo-Checklists/" 
+         class="square-tile tile-br tile-checklists interactive-tactile" 
          data-target="checklists"
          role="button"
          aria-label="Sector 04: Checklists — Operational protocols and readiness workflows"
          tabindex="0">
-        <div class="tile-glass"></div>
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
         
@@ -182,8 +198,8 @@
                 <line x1="18" y1="29.5" x2="30" y2="29.5"/>
               </svg>
             </div>
-            <h2 class="tile-name">CHECKLISTS</h2>
-            <p class="tile-desc">Operational protocols &amp; readiness workflows</p>
+            <h2 class="tile-name" id="nameLabelChecklists">CHECKLISTS</h2>
+            <p class="tile-desc" id="descLabelChecklists">Operational protocols &amp; readiness workflows</p>
             <div class="tile-cue" aria-hidden="true">
               <span class="cue-arrow">&swarr;</span>
               <span>INSPECT</span>
@@ -192,7 +208,7 @@
 
           <div class="tile-header-group">
             <div class="tile-meta-line">
-              <span class="tile-category">AUDIT</span>
+              <span class="tile-category" id="catLabelChecklists">AUDIT</span>
               <span class="tile-divider">/</span>
               <span class="tile-index">04</span>
             </div>
@@ -207,9 +223,9 @@
         <div class="record-contour-rim" aria-hidden="true"></div>
 
         <button type="button" 
-                class="record-disc" 
+                class="record-disc interactive-tactile" 
                 id="recordDisc" 
-                aria-label="System Vinyl Core. Press to inspect and toggle expanded view"
+                aria-label="System Vinyl Core. Tap to inspect and expand tactile view"
                 title="System Vinyl Core">
           <div class="vinyl-body">
             <div class="groove groove-1" aria-hidden="true"></div>
@@ -233,11 +249,12 @@
     </main>
   </div>
 
-  <!-- Bottom Accessibility / Shortcut Cue for Mobile and Desktop -->
-  <footer class="bottom-dock" role="contentinfo">
-    <span class="dock-note">DIR // SEC 01-04</span>
-    <span class="dock-hint">Use arrow keys or tap quadrant to navigate</span>
-  </footer>
+  <!-- Standardized Persistent Thumb Dock (Mobile & Tablet) -->
+  <nav class="app-bottom-dock" aria-label="Sector Fast Navigation">
+    <div class="app-bottom-dock__container" id="bottomDockNavItems">
+      <!-- Populated dynamically through APP_CONFIG.navigation.items -->
+    </div>
+  </nav>
 
   <script src="script.js"></script>
 </body>

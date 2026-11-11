@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Editorial Crossword Ledger & Bulk Studio</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Paper Studio Lighting Layers -->
+  <div class="studio-atmosphere" aria-hidden="true">
+    <div class="bg-paper-wash"></div>
+    <div class="bg-paper-grain"></div>
+  </div>
+
+  <div class="app-viewport">
+    <!-- Standardized Universal Page Header -->
+    <header class="app-page-header">
+      <div class="app-page-header__inner">
+        <div class="app-page-header__controls">
+          <button type="button" class="btn-back-nav" id="btn-global-back" aria-label="Navigate back">
+            <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span class="btn-back-nav__label" id="backButtonLabel">Back</span>
+          </button>
+
+          <div class="header-badges-slot">
+            <button type="button" class="interactive-tactile btn-pill-action" id="btn-seed-lexicon" title="Seed standard architectural cocktail glossary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span>Seed Glossary</span>
+            </button>
+            <div class="status-chip status-chip--sage" id="badge-lexicon-count" title="Total validated words in active database">
+              <span class="status-dot"></span>
+              <span id="stat-total-lexicon">0 Words in DB</span>
+            </div>
+            <div class="status-chip status-chip--ochre" id="badge-puzzles-count" title="Compiled puzzle suites in current deck">
+              <span class="status-dot"></span>
+              <span id="stat-total-puzzles">0 Puzzles</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-page-header__title-block">
+          <div class="eyebrow-brand-row">
+            <span class="app-page-header__eyebrow" id="pageEyebrowSlot">EDITORIAL ARCHIVE</span>
+            <span class="version-badge" id="appVersionBadge">v2.4.0</span>
+          </div>
+          <h1 class="app-page-header__title" id="pageTitleSlot">Crossword Lexicon & Bulk Builder</h1>
+          <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+            Authoritative lexicographical inventory, layout compilation, and turnkey publication exports.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Desktop Secondary Navigation Bar -->
+    <nav class="desktop-nav-strip" aria-label="Desktop Studio Navigation">
+      <div class="desktop-nav-inner">
+        <div class="nav-tabs-group" role="tablist">
+          <button type="button" class="nav-tab-btn active" data-tab="tab-lexicon" role="tab" aria-selected="true" aria-controls="tab-lexicon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Lexicon Database</span>
+            <span class="tab-count-pill" id="nav-lexicon-pill">0</span>
+          </button>
+
+          <button type="button" class="nav-tab-btn" data-tab="tab-compiler" role="tab" aria-selected="false" aria-controls="tab-compiler">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Single Board Studio</span>
+          </button>
+
+          <button type="button" class="nav-tab-btn" data-tab="tab-bulk-maker" role="tab" aria-selected="false" aria-controls="tab-bulk-maker">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <span>Bulk Puzzle Maker</span>
+            <span class="tab-accent-chip">Batch</span>
+          </button>
+
+          <button type="button" class="nav-tab-btn" data-tab="tab-deck" role="tab" aria-selected="false" aria-controls="tab-deck">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            <span>Ledger Deck</span>
+            <span class="tab-count-pill" id="nav-deck-pill">0</span>
+          </button>
+
+          <button type="button" class="nav-tab-btn" data-tab="tab-export" role="tab" aria-selected="false" aria-controls="tab-export">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export CSV</span>
+          </button>
+        </div>
+
+        <div class="desktop-nav-utilities">
+          <label class="interactive-tactile btn-secondary btn-sm" title="Import existing standard puzzles.csv">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Import CSV</span>
+            <input type="file" id="file-input-csv" accept=".csv,text/csv" class="visually-hidden">
+          </label>
+          <button type="button" class="interactive-tactile btn-primary btn-sm" id="btn-quick-export-head">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export CSV</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Application Viewport Frame -->
+    <main class="main-container" id="mainContentArea">
+      
+      <!-- ===================================================================
+           TAB 1: LEXICON DATABASE
+           =================================================================== -->
+      <section id="tab-lexicon" class="tab-content active" role="tabpanel">
+        <div class="lexicon-layout">
+          
+          <!-- Left: Add & Bulk Entry Panel -->
+          <div class="lexicon-col-left">
+            <div class="paper-card">
+              <div class="paper-card__header">
+                <div>
+                  <h2 class="panel-title">Add Word & Clue</h2>
+                  <p class="panel-subtitle">Archived permanently to client ledger with live rotation analysis.</p>
+                </div>
+              </div>
+
+              <form id="form-add-lexicon" autocomplete="off">
+                <div class="paper-input-group">
+                  <label for="lex-input-word" class="paper-label">Answer Word <span class="required">*</span></label>
+                  <input type="text" id="lex-input-word" class="paper-input paper-input-mono" placeholder="e.g. CAMPARI" maxlength="15" required spellcheck="false">
+                  <span class="field-help">Uppercase characters (A–Z). Accents, punctuation and spaces sanitize automatically.</span>
+                </div>
+
+                <div class="paper-input-group">
+                  <label for="lex-input-clue" class="paper-label">Clue Definition <span class="required">*</span></label>
+                  <textarea id="lex-input-clue" class="paper-input paper-textarea" rows="3" placeholder="e.g. Vibrant crimson Italian aperitivo famous for bitter orange and gentian" required></textarea>
+                </div>
+
+                <div class="paper-input-group">
+                  <label for="lex-input-category" class="paper-label">Category / Classification</label>
+                  <input type="text" id="lex-input-category" class="paper-input" placeholder="e.g. Classic Cocktails, Spirits, Garnishes" list="category-datalist">
+                  <datalist id="category-datalist">
+                    <option value="Classic Cocktails"></option>
+                    <option value="Spirits & Liqueurs"></option>
+                    <option value="Bar Tools"></option>
+                    <option value="Ice & Chilling"></option>
+                    <option value="Garnishes"></option>
+                    <option value="History & Speakeasy"></option>
+                  </datalist>
+                </div>
+
+                <div class="form-actions-split">
+                  <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-open-bulk-modal">
+                    Bulk Paste
+                  </button>
+                  <button type="submit" class="interactive-tactile btn-primary" id="btn-save-lex-entry">
+                    <span>+ Add to Lexicon</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Utilization Metrics Card -->
+            <div class="paper-card mt-16">
+              <h3 class="panel-title-sm">Lexicon Rotation Frequency</h3>
+              <div class="utilization-bars">
+                <div class="util-bar-row">
+                  <span class="util-label">Available / Unused:</span>
+                  <span class="status-chip status-chip--sage" id="stat-unused-count">0</span>
+                </div>
+                <div class="util-bar-row">
+                  <span class="util-label">Balanced (1–2 Puzzles):</span>
+                  <span class="status-chip status-chip--ochre" id="stat-low-count">0</span>
+                </div>
+                <div class="util-bar-row">
+                  <span class="util-label">High Rotation (3+ Puzzles):</span>
+                  <span class="status-chip status-chip--terracotta" id="stat-high-count">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Search, Filter, and Lexicon Ledger Table -->
+          <div class="lexicon-col-right">
+            <div class="paper-card">
+              
+              <!-- Filter Controls Toolbar -->
+              <div class="lexicon-toolbar">
+                <div class="search-box">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input type="text" id="lex-search-input" class="paper-input paper-input-sm" placeholder="Search answers, clues, categories...">
+                </div>
+
+                <div class="filter-controls-group">
+                  <div class="filter-group">
+                    <label for="lex-filter-usage" class="paper-label-sm">Usage:</label>
+                    <select id="lex-filter-usage" class="paper-input paper-select-sm">
+                      <option value="all">All Words (Any Frequency)</option>
+                      <option value="unused">Fresh / Unused (0 uses)</option>
+                      <option value="rare">Moderate (1–2 uses)</option>
+                      <option value="frequent">Heavy Rotation (3+ uses)</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="lex-filter-length" class="paper-label-sm">Length:</label>
+                    <select id="lex-filter-length" class="paper-input paper-select-sm">
+                      <option value="all">Any Length</option>
+                      <option value="3-5">Short (3–5)</option>
+                      <option value="6-8">Medium (6–8)</option>
+                      <option value="9+">Long (9+)</option>
+                    </select>
+                  </div>
+
+                  <div class="filter-group">
+                    <label for="lex-sort-order" class="paper-label-sm">Sort:</label>
+                    <select id="lex-sort-order" class="paper-input paper-select-sm">
+                      <option value="usage-asc">Usage Count (Least First)</option>
+                      <option value="usage-desc">Usage Count (Most First)</option>
+                      <option value="alpha-asc">Word (A to Z)</option>
+                      <option value="date-desc">Recently Added</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Database Records Table -->
+              <div class="table-responsive lexicon-table-wrap">
+                <table class="paper-table" id="table-lexicon">
+                  <thead>
+                    <tr>
+                      <th width="44">
+                        <input type="checkbox" id="check-all-lexicon" class="paper-checkbox" title="Select All Visible">
+                      </th>
+                      <th width="120">Answer</th>
+                      <th width="50">Len</th>
+                      <th>Clue Definition</th>
+                      <th width="130">Category</th>
+                      <th width="85" title="Historical publication usage">Usage</th>
+                      <th width="140">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-lexicon">
+                    <!-- Hydrated Dynamically -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Bottom Batch Action Bar -->
+              <div class="lexicon-batch-bar">
+                <span id="selected-lexicon-count" class="batch-count-display">0 words selected</span>
+                <div class="batch-buttons">
+                  <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-batch-send-bulk">
+                    Send to Bulk Maker
+                  </button>
+                  <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-batch-send-compiler">
+                    Send to Single Compiler
+                  </button>
+                  <button type="button" class="interactive-tactile btn-danger btn-sm" id="btn-batch-delete">
+                    Delete Selected
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 2: SINGLE COMPILER & BOARD STUDIO
+           =================================================================== -->
+      <section id="tab-compiler" class="tab-content" role="tabpanel">
+        <div class="compiler-layout">
+          
+          <div class="compiler-col-left">
+            <div class="paper-card">
+              <div class="paper-card__header">
+                <div>
+                  <h2 class="panel-title">Compiler Staging Pool</h2>
+                  <p class="panel-subtitle">Stage specific terms or pull least-used candidates automatically.</p>
+                </div>
+                <span class="status-chip status-chip--sage" id="compiler-status-badge">Ready</span>
+              </div>
+
+              <div class="form-row">
+                <div class="paper-input-group flex-2">
+                  <label for="comp-puzzle-title" class="paper-label">Puzzle Title <span class="required">*</span></label>
+                  <input type="text" id="comp-puzzle-title" class="paper-input" placeholder="e.g. Classic Aperitifs" maxlength="60">
+                </div>
+                <div class="paper-input-group flex-1">
+                  <label for="comp-puzzle-tier" class="paper-label">Target Tier <span class="required">*</span></label>
+                  <select id="comp-puzzle-tier" class="paper-input">
+                    <option value="mini">mini (5×5, 4–7 words)</option>
+                    <option value="midi">midi (11×11, 7–14 words)</option>
+                    <option value="main" selected>main (15×15, 12–25 words)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="pool-actions-strip">
+                <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-pull-unused">
+                  Pull Least-Used Words
+                </button>
+                <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-clear-staging">
+                  Clear Pool
+                </button>
+                <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-add-staged-row">
+                  + Add Custom Row
+                </button>
+              </div>
+
+              <div class="staged-words-scroll" id="staged-words-list"></div>
+
+              <div class="compiler-actions-bar">
+                <button type="button" class="interactive-tactile btn-primary btn-compile-main" id="btn-run-compiler">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <span>Auto-Compile Crossword Board</span>
+                </button>
+                <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-reshuffle-compile" title="Recompile alternate spatial layout">
+                  Reshuffle Layout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="compiler-col-right">
+            <div class="paper-card board-result-card">
+              <div class="paper-card__header w-100">
+                <div>
+                  <h3 class="panel-title">Compiled Crossword Grid</h3>
+                  <p class="panel-subtitle" id="board-meta-caption">No board generated yet. Click "Auto-Compile Crossword Board" to build.</p>
+                </div>
+                <div class="board-badges">
+                  <span class="status-chip status-chip--ochre" id="badge-board-fit">Awaiting Compile</span>
+                </div>
+              </div>
+
+              <div class="board-canvas-wrap">
+                <div id="compiler-grid-canvas" class="crossword-canvas-grid" role="grid" aria-label="Compiled Crossword Board Layout"></div>
+              </div>
+
+              <div class="post-clues-section">
+                <div class="post-clues-header">
+                  <span class="paper-label">Post-Generation Editorial Clue Suite</span>
+                  <span class="field-help">Fine-tune individual clues in place. Updates mirror automatically into publication.</span>
+                </div>
+
+                <div class="post-clues-dual">
+                  <div class="post-clues-col">
+                    <h4 class="track-title">Across (<span id="count-across-clues">0</span>)</h4>
+                    <div class="clues-live-edit-list" id="list-across-editor"></div>
+                  </div>
+                  <div class="post-clues-col">
+                    <h4 class="track-title">Down (<span id="count-down-clues">0</span>)</h4>
+                    <div class="clues-live-edit-list" id="list-down-editor"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="save-ledger-strip">
+                <div id="compiler-error-box" class="error-summary-area hidden"></div>
+                <div class="form-actions-split">
+                  <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-discard-board">Discard Grid</button>
+                  <button type="button" class="interactive-tactile btn-primary" id="btn-commit-to-ledger" disabled>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Commit Puzzle to Ledger Deck</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 3: BULK PUZZLE MAKER
+           =================================================================== -->
+      <section id="tab-bulk-maker" class="tab-content" role="tabpanel">
+        <div class="bulk-layout">
+          
+          <div class="bulk-col-config">
+            <div class="paper-card">
+              <div class="paper-card__header">
+                <div>
+                  <h2 class="panel-title">Bulk Maker Config</h2>
+                  <p class="panel-subtitle">Synthesize distinct non-overlapping crosswords from a governed batch pool.</p>
+                </div>
+                <span class="status-chip status-chip--sage" id="bulk-status-badge">Idle</span>
+              </div>
+
+              <div class="paper-input-group">
+                <label for="bulk-puzzle-tier" class="paper-label">Target Tier For Batch <span class="required">*</span></label>
+                <select id="bulk-puzzle-tier" class="paper-input">
+                  <option value="mini">mini (5×5, quick daily solves)</option>
+                  <option value="midi">midi (11×11, balanced medium grids)</option>
+                  <option value="main" selected>main (15×15, standard publication grids)</option>
+                </select>
+              </div>
+
+              <div class="paper-input-group">
+                <label for="bulk-title-prefix" class="paper-label">Puzzle Suite Title Prefix</label>
+                <input type="text" id="bulk-title-prefix" class="paper-input" value="Speakeasy Edition" placeholder="Prefix before #1, #2...">
+              </div>
+
+              <div class="form-row">
+                <div class="paper-input-group flex-1">
+                  <label for="bulk-max-puzzles" class="paper-label">Max Puzzles</label>
+                  <input type="number" id="bulk-max-puzzles" class="paper-input paper-input-sm" value="10" min="1" max="50">
+                  <span class="field-help">Upper target limit.</span>
+                </div>
+                <div class="paper-input-group flex-1">
+                  <label for="bulk-default-cap" class="paper-label">Max Uses / Word</label>
+                  <input type="number" id="bulk-default-cap" class="paper-input paper-input-sm" value="1" min="1" max="10">
+                  <span class="field-help">Default word cap.</span>
+                </div>
+              </div>
+
+              <div class="bulk-quick-actions mt-16">
+                <button type="button" class="interactive-tactile btn-secondary btn-sm w-100 mb-8" id="btn-bulk-load-all-db">
+                  Load Entire Database Pool
+                </button>
+                <button type="button" class="interactive-tactile btn-secondary btn-sm w-100 mb-8" id="btn-bulk-apply-caps">
+                  Apply Default Cap To All Terms Below
+                </button>
+                <button type="button" class="interactive-tactile btn-secondary btn-sm w-100" id="btn-bulk-clear-selection">
+                  Clear Batch Selection
+                </button>
+              </div>
+
+              <div class="bulk-compile-cta-box mt-16">
+                <button type="button" class="interactive-tactile btn-primary w-100 btn-lg" id="btn-run-bulk-generator">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <span>Synthesize All Unique Puzzles</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bulk-col-pool">
+            <div class="paper-card">
+              <div class="paper-card__header">
+                <div>
+                  <h3 class="panel-title">Batch Word Pool & Individual Usage Caps</h3>
+                  <p class="panel-subtitle">Allow frequent staple words (GIN, ICE) higher quotas while restricting rare terms.</p>
+                </div>
+                <span class="status-chip status-chip--ochre" id="bulk-word-count-badge">0 Words Selected</span>
+              </div>
+
+              <div class="table-responsive bulk-table-wrap">
+                <table class="paper-table" id="table-bulk-words">
+                  <thead>
+                    <tr>
+                      <th width="140">Word</th>
+                      <th width="50">Len</th>
+                      <th>Clue Definition</th>
+                      <th width="150" title="Max times this word may appear in this generation session">Allowed In Batch</th>
+                      <th width="90">Historical</th>
+                      <th width="60">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-bulk-words">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="bulk-results-panel mt-16" id="bulk-results-container">
+                <div class="bulk-log-header">
+                  <h4 class="panel-title-sm">Batch Synthesizer Console</h4>
+                  <span id="bulk-progress-text" class="field-help">Ready to compile.</span>
+                </div>
+                <div class="bulk-log-console" id="bulk-log-console">
+                  <p class="text-muted">Select words above, configure rotation quotas, and click "Synthesize All Unique Puzzles".</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 4: PUZZLE DECK MANAGEMENT
+           =================================================================== -->
+      <section id="tab-deck" class="tab-content" role="tabpanel">
+        <div class="paper-card">
+          <div class="deck-top-bar">
+            <div class="deck-filter-group">
+              <div class="search-box flex-2">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="deck-search-input" class="paper-input paper-input-sm" placeholder="Search puzzles by title or words...">
+              </div>
+              <select id="deck-tier-filter" class="paper-input paper-select-sm flex-1">
+                <option value="all">All Tiers</option>
+                <option value="mini">Mini (5×5)</option>
+                <option value="midi">Midi (11×11)</option>
+                <option value="main">Main (15×15)</option>
+              </select>
+            </div>
+
+            <div class="deck-actions-group">
+              <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-goto-compiler">+ Compile Single</button>
+              <button type="button" class="interactive-tactile btn-secondary btn-sm" id="btn-goto-bulk">+ Bulk Maker</button>
+              <button type="button" class="interactive-tactile btn-danger btn-sm" id="btn-deck-clear-all">Clear Deck</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="paper-table" id="deck-records-table">
+              <thead>
+                <tr>
+                  <th width="48">#</th>
+                  <th>Title</th>
+                  <th>Tier</th>
+                  <th>Grid Dimension</th>
+                  <th>Words</th>
+                  <th>Status</th>
+                  <th width="140">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="deck-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="deck-empty-state" class="empty-state hidden">
+            <div class="empty-state-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            </div>
+            <p class="empty-state-title">No puzzles in your active deck yet</p>
+            <p class="empty-state-text">Use the Single Compiler or Bulk Puzzle Maker to synthesize crosswords from your lexicon database.</p>
+            <button type="button" class="interactive-tactile btn-primary btn-sm" id="btn-deck-create-first">Open Bulk Maker</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 5: PREVIEW & EXPORT CSV
+           =================================================================== -->
+      <section id="tab-export" class="tab-content" role="tabpanel">
+        <div class="export-layout">
+          
+          <div class="export-controls-card paper-card">
+            <div class="paper-card__header">
+              <div>
+                <h3 class="panel-title">Pre-Flight CSV Audit</h3>
+                <p class="panel-subtitle">Verifies strict RFC-4180 conformity, matrix symmetry, and delimiter specifications.</p>
+              </div>
+            </div>
+            
+            <div class="audit-summary-boxes">
+              <div class="audit-box">
+                <span class="audit-val" id="audit-total-puzzles">0</span>
+                <span class="audit-lbl">Puzzles</span>
+              </div>
+              <div class="audit-box">
+                <span class="audit-val text-sage" id="audit-valid-puzzles">0</span>
+                <span class="audit-lbl">Valid</span>
+              </div>
+              <div class="audit-box">
+                <span class="audit-val text-terracotta" id="audit-error-puzzles">0</span>
+                <span class="audit-lbl">Issues</span>
+              </div>
+            </div>
+
+            <div id="export-validation-feedback" class="export-issues-list"></div>
+
+            <div class="paper-input-group mt-16">
+              <label for="export-filename-input" class="paper-label">Export Filename</label>
+              <input type="text" id="export-filename-input" class="paper-input paper-input-sm" value="puzzles.csv">
+            </div>
+
+            <div class="export-actions-list">
+              <button type="button" class="interactive-tactile btn-primary w-100" id="btn-download-all">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Download Complete puzzles.csv</span>
+              </button>
+              <button type="button" class="interactive-tactile btn-secondary w-100" id="btn-copy-clipboard">
+                Copy Raw CSV Text to Clipboard
+              </button>
+              <button type="button" class="interactive-tactile btn-secondary w-100" id="btn-export-lexicon-json">
+                Backup Lexicon Database (JSON)
+              </button>
+              <button type="button" class="interactive-tactile btn-secondary w-100" id="btn-download-template">
+                Download Blank CSV Template
+              </button>
+            </div>
+          </div>
+
+          <div class="export-preview-card paper-card">
+            <div class="preview-header">
+              <div>
+                <h3 class="panel-title">Visual CSV Preview</h3>
+                <p class="panel-subtitle">Live serialized representation verified against target game engine.</p>
+              </div>
+              <div class="view-toggle-segmented" role="tablist">
+                <button type="button" class="seg-btn active" id="btn-view-table">Table Grid</button>
+                <button type="button" class="seg-btn" id="btn-view-raw">Raw CSV</button>
+              </div>
+            </div>
+
+            <div id="preview-mode-table" class="table-responsive">
+              <table class="preview-table">
+                <thead>
+                  <tr>
+                    <th>tier</th>
+                    <th>title</th>
+                    <th>grid</th>
+                    <th>clues_across</th>
+                    <th>clues_down</th>
+                  </tr>
+                </thead>
+                <tbody id="preview-table-body">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <div id="preview-mode-raw" class="raw-preview-wrap hidden">
+              <textarea id="raw-csv-textarea" class="raw-csv-box" readonly spellcheck="false"></textarea>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Ergonomic Persistent Mobile Bottom Dock (Thumb-Zone) -->
+  <nav class="app-bottom-dock" aria-label="Mobile Primary Navigation">
+    <div class="app-bottom-dock__container" id="bottomDockNavItems">
+      <!-- Populated dynamically through APP_CONFIG.navigation.items -->
+    </div>
+  </nav>
+
+  <!-- MODAL: Bulk Paste Into Lexicon -->
+  <div id="modal-bulk-paste" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="bulk-paste-title">
+    <div class="paper-card modal-card">
+      <div class="modal-head">
+        <div>
+          <span class="modal-eyebrow">BATCH INGESTION</span>
+          <h3 id="bulk-paste-title" class="modal-title">Bulk Paste Answers & Clues</h3>
+        </div>
+        <button type="button" class="btn-close-modal" data-close="modal-bulk-paste" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="field-help mb-12">
+          Format lines as <code>ANSWER: Clue definition</code> or <code>ANSWER - Clue definition</code>. Append optional classification in brackets, e.g. <code>[Classic Cocktails]</code>.
+        </p>
+        <textarea id="textarea-bulk-input" class="paper-input paper-textarea" rows="8" placeholder="MANHATTAN: Rye whiskey classic stirred with sweet vermouth and bitters [Classic Cocktails]&#10;CAMPARI: Bitter Italian red aperitivo infused with herbs and fruit [Spirits & Liqueurs]&#10;ORANGE: Citrus fruit whose peel traditionally oils an Old Fashioned [Garnishes]&#10;JIGGER: Dual-ended bar tool for measuring exact ounces [Bar Tools]"></textarea>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="interactive-tactile btn-secondary" data-close="modal-bulk-paste">Cancel</button>
+        <button type="button" class="interactive-tactile btn-primary" id="btn-apply-bulk">Add All to Lexicon</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Edit Single Lexicon Entry -->
+  <div id="modal-edit-lexicon" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="edit-lex-title">
+    <div class="paper-card modal-card">
+      <div class="modal-head">
+        <div>
+          <span class="modal-eyebrow">EDITORIAL RECORD</span>
+          <h3 id="edit-lex-title" class="modal-title">Edit Lexicon Entry</h3>
+        </div>
+        <button type="button" class="btn-close-modal" data-close="modal-edit-lexicon" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-lex-id">
+        <div class="paper-input-group">
+          <label for="edit-lex-word" class="paper-label">Answer Word</label>
+          <input type="text" id="edit-lex-word" class="paper-input paper-input-mono" maxlength="15">
+        </div>
+        <div class="paper-input-group">
+          <label for="edit-lex-clue" class="paper-label">Clue Definition</label>
+          <textarea id="edit-lex-clue" class="paper-input paper-textarea" rows="3"></textarea>
+        </div>
+        <div class="paper-input-group">
+          <label for="edit-lex-category" class="paper-label">Category</label>
+          <input type="text" id="edit-lex-category" class="paper-input">
+        </div>
+        <div class="paper-input-group">
+          <label for="edit-lex-usage" class="paper-label">Historical Usage Count</label>
+          <input type="number" id="edit-lex-usage" class="paper-input paper-input-sm" min="0" max="999">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="interactive-tactile btn-secondary" data-close="modal-edit-lexicon">Cancel</button>
+        <button type="button" class="interactive-tactile btn-primary" id="btn-save-edit-lexicon">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tactile Notification Toast -->
+  <div id="toast-notify" class="toast-bubble hidden" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

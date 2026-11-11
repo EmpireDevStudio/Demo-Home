@@ -15,21 +15,12 @@
       edition: "Cocktail Lounge Edition",
       storageKey: "cocktail_word_guess_data_v1",
       settingsKey: "cocktail_word_guess_settings_v1",
-      homeHubUrl: "../Demo-Games/"
+      homeHubUrl: "../"
     },
 
     data: {
       puzzlesFile: "puzzles.csv",
       wordsFile: "words.txt",
-      fallbackPuzzles: [
-        { id: "P001", word: "PRIDE", definition: "A feeling of deep satisfaction from one's achievements." },
-        { id: "P002", word: "CLEAN", definition: "Free from dirt, marks, or unwanted matter." },
-        { id: "P003", word: "LIGHT", definition: "The natural agent that stimulates sight." },
-        { id: "P004", word: "BRAVE", definition: "Ready to face danger or pain; showing courage." },
-        { id: "P005", word: "SHARP", definition: "Having an edge or point that is able to cut or pierce." },
-        { id: "P006", word: "SWIFT", definition: "Happening quickly or moving with great speed." },
-        { id: "P007", word: "CRANE", definition: "A large tall machine used for moving heavy objects." }
-      ]
     },
 
     dailyCycle: {

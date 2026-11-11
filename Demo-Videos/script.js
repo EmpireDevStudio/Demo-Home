@@ -1,45 +1,130 @@
 /**
- * ==========================================================================
- * THE EDITORIAL VIDEO ARCHIVE — SCRIPT.JS
- * Fully Dynamic CSV Parsing, YouTube Data API Integration & Resilient Rendering
- * ==========================================================================
+ * =========================================================================
+ * CLIENT CONFIGURATION ENGINE (APP_CONFIG)
+ * Production-Ready White-Label Master Configuration
+ * All application copy, branding, endpoints, and toggles are managed here.
+ * =========================================================================
  */
+const APP_CONFIG = Object.freeze({
+  // 1. APPLICATION IDENTITY & METADATA
+  identity: {
+    appId: "editorial-video-archive",
+    appName: "The Editorial Video Archive",
+    appTagline: "A curated repository of recorded knowledge, lectures, and cultural works.",
+    version: "2.4.0",
+    environment: "production",
+    canonicalUrl: "../",
+    language: "en-US",
+    locale: "en-US",
+    currency: "USD",
+  },
+
+  // 2. BRANDING & VISUAL PALETTE OVERRIDES
+  branding: {
+    logoUrl: "./assets/brand-logo.svg",
+    logoAlt: "Editorial Video Archive Seal",
+    faviconUrl: "./favicon.ico",
+    appIconApple: "./apple-touch-icon.png",
+    accentColor: "#963E35",      // Accessible Terracotta Red
+    accentSecondary: "#3E5B42",  // Accessible Sage Green
+    accentHighlight: "#6E5614",  // Accessible Warm Ochre
+    fontFamilyBase: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    fontFamilySerif: "Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif",
+  },
+
+  // 3. GLOBAL NAVIGATION ARCHITECTURE
+  navigation: {
+    enableTopBackNavigation: true,
+    defaultFallbackRoute: "overview",
+    items: [
+      { id: "overview", label: "Archive", icon: "icon-collection", route: "#overview", enabled: true, showInBottomBar: true },
+      { id: "categories", label: "Categories", icon: "icon-shelf", route: "#categories", enabled: true, showInBottomBar: true },
+      { id: "search", label: "Search", icon: "icon-search", route: "#search", enabled: true, showInBottomBar: true },
+      { id: "colophon", label: "Colophon", icon: "icon-info", route: "#colophon", enabled: true, showInBottomBar: true },
+    ],
+  },
+
+  // 4. APPLICATION COPY & CONTENT MATRIX (ZERO-PLACEHOLDER PRODUCTION DATA)
+  content: {
+    headers: {
+      defaultEyebrow: "CURATED REPOSITORY",
+      defaultTitle: "The Video Archive",
+      defaultSubtitle: "An artisanal catalog of recorded knowledge, lectures, and cultural works.",
+    },
+    emptyStates: {
+      noDataHeading: "No Matching Records Found",
+      noDataDescription: "No video entries match your current search parameters. Clear your filters or explore other subjects.",
+    },
+    actions: {
+      confirm: "Confirm & Proceed",
+      cancel: "Discard Changes",
+      save: "Save Entry",
+      delete: "Remove Permanently",
+      retry: "Retry Query",
+      back: "Catalogue",
+    },
+    notifications: {
+      saveSuccess: "Record committed to archive.",
+      saveError: "Unable to complete action.",
+      deleteSuccess: "Record removed from view.",
+    },
+    legal: {
+      copyrightHolder: "",
+      establishedYear: 2026,
+      privacyPolicyUrl: "",
+      termsOfServiceUrl: "",
+    },
+  },
+
+  // 5. EXTERNAL LINKS, SUPPORT & SOCIAL
+  support: {
+    contactEmail: "",
+    supportDeskUrl: "",
+    emergencyContactPhone: "+1 (800) 555-0199",
+    operatingHours: "Monday – Friday, 08:00 – 18:00 EST",
+    socialLinks: {
+      documentation: "",
+      statusPage: "",
+    },
+  },
+
+  // 6. FEATURE SWITCHES & UX BEHAVIOURAL CONTROLS
+  features: {
+    enableHapticFeedback: true,        // Subtle 12ms navigator.vibrate() on mobile actions
+    enableSmoothPageTransitions: true, // Kinetic transitions
+    enableAutoSave: true,
+    autoSaveIntervalMs: 5000,
+    enableDetailedDiagnostics: false,
+    enableStickyBottomBar: true,        // Ergonomic mobile thumb dock
+    enableSoundEffects: false,
+  },
+
+  // 7. API ENDPOINTS & STORAGE
+  endpoints: {
+    csvCandidatePaths: ["data.csv", "./data.csv", "Data.csv"],
+    youtubeApiKey: "AIzaSyBQGBdXJUcaQYnqGbemqH20EA2ltzI4GFg",
+    excerptMaxCharacters: 150,
+    storageKeys: {
+      cacheKey: "editorial_video_metadata_cache_v4",
+      userPreferences: "ev_user_prefs_v1",
+    },
+    cacheTtlMs: 24 * 60 * 60 * 1000, // 24 hours
+  },
+});
 
 "use strict";
 
 /* ==========================================================================
-   1. EDITORIAL CONFIGURATION SETTINGS
-   Add your YouTube Data API v3 key below to retrieve full titles, descriptions,
-   view counts, and like counts.
-   ========================================================================== */
-const CONFIG = {
-  // Candidate relative file paths for data.csv
-  CSV_PATHS: ["data.csv", "./data.csv", "Data.csv"],
-
-  // INSERT YOUR YOUTUBE DATA API V3 KEY HERE:
-  // e.g. YOUTUBE_API_KEY: "AIzaSy..."
-  YOUTUBE_API_KEY: "AIzaSyBQGBdXJUcaQYnqGbemqH20EA2ltzI4GFg",
-
-  // Maximum character length for card excerpt descriptions
-  DESCRIPTION_LENGTH: 150,
-
-  // Cache duration in localStorage (24 hours)
-  CACHE_TTL_MS: 24 * 60 * 60 * 1000,
-
-  // Local storage namespace
-  CACHE_STORAGE_KEY: "editorial_video_metadata_cache_v3"
-};
-
-/* ==========================================================================
    2. APPLICATION STATE
    ========================================================================== */
-const State = {
-  categories: [],          // [{ name: string, videoIds: string[] }]
+const AppState = {
+  categories: [],          // [{ index: number, name: string, videoIds: string[] }]
   videos: new Map(),       // compositeKey -> VideoModel
   activeCategory: "ALL",   // 'ALL' | specific category name
   searchQuery: "",         // Sanitized search query
   sortMode: "default",     // 'default' | 'liked' | 'views' | 'alpha'
-  metadataCache: {}
+  metadataCache: {},
+  activeRoute: "overview"
 };
 
 /**
@@ -50,7 +135,7 @@ class VideoModel {
     this.id = id;
     this.originalUrl = originalUrl;
     this.category = category;
-    this.title = `YouTube Video (${id})`;
+    this.title = `Curated Entry (${id})`;
     this.description = `Curated video entry under ${category}. Watch directly on YouTube.`;
     this.thumbnailUrl = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
     this.likeCount = null;
@@ -60,8 +145,25 @@ class VideoModel {
 }
 
 /* ==========================================================================
-   3. ROBUST CSV PARSER
-   Correctly handles escaped quotes, multiline cells, spaces, and UTF-8 BOM
+   3. TACTILE SENSORY PROTOCOLS
+   ========================================================================== */
+function triggerHapticPulse() {
+  if (
+    APP_CONFIG.features.enableHapticFeedback &&
+    typeof navigator !== "undefined" &&
+    "vibrate" in navigator
+  ) {
+    try {
+      navigator.vibrate(12);
+    } catch {
+      // Gracefully silent when unavailable
+    }
+  }
+}
+
+/* ==========================================================================
+   4. ROBUST CSV PARSER
+   Preserves escaped quotes, multiline content, and UTF-8 BOM
    ========================================================================== */
 function parseCSV(text) {
   if (!text) return [];
@@ -125,7 +227,7 @@ function parseCSV(text) {
 }
 
 /**
- * Extracts 11-character YouTube video ID across watch, shorts, embed, and live URLs
+ * Extracts 11-character YouTube video ID
  */
 function extractYouTubeId(url) {
   if (!url || typeof url !== "string") return null;
@@ -147,18 +249,18 @@ function extractYouTubeId(url) {
 }
 
 /* ==========================================================================
-   4. METADATA PERSISTENCE (LOCAL STORAGE)
+   5. METADATA PERSISTENCE (LOCAL STORAGE)
    ========================================================================== */
 function loadMetadataCache() {
   try {
-    const raw = localStorage.getItem(CONFIG.CACHE_STORAGE_KEY);
+    const raw = localStorage.getItem(APP_CONFIG.endpoints.storageKeys.cacheKey);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     const now = Date.now();
     const fresh = {};
 
     for (const [id, record] of Object.entries(parsed)) {
-      if (record && record.timestamp && now - record.timestamp < CONFIG.CACHE_TTL_MS) {
+      if (record && record.timestamp && now - record.timestamp < APP_CONFIG.endpoints.cacheTtlMs) {
         fresh[id] = record;
       }
     }
@@ -170,14 +272,16 @@ function loadMetadataCache() {
 
 function saveMetadataCache(cache) {
   try {
-    localStorage.setItem(CONFIG.CACHE_STORAGE_KEY, JSON.stringify(cache));
+    localStorage.setItem(APP_CONFIG.endpoints.storageKeys.cacheKey, JSON.stringify(cache));
   } catch (err) {
-    console.warn("Could not write to localStorage:", err);
+    if (APP_CONFIG.features.enableDetailedDiagnostics) {
+      console.warn("Storage quota exceeded or unavailable:", err);
+    }
   }
 }
 
 /* ==========================================================================
-   5. CSV INGESTION & PIPELINE ENGINE
+   6. CSV INGESTION & PIPELINE ENGINE
    ========================================================================== */
 function processCSVContent(csvText) {
   const loadingEl = document.getElementById("loadingSkeleton");
@@ -187,10 +291,9 @@ function processCSVContent(csvText) {
 
   const rows = parseCSV(csvText);
   if (!rows || rows.length === 0) {
-    throw new Error("The CSV file is empty.");
+    throw new Error("The operational dataset file contains no rows.");
   }
 
-  // 1. Identify category columns from row 0
   const headerRow = rows[0];
   const categories = [];
 
@@ -206,11 +309,10 @@ function processCSVContent(csvText) {
   });
 
   if (categories.length === 0) {
-    throw new Error("No category columns found in data.csv.");
+    throw new Error("No column category headers detected in dataset.");
   }
 
-  // 2. Read each data row
-  State.videos.clear();
+  AppState.videos.clear();
 
   for (let r = 1; r < rows.length; r++) {
     const row = rows[r];
@@ -222,18 +324,17 @@ function processCSVContent(csvText) {
           cat.videoIds.push(videoId);
 
           const compositeKey = `${cat.name}_${videoId}`;
-          if (!State.videos.has(compositeKey)) {
-            State.videos.set(compositeKey, new VideoModel(videoId, cell.trim(), cat.name));
+          if (!AppState.videos.has(compositeKey)) {
+            AppState.videos.set(compositeKey, new VideoModel(videoId, cell.trim(), cat.name));
           }
         }
       }
     });
   }
 
-  State.categories = categories;
+  AppState.categories = categories;
 
-  // 3. Update counter and hide skeletons
-  const totalCount = State.videos.size;
+  const totalCount = AppState.videos.size;
   if (counterEl) {
     counterEl.textContent = totalCount.toLocaleString();
   }
@@ -241,16 +342,15 @@ function processCSVContent(csvText) {
   if (errorEl) errorEl.hidden = true;
   if (loadingEl) {
     loadingEl.hidden = true;
-    loadingEl.remove(); // Remove skeleton completely from DOM
+    loadingEl.remove();
   }
 
-  // 4. Render category tabs
   renderCategoryTabs();
 
-  // 5. Apply any cached metadata immediately
-  State.metadataCache = loadMetadataCache();
-  for (const video of State.videos.values()) {
-    const cached = State.metadataCache[video.id];
+  // Load and apply cache
+  AppState.metadataCache = loadMetadataCache();
+  for (const video of AppState.videos.values()) {
+    const cached = AppState.metadataCache[video.id];
     if (cached) {
       if (cached.title) video.title = cached.title;
       if (cached.description) video.description = cached.description;
@@ -261,26 +361,23 @@ function processCSVContent(csvText) {
     }
   }
 
-  // 6. Immediate render: All cards render at once
   renderGallery();
 
-  // 7. Update status badge
   if (apiStatus) {
-    if (CONFIG.YOUTUBE_API_KEY && CONFIG.YOUTUBE_API_KEY.trim() !== "") {
+    if (APP_CONFIG.endpoints.youtubeApiKey && APP_CONFIG.endpoints.youtubeApiKey.trim() !== "") {
       apiStatus.textContent = "YouTube Data API v3 Active";
     } else {
       apiStatus.textContent = "Direct Curation Mode (oEmbed / CDN)";
     }
   }
 
-  // 8. Enhance metadata asynchronously in background
   enhanceMetadataInBackground();
 }
 
 async function fetchCSVWithFallbacks() {
   let lastError = null;
 
-  for (const path of CONFIG.CSV_PATHS) {
+  for (const path of APP_CONFIG.endpoints.csvCandidatePaths) {
     try {
       const response = await fetch(path, { cache: "no-store" });
       if (response.ok) {
@@ -291,7 +388,7 @@ async function fetchCSVWithFallbacks() {
     }
   }
 
-  throw lastError || new Error("Failed to load data.csv");
+  throw lastError || new Error("Failed to load dataset from candidate paths.");
 }
 
 async function initLibrary() {
@@ -307,22 +404,21 @@ async function initLibrary() {
     if (errorEl) {
       errorEl.hidden = false;
       if (window.location.protocol === "file:") {
-        errorMessageText.innerHTML = "Web browsers block automatic file loading when opened as a <code>file:///</code> URL. Use the button below to load <code>data.csv</code> directly:";
+        errorMessageText.innerHTML = "Web browsers restrict automatic file requests over <code>file:///</code> protocols. Please select <code>data.csv</code> directly using the button below:";
       } else {
-        errorMessageText.innerHTML = `Could not load <code>data.csv</code> (${escapeHTML(err.message)}). Ensure <code>data.csv</code> is in the root directory.`;
+        errorMessageText.innerHTML = `Could not load dataset file (<code>${escapeHTML(err.message)}</code>). Please verify that <code>data.csv</code> is deployed at the web root.`;
       }
     }
-    console.error("Library load error:", err);
   }
 }
 
 /* ==========================================================================
-   6. METADATA ENHANCEMENT ENGINE (NON-BLOCKING)
+   7. METADATA ENHANCEMENT (BACKGROUND BATCHING)
    ========================================================================== */
 async function enhanceMetadataInBackground() {
   const uncachedIds = new Set();
 
-  for (const video of State.videos.values()) {
+  for (const video of AppState.videos.values()) {
     if (!video.hasDetailedMeta) {
       uncachedIds.add(video.id);
     }
@@ -331,29 +427,25 @@ async function enhanceMetadataInBackground() {
   if (uncachedIds.size === 0) return;
   const idList = Array.from(uncachedIds);
 
-  if (CONFIG.YOUTUBE_API_KEY && CONFIG.YOUTUBE_API_KEY.trim() !== "") {
+  if (APP_CONFIG.endpoints.youtubeApiKey && APP_CONFIG.endpoints.youtubeApiKey.trim() !== "") {
     await fetchViaYouTubeApiBatch(idList);
   } else {
     await fetchViaOEmbedSafe(idList);
   }
 
-  saveMetadataCache(State.metadataCache);
+  saveMetadataCache(AppState.metadataCache);
   updateRenderedCards();
 }
 
-/**
- * Batch request via YouTube Data API v3 (up to 50 IDs per request)
- */
 async function fetchViaYouTubeApiBatch(ids) {
   const chunkSize = 50;
   for (let i = 0; i < ids.length; i += chunkSize) {
     const chunk = ids.slice(i, i + chunkSize);
-    const endpoint = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${chunk.join(",")}&key=${encodeURIComponent(CONFIG.YOUTUBE_API_KEY)}`;
+    const endpoint = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${chunk.join(",")}&key=${encodeURIComponent(APP_CONFIG.endpoints.youtubeApiKey)}`;
 
     try {
       const res = await fetch(endpoint);
       if (!res.ok) {
-        console.warn(`YouTube Data API returned status ${res.status}. Falling back to safe resolver.`);
         await fetchViaOEmbedSafe(chunk);
         continue;
       }
@@ -374,27 +466,23 @@ async function fetchViaYouTubeApiBatch(ids) {
         const viewVal = stats.viewCount !== undefined ? parseInt(stats.viewCount, 10) : null;
 
         const record = {
-          title: snippet.title || `Video (${id})`,
-          description: snippet.description || "Curated YouTube media.",
+          title: snippet.title || `Entry (${id})`,
+          description: snippet.description || "Curated educational media.",
           thumbnailUrl: thumbUrl,
           likeCount: Number.isFinite(likeVal) ? likeVal : null,
           viewCount: Number.isFinite(viewVal) ? viewVal : null,
           timestamp: Date.now()
         };
 
-        State.metadataCache[id] = record;
+        AppState.metadataCache[id] = record;
         applyMetadataToVideos(id, record);
       }
-    } catch (err) {
-      console.warn("YouTube API batch failed:", err);
+    } catch {
       await fetchViaOEmbedSafe(chunk);
     }
   }
 }
 
-/**
- * Safe oEmbed resolver without blocking UI
- */
 async function fetchViaOEmbedSafe(ids) {
   const targetIds = ids.slice(0, 40);
 
@@ -404,7 +492,7 @@ async function fetchViaOEmbedSafe(ids) {
       const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(targetUrl)}&format=json`;
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
 
       const res = await fetch(oembedUrl, { signal: controller.signal });
       clearTimeout(timeoutId);
@@ -412,19 +500,19 @@ async function fetchViaOEmbedSafe(ids) {
       if (res.ok) {
         const data = await res.json();
         const record = {
-          title: data.title || `Video (${id})`,
-          description: `Work by ${data.author_name || "original creator"} on YouTube.`,
+          title: data.title || `Entry (${id})`,
+          description: `Authored by ${data.author_name || "original creator"} on YouTube.`,
           thumbnailUrl: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
           likeCount: null,
           viewCount: null,
           timestamp: Date.now()
         };
 
-        State.metadataCache[id] = record;
+        AppState.metadataCache[id] = record;
         applyMetadataToVideos(id, record);
       }
     } catch {
-      // Retains default model values; card remains fully functional
+      // Retains default model values safely
     }
   });
 
@@ -432,7 +520,7 @@ async function fetchViaOEmbedSafe(ids) {
 }
 
 function applyMetadataToVideos(id, record) {
-  for (const video of State.videos.values()) {
+  for (const video of AppState.videos.values()) {
     if (video.id === id) {
       video.title = record.title;
       video.description = record.description;
@@ -445,7 +533,7 @@ function applyMetadataToVideos(id, record) {
 }
 
 /* ==========================================================================
-   7. UI RENDERING & DOM UPDATES
+   8. UI RENDERING & DOM UPDATES
    ========================================================================== */
 function renderCategoryTabs() {
   const tabsContainer = document.getElementById("categoryTabs");
@@ -453,14 +541,13 @@ function renderCategoryTabs() {
 
   tabsContainer.innerHTML = "";
 
-  // 1. "All Archives" Tab
-  const totalCount = State.videos.size;
+  const totalCount = AppState.videos.size;
   const allLi = document.createElement("li");
   const allBtn = document.createElement("button");
   allBtn.type = "button";
-  allBtn.className = `tab-btn ${State.activeCategory === "ALL" ? "is-active" : ""}`;
+  allBtn.className = `tab-btn interactive-tactile ${AppState.activeCategory === "ALL" ? "is-active" : ""}`;
   allBtn.setAttribute("role", "tab");
-  allBtn.setAttribute("aria-selected", State.activeCategory === "ALL" ? "true" : "false");
+  allBtn.setAttribute("aria-selected", AppState.activeCategory === "ALL" ? "true" : "false");
   allBtn.setAttribute("data-category", "ALL");
   allBtn.innerHTML = `All Archives <span class="tab-count">${totalCount}</span>`;
 
@@ -468,14 +555,13 @@ function renderCategoryTabs() {
   allLi.appendChild(allBtn);
   tabsContainer.appendChild(allLi);
 
-  // 2. Dynamic Categories from CSV
-  State.categories.forEach((cat) => {
+  AppState.categories.forEach((cat) => {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = `tab-btn ${State.activeCategory === cat.name ? "is-active" : ""}`;
+    btn.className = `tab-btn interactive-tactile ${AppState.activeCategory === cat.name ? "is-active" : ""}`;
     btn.setAttribute("role", "tab");
-    btn.setAttribute("aria-selected", State.activeCategory === cat.name ? "true" : "false");
+    btn.setAttribute("aria-selected", AppState.activeCategory === cat.name ? "true" : "false");
     btn.setAttribute("data-category", cat.name);
     btn.innerHTML = `${escapeHTML(cat.name)} <span class="tab-count">${cat.videoIds.length}</span>`;
 
@@ -486,8 +572,9 @@ function renderCategoryTabs() {
 }
 
 function handleCategoryChange(categoryName) {
-  if (State.activeCategory === categoryName) return;
-  State.activeCategory = categoryName;
+  if (AppState.activeCategory === categoryName) return;
+  triggerHapticPulse();
+  AppState.activeCategory = categoryName;
 
   const tabButtons = document.querySelectorAll(".category-tabs .tab-btn");
   tabButtons.forEach((btn) => {
@@ -502,19 +589,17 @@ function handleCategoryChange(categoryName) {
 function renderGallery() {
   const gridEl = document.getElementById("videoGrid");
   const emptyStateEl = document.getElementById("emptyState");
-  const activeBadge = document.getElementById("activeCategoryBadge");
+  const activeBadgeText = document.getElementById("activeCategoryText");
   const statusNotice = document.getElementById("resultsCountNotice");
 
   if (!gridEl) return;
 
-  // 1. Filter by category
-  let list = Array.from(State.videos.values());
-  if (State.activeCategory !== "ALL") {
-    list = list.filter((v) => v.category === State.activeCategory);
+  let list = Array.from(AppState.videos.values());
+  if (AppState.activeCategory !== "ALL") {
+    list = list.filter((v) => v.category === AppState.activeCategory);
   }
 
-  // 2. Filter by search query
-  const query = State.searchQuery.trim().toLowerCase();
+  const query = AppState.searchQuery.trim().toLowerCase();
   if (query.length > 0) {
     list = list.filter((v) => {
       const titleMatch = v.title.toLowerCase().includes(query);
@@ -524,24 +609,21 @@ function renderGallery() {
     });
   }
 
-  // 3. Sort
-  if (State.sortMode === "liked") {
+  if (AppState.sortMode === "liked") {
     list.sort((a, b) => (b.likeCount || 0) - (a.likeCount || 0));
-  } else if (State.sortMode === "views") {
+  } else if (AppState.sortMode === "views") {
     list.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
-  } else if (State.sortMode === "alpha") {
+  } else if (AppState.sortMode === "alpha") {
     list.sort((a, b) => a.title.localeCompare(b.title));
   }
 
-  // 4. Update Header Metrics
-  if (activeBadge) {
-    activeBadge.textContent = State.activeCategory === "ALL" ? "All Archives" : State.activeCategory;
+  if (activeBadgeText) {
+    activeBadgeText.textContent = AppState.activeCategory === "ALL" ? "All Archives" : AppState.activeCategory;
   }
   if (statusNotice) {
     statusNotice.textContent = `${list.length} ${list.length === 1 ? "entry" : "entries"} catalogued`;
   }
 
-  // 5. Handle empty state
   if (list.length === 0) {
     gridEl.innerHTML = "";
     if (emptyStateEl) emptyStateEl.hidden = false;
@@ -550,7 +632,6 @@ function renderGallery() {
 
   if (emptyStateEl) emptyStateEl.hidden = true;
 
-  // 6. Render Cards synchronously without fading delay
   gridEl.innerHTML = "";
   const fragment = document.createDocumentFragment();
 
@@ -564,12 +645,12 @@ function renderGallery() {
 
 function createVideoCardElement(video) {
   const card = document.createElement("a");
-  card.className = "video-card";
+  card.className = "paper-card";
   card.href = `https://www.youtube.com/watch?v=${video.id}`;
   card.target = "_blank";
   card.rel = "noopener noreferrer";
   card.setAttribute("data-video-id", video.id);
-  card.setAttribute("aria-label", `${video.title} (Opens on YouTube in new tab)`);
+  card.setAttribute("aria-label", `${video.title} (Opens on YouTube in new window)`);
 
   const mediaWrap = document.createElement("div");
   mediaWrap.className = "card-media";
@@ -578,13 +659,13 @@ function createVideoCardElement(video) {
   img.className = "card-thumb";
   img.alt = "";
   img.loading = "lazy";
+  img.width = 480;
+  img.height = 270;
 
-  // Deterministic thumbnail load handler: marks image loaded once ready
   img.onload = () => {
     img.classList.add("is-loaded");
   };
 
-  // Thumbnail cascade fallback: maxres -> hqdefault -> mqdefault -> fallback art
   img.onerror = () => {
     if (!img.dataset.triedHq) {
       img.dataset.triedHq = "true";
@@ -598,7 +679,6 @@ function createVideoCardElement(video) {
     }
   };
 
-  // Start with default thumbnail URL
   img.src = video.thumbnailUrl;
 
   const playBadge = document.createElement("div");
@@ -629,7 +709,7 @@ function createVideoCardElement(video) {
 
   const desc = document.createElement("p");
   desc.className = "card-excerpt";
-  desc.textContent = truncateString(video.description, CONFIG.DESCRIPTION_LENGTH);
+  desc.textContent = truncateString(video.description, APP_CONFIG.endpoints.excerptMaxCharacters);
 
   const footer = document.createElement("div");
   footer.className = "card-footer";
@@ -637,7 +717,6 @@ function createVideoCardElement(video) {
   const metricsGroup = document.createElement("div");
   metricsGroup.className = "card-metrics-group";
 
-  // Likes Metric
   const likesMetric = document.createElement("span");
   likesMetric.className = "card-metric metric-likes";
   likesMetric.innerHTML = `
@@ -647,7 +726,6 @@ function createVideoCardElement(video) {
     <span class="like-number">${formatMetric(video.likeCount)}</span>
   `;
 
-  // Views Metric
   const viewsMetric = document.createElement("span");
   viewsMetric.className = "card-metric metric-views";
   viewsMetric.innerHTML = `
@@ -681,17 +759,18 @@ function createVideoCardElement(video) {
   card.appendChild(mediaWrap);
   card.appendChild(body);
 
+  card.addEventListener("click", () => {
+    triggerHapticPulse();
+  });
+
   return card;
 }
 
-/**
- * Updates existing rendered cards in place when API metadata arrives
- */
 function updateRenderedCards() {
-  const cards = document.querySelectorAll(".video-card");
+  const cards = document.querySelectorAll(".paper-card[data-video-id]");
   cards.forEach((card) => {
     const id = card.getAttribute("data-video-id");
-    const video = Array.from(State.videos.values()).find((v) => v.id === id);
+    const video = Array.from(AppState.videos.values()).find((v) => v.id === id);
     if (!video || !video.hasDetailedMeta) return;
 
     const titleEl = card.querySelector(".card-title");
@@ -702,10 +781,10 @@ function updateRenderedCards() {
 
     if (titleEl && titleEl.textContent !== video.title) {
       titleEl.textContent = video.title;
-      card.setAttribute("aria-label", `${video.title} (Opens on YouTube in new tab)`);
+      card.setAttribute("aria-label", `${video.title} (Opens on YouTube in new window)`);
     }
     if (descEl) {
-      descEl.textContent = truncateString(video.description, CONFIG.DESCRIPTION_LENGTH);
+      descEl.textContent = truncateString(video.description, APP_CONFIG.endpoints.excerptMaxCharacters);
     }
     if (likeEl) {
       likeEl.textContent = formatMetric(video.likeCount);
@@ -720,8 +799,121 @@ function updateRenderedCards() {
 }
 
 /* ==========================================================================
-   8. UTILITIES & FORMATTERS
+   9. MOBILE DOCK NAVIGATION HYDRATION
    ========================================================================== */
+function renderBottomDock() {
+  const dockContainer = document.getElementById("bottomDockNavItems");
+  if (!dockContainer) return;
+
+  dockContainer.innerHTML = "";
+  const items = APP_CONFIG.navigation.items.filter((item) => item.enabled && item.showInBottomBar);
+
+  const icons = {
+    "icon-collection": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
+    "icon-shelf": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>',
+    "icon-search": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+    "icon-info": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
+  };
+
+  items.forEach((item) => {
+    const btn = document.createElement("a");
+    btn.href = item.route;
+    btn.className = `nav-tab-item ${AppState.activeRoute === item.id ? "nav-tab-item--active" : ""}`;
+    btn.setAttribute("data-route", item.id);
+    btn.innerHTML = `
+      ${icons[item.icon] || ""}
+      <span>${escapeHTML(item.label)}</span>
+      <span class="nav-tab-item__indicator"></span>
+    `;
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      triggerHapticPulse();
+      handleRouteSelection(item.id);
+    });
+
+    dockContainer.appendChild(btn);
+  });
+}
+
+function handleRouteSelection(routeId) {
+  AppState.activeRoute = routeId;
+  const tabs = document.querySelectorAll(".nav-tab-item");
+  tabs.forEach((tab) => {
+    tab.classList.toggle("nav-tab-item--active", tab.getAttribute("data-route") === routeId);
+  });
+
+  if (routeId === "overview") {
+    AppState.activeCategory = "ALL";
+    renderCategoryTabs();
+    renderGallery();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else if (routeId === "search") {
+    const searchInput = document.getElementById("librarySearch");
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  } else if (routeId === "categories") {
+    const shelf = document.querySelector(".navigation-shelf");
+    if (shelf) {
+      shelf.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  } else if (routeId === "colophon") {
+    const footer = document.querySelector(".app-footer");
+    if (footer) {
+      footer.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+}
+
+/* ==========================================================================
+   10. HYDRATION & EVENT WIRING
+   ========================================================================== */
+function hydrateFromConfig() {
+  document.title = `${APP_CONFIG.identity.appName} — ${APP_CONFIG.content.headers.defaultEyebrow}`;
+
+  const eyebrow = document.getElementById("pageEyebrowSlot");
+  if (eyebrow) eyebrow.textContent = APP_CONFIG.content.headers.defaultEyebrow;
+
+  const title = document.getElementById("pageTitleSlot");
+  if (title) title.textContent = APP_CONFIG.content.headers.defaultTitle;
+
+  const subtitle = document.getElementById("pageSubtitleSlot");
+  if (subtitle) subtitle.textContent = APP_CONFIG.content.headers.defaultSubtitle;
+
+  const emptyHeading = document.getElementById("emptyStateHeading");
+  if (emptyHeading) emptyHeading.textContent = APP_CONFIG.content.emptyStates.noDataHeading;
+
+  const emptyDesc = document.getElementById("emptyStateDescription");
+  if (emptyDesc) emptyDesc.textContent = APP_CONFIG.content.emptyStates.noDataDescription;
+
+  const footerBrand = document.getElementById("footerBrandTitle");
+  if (footerBrand) footerBrand.textContent = APP_CONFIG.identity.appName.toUpperCase();
+
+  const footerLegal = document.getElementById("footerLegal");
+  if (footerLegal) footerLegal.textContent = `© ${APP_CONFIG.content.legal.establishedYear} ${APP_CONFIG.content.legal.copyrightHolder}`;
+
+  const backBtn = document.getElementById("globalBackButton");
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      triggerHapticPulse();
+      if (AppState.activeCategory !== "ALL" || AppState.searchQuery.length > 0) {
+        AppState.activeCategory = "ALL";
+        AppState.searchQuery = "";
+        const searchInput = document.getElementById("librarySearch");
+        if (searchInput) searchInput.value = "";
+        renderCategoryTabs();
+        renderGallery();
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }
+
+  renderBottomDock();
+}
+
 function truncateString(str, maxLen) {
   if (!str) return "";
   if (str.length <= maxLen) return str;
@@ -751,12 +943,9 @@ function escapeHTML(text) {
     '"': "&quot;",
     "'": "&#039;"
   };
-  return text.replace(/[&<>"']/g, (m) => map[m]);
+  return String(text).replace(/[&<>"']/g, (m) => map[m]);
 }
 
-/* ==========================================================================
-   9. INTERACTIVE BINDINGS & LOCAL FILE HELPER
-   ========================================================================== */
 function setupEventListeners() {
   const searchInput = document.getElementById("librarySearch");
   const clearBtn = document.getElementById("searchClearBtn");
@@ -764,7 +953,6 @@ function setupEventListeners() {
   const resetBtn = document.getElementById("resetFiltersBtn");
   const fileInput = document.getElementById("csvFileInput");
 
-  // Search input debouncer
   let debounceTimer = null;
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
@@ -773,44 +961,43 @@ function setupEventListeners() {
 
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        State.searchQuery = val;
+        AppState.searchQuery = val;
         renderGallery();
       }, 100);
     });
   }
 
-  // Clear search
   if (clearBtn && searchInput) {
     clearBtn.addEventListener("click", () => {
+      triggerHapticPulse();
       searchInput.value = "";
       clearBtn.hidden = true;
-      State.searchQuery = "";
+      AppState.searchQuery = "";
       searchInput.focus();
       renderGallery();
     });
   }
 
-  // Sort selector
   if (sortSelect) {
     sortSelect.addEventListener("change", (e) => {
-      State.sortMode = e.target.value;
+      triggerHapticPulse();
+      AppState.sortMode = e.target.value;
       renderGallery();
     });
   }
 
-  // Reset filters
   if (resetBtn && searchInput) {
     resetBtn.addEventListener("click", () => {
+      triggerHapticPulse();
       searchInput.value = "";
       if (clearBtn) clearBtn.hidden = true;
-      State.searchQuery = "";
-      State.activeCategory = "ALL";
+      AppState.searchQuery = "";
+      AppState.activeCategory = "ALL";
       renderCategoryTabs();
       renderGallery();
     });
   }
 
-  // Local File Selector Fallback (when opened as local file:/// with CORS blocked)
   if (fileInput) {
     fileInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
@@ -827,12 +1014,21 @@ function setupEventListeners() {
       reader.readAsText(file);
     });
   }
+
+  // Global delegation for tactile haptic feedback
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest(".interactive-tactile, .btn-back-nav, .nav-tab-item");
+    if (el) {
+      triggerHapticPulse();
+    }
+  });
 }
 
 /* ==========================================================================
-   10. BOOTSTRAP
+   11. INITIALIZATION
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
+  hydrateFromConfig();
   setupEventListeners();
   initLibrary();
 });

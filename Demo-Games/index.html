@@ -3,80 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>The Game Lounge — Curated Daily Puzzles</title>
+  <title>The Game Lounge — Curated Artisanal Puzzles</title>
+  <meta name="description" content="A tactile, ad-free parlor of daily word, memory, and logic puzzles built with physical stationery ergonomics." />
   
-  <!-- Typography: Cormorant Garamond for Display & Plus Jakarta Sans for UI -->
+  <!-- Preconnect and Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Ambient Atmospheric Micro-Texture & Caustic Background Layers -->
-  <div class="lounge-backdrop" aria-hidden="true">
-    <div class="ambient-caustic-field"></div>
+  <!-- Ambient Micro-Texture & Architectural Paper Canvas Layers -->
+  <div class="paper-backdrop" aria-hidden="true">
+    <div class="ambient-warmth-field"></div>
     <div class="ambient-radial-pool pool-top"></div>
     <div class="ambient-radial-pool pool-bottom"></div>
-    <div class="ambient-dot-grid"></div>
-    <div class="ambient-grain-overlay"></div>
+    <div class="ambient-fine-grid"></div>
+    <div class="ambient-paper-grain"></div>
   </div>
 
-  <!-- Background Living Garnish Flight Canvas Container (6-9 floating botanicals) -->
+  <!-- Background Living Botanical Emboss Stage -->
   <div id="garnish-stage" class="garnish-stage" aria-hidden="true"></div>
 
-  <!-- Visually hidden ARIA live announcer for screen readers -->
+  <!-- Accessible Screen-Reader Live Announcer -->
   <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Toast notification banner for route and system feedback -->
+  <!-- Tactile System Notification Banner -->
   <div id="toast-banner" class="toast-banner" role="status" aria-hidden="true"></div>
 
-  <!-- Main Presentation Layer -->
-  <div class="hub-wrapper">
-    <!-- Header with Art-Directed Brass Emblems & Contextual Greeting -->
-    <header class="hub-header">
-      <div class="header-seal" aria-hidden="true">
-        <svg viewBox="0 0 32 32" class="svg-seal">
-          <circle cx="16" cy="16" r="14" class="seal-rim"></circle>
-          <path d="M16 5 L16 27 M5 16 L27 16" class="seal-crosshair"></path>
-          <circle cx="16" cy="16" r="3.5" class="seal-core"></circle>
-        </svg>
+  <!-- Master Application Viewport Shell -->
+  <div class="app-viewport-shell">
+
+    <!-- Standardized Universal Page Header -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__controls">
+        <a href="./Demo-Home/" class="btn-back-nav interactive-tactile" id="btn-back-nav" aria-label="Navigate back to Parlor Home">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span class="btn-back-nav__label" id="backNavLabel">Lounge</span>
+        </a>
+
+        <!-- Contextual Utility Actions -->
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <button type="button" class="btn-header-utility interactive-tactile" id="btn-settings-trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="Open House Rules and Preferences">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+          <button type="button" class="btn-header-utility interactive-tactile" id="btn-donate-trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="Support parlor and keep ad-free">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
       </div>
-      <h1 class="hub-title">Game Collection</h1>
-      <p id="hub-subtitle" class="hub-subtitle">Select a game to play</p>
-      <div class="header-divider" aria-hidden="true">
-        <span class="divider-line"></span>
-        <span class="divider-gem"></span>
-        <span class="divider-line"></span>
+
+      <div class="app-page-header__title-block">
+        <div class="title-seal-gem" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="svg-seal-gem">
+            <polygon points="12,2 15,9 22,12 15,15 12,22 9,15 2,12 9,9" />
+          </svg>
+        </div>
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">CURATED ARCHIVE</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Game Collection</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">Select a stationery puzzle to unwind</p>
       </div>
     </header>
 
-    <!-- Main Game Board Surface -->
-    <main class="hub-main">
-      <!-- Semantic 3x3 Game List (Smoked Glass & Polished Brass Tiles) -->
-      <ul id="game-grid" class="game-grid" aria-label="Available Games">
-        <!-- Rendered dynamically and validated by script.js -->
-      </ul>
+    <!-- Main Game Board Surface (Container Query Enabled) -->
+    <main class="app-main-content" id="mainContentArea">
+      <section class="card-feed-container" aria-label="Catalog Collection">
+        <ul id="game-grid" class="game-grid" aria-label="Available Puzzles">
+          <!-- Dynamically hydrated via APP_CONFIG catalog -->
+        </ul>
+      </section>
 
-      <!-- Home link to the site root -->
-      <nav class="utility-bar" aria-label="Site navigation">
-        <a href="./Demo-Home/" class="utility-tile" id="btn-home" aria-label="Home">
-          <div class="utility-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="m3 10 9-7 9 7"></path>
-              <path d="M5 9v11h14V9"></path>
-              <path d="M9 20v-7h6v7"></path>
-            </svg>
-          </div>
-        </a>
-      </nav>
+      <!-- Stationary Quick Status Bar -->
+      <footer class="parlor-digest-bar" aria-label="Daily Progress Ledger">
+        <div class="digest-pill">
+          <span class="digest-indicator" aria-hidden="true"></span>
+          <span class="digest-text" id="dailyDigestText">0 of 9 puzzles documented today</span>
+        </div>
+      </footer>
     </main>
+
+    <!-- Ergonomic Thumb-Zone Bottom Dock (Mobile & Adaptive Tablet/Desktop) -->
+    <nav class="app-bottom-dock" aria-label="Primary Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Dynamically hydrated via APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
   </div>
 
-  <!-- Smoked Glass Modal Backdrop -->
+  <!-- Tactile Paper Modal Backdrop -->
   <div id="modal-backdrop" class="modal-backdrop" aria-hidden="true"></div>
 
-  <!-- Settings Bottom / Side Sheet -->
+  <!-- Settings / House Rules Sheet -->
   <div 
     id="settings-modal" 
     class="modal-sheet" 
@@ -85,14 +111,14 @@
     aria-labelledby="settings-title"
     hidden
   >
-    <div class="sheet-handle" aria-hidden="true" title="Swipe down to close"></div>
+    <div class="sheet-handle" aria-hidden="true" title="Drag down to dismiss"></div>
     <div class="sheet-header">
       <div class="sheet-title-group">
-        <span class="sheet-eyebrow">Preferences</span>
+        <span class="sheet-eyebrow">PREFERENCES</span>
         <h2 id="settings-title" class="sheet-title">House Rules</h2>
       </div>
-      <button type="button" class="sheet-close" id="close-settings" aria-label="Close preferences">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
+      <button type="button" class="sheet-close interactive-tactile" id="close-settings" aria-label="Close house rules">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -100,13 +126,13 @@
     </div>
 
     <div class="sheet-content">
-      <!-- Sound FX Switch -->
+      <!-- Sound Switch -->
       <div class="setting-row">
         <div class="setting-info">
           <span class="setting-label">Sound FX</span>
-          <span class="setting-desc">Tactile crystal chimes, brass clicks &amp; feedback</span>
+          <span class="setting-desc">Acoustic crystal chimes and soft physical clicks</span>
         </div>
-        <label class="switch" for="toggle-sound">
+        <label class="paper-switch" for="toggle-sound">
           <input type="checkbox" id="toggle-sound" checked />
           <span class="slider" aria-hidden="true"></span>
         </label>
@@ -115,18 +141,30 @@
       <!-- Animations Switch -->
       <div class="setting-row">
         <div class="setting-info">
-          <span class="setting-label">Animations</span>
-          <span class="setting-desc">Floating botanicals, caustics &amp; visual depth</span>
+          <span class="setting-label">Atmospheric Motion</span>
+          <span class="setting-desc">Floating botanicals, depth caustics, and kinetics</span>
         </div>
-        <label class="switch" for="toggle-animations">
+        <label class="paper-switch" for="toggle-animations">
           <input type="checkbox" id="toggle-animations" checked />
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <!-- Haptics Switch -->
+      <div class="setting-row">
+        <div class="setting-info">
+          <span class="setting-label">Micro-Haptic Feedback</span>
+          <span class="setting-desc">12ms tactile pulse on mobile touch gestures</span>
+        </div>
+        <label class="paper-switch" for="toggle-haptics">
+          <input type="checkbox" id="toggle-haptics" checked />
           <span class="slider" aria-hidden="true"></span>
         </label>
       </div>
     </div>
   </div>
 
-  <!-- Support & Keep Ad-Free Sheet -->
+  <!-- Support & Patronage Sheet -->
   <div 
     id="donate-modal" 
     class="modal-sheet modal-donate" 
@@ -135,19 +173,19 @@
     aria-labelledby="donate-title"
     hidden
   >
-    <div class="sheet-handle" aria-hidden="true" title="Swipe down to close"></div>
+    <div class="sheet-handle" aria-hidden="true" title="Drag down to dismiss"></div>
     <div class="sheet-header">
       <div class="donate-badge" aria-hidden="true">
-        <svg viewBox="0 0 24 24">
+        <svg viewBox="0 0 24 24" width="20" height="20">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
       </div>
       <div class="sheet-title-group">
-        <span class="sheet-eyebrow">Patronage</span>
+        <span class="sheet-eyebrow">PATRONAGE</span>
         <h2 id="donate-title" class="sheet-title">Keep Games Ad-Free</h2>
       </div>
-      <button type="button" class="sheet-close" id="close-donate" aria-label="Close donation dialog">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
+      <button type="button" class="sheet-close interactive-tactile" id="close-donate" aria-label="Close patronage dialog">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -156,30 +194,29 @@
 
     <div class="sheet-content donate-body">
       <p class="donate-intro">
-        Thank you for playing and supporting our parlor! We crafted this collection to provide an ultra-clean, lightning-fast gaming sanctuary.
+        Thank you for spending time in our parlor. Every game in this lounge is hand-crafted to remain an ad-free, clutter-free sensory sanctuary.
       </p>
       <p class="donate-sub">
-        No tracking, zero intrusive banners, and no ads. Every contribution directly funds cloud server hosting and daily artisanal puzzle creation.
+        Zero tracking telemetry, zero interstitial popups, and no algorithmic monetization. Patronage directly funds independent cloud infrastructure and daily puzzle design.
       </p>
 
-      <!-- External Stripe Link with Clarifying Target Info -->
       <a 
         href="https://buy.stripe.com/14AbJ0czm3Ct3ARdPgefC0U" 
         target="_blank" 
         rel="noopener noreferrer" 
-        class="donate-action-btn"
+        class="donate-action-btn interactive-tactile"
         id="stripe-donate-link"
-        aria-label="Donate to Support on Stripe (opens in a secure new tab)"
+        aria-label="Contribute via Stripe (Opens in a secure new tab)"
       >
-        <span>Donate to Support</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
+        <span>Contribute Patronage</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
           <polyline points="15 3 21 3 21 9"></polyline>
           <line x1="10" y1="14" x2="21" y2="3"></line>
         </svg>
       </a>
 
-      <p class="donate-appreciation">Thank you so much for keeping the lights on! ❤️</p>
+      <p class="donate-appreciation">Thank you kindly for supporting artisanal web publishing.</p>
     </div>
   </div>
 

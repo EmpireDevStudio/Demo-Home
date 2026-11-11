@@ -1,17 +1,120 @@
 /**
- * CURATED ARCHIVE & INDEX CONTROLLER
- * Architecture: Smart Directory Crawling, Multi-Format Media Handling,
- * Dynamic Sorting, and Mobile-Friendly Layout Transformations.
+ * =========================================================================
+ * CLIENT CONFIGURATION ENGINE (APP_CONFIG)
+ * Production-Ready White-Label Master Configuration
+ * All application copy, branding, endpoints, and toggles are managed here.
+ * =========================================================================
  */
+const APP_CONFIG = Object.freeze({
+  // 1. APPLICATION IDENTITY & METADATA
+  identity: {
+    appId: "curated-folio-archive",
+    appName: "Editorial Archive & Document Index",
+    appTagline: "Curated Archival Management & Operational Document Library",
+    eyebrowText: "FOLIO VOL. IV",
+    version: "4.2.0",
+    environment: "production",
+    canonicalUrl: "../",
+    language: "en-US",
+    locale: "en-US",
+  },
 
+  // 2. BRANDING & VISUAL PALETTE OVERRIDES
+  branding: {
+    accentColor: "#963E35",       // Accessible Terracotta
+    accentSecondary: "#3E5B42",   // Accessible Sage
+    accentHighlight: "#6E5614",   // Accessible Ochre
+    fontFamilyBase: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+    fontFamilySerif: "'Newsreader', Georgia, serif",
+  },
+
+  // 3. GLOBAL NAVIGATION ARCHITECTURE
+  navigation: {
+    enableTopBackNavigation: true,
+    defaultFallbackRoute: "#archive",
+    backLabel: "Index",
+    items: [
+      { id: "archive", label: "Catalog", icon: "icon-catalog", route: "#archive", enabled: true, showInBottomBar: true },
+      { id: "categories", label: "Categories", icon: "icon-folders", route: "#categories", enabled: true, showInBottomBar: true },
+      { id: "recent", label: "Inspected", icon: "icon-history", route: "#recent", enabled: true, showInBottomBar: true },
+      { id: "settings", label: "Storage", icon: "icon-storage", route: "#storage", enabled: true, showInBottomBar: true }
+    ],
+  },
+
+  // 4. APPLICATION COPY & CONTENT MATRIX (ZERO-PLACEHOLDER PRODUCTION DATA)
+  content: {
+    headers: {
+      defaultTitle: "Editorial Archive & Index",
+      defaultSubtitle: "Master inventory of verified documents, sheets, source media, and analytical records.",
+      inspectTitle: "Document Inspector",
+    },
+    emptyStates: {
+      noDataHeading: "No Archival Records Discovered",
+      noDataDescription: "No catalog files were located inside the assets/ directory path. Verify your folder structure or mount an operational folder using the action above.",
+      noSearchResultsHeading: "No Matching Records Discovered",
+      noSearchResultsDescription: "Review your filter parameters or search terms and attempt the query again.",
+    },
+    actions: {
+      inspect: "Inspect",
+      download: "Download",
+      copyLink: "Copy Link",
+      rescan: "Rescan Assets",
+      mount: "Mount Assets",
+      back: "Navigate Back",
+    },
+    notifications: {
+      scanning: "Scanning assets directory structure…",
+      synced: "Catalog synchronized successfully.",
+      linkCopied: "Resource URL successfully copied to clipboard.",
+      localMounted: "Local folder assets mounted successfully.",
+      localPrompt: "Local Protocol Active: Click 'Mount Assets' to choose your directory.",
+    },
+    legal: {
+      copyrightHolder: "Editorial Ledger Archival Systems",
+      establishedYear: 2026,
+    },
+  },
+
+  // 5. EXTERNAL LINKS, SUPPORT & SOCIAL
+  support: {
+    contactEmail: "",
+    documentationUrl: "",
+  },
+
+  // 6. FEATURE SWITCHES & UX BEHAVIOURAL CONTROLS
+  features: {
+    enableHapticFeedback: true,        // 12ms micro-haptics on mobile
+    enableAutoScanOnLoad: true,        // Automatic discovery on DOM ready
+    enableOfficeLiveViewer: true,      // Remote office document viewer
+    defaultSortCriteria: "name-asc",
+    defaultViewLayout: "grid",         // 'grid' | 'list'
+  },
+
+  // 7. PATHS & STORAGE KEYS
+  paths: {
+    assetsRoot: "./assets/",
+    manifestJson: "./assets.json",
+  },
+  storageKeys: {
+    viewPreference: "folio_archive_view_mode",
+    sortPreference: "folio_archive_sort_mode",
+  }
+});
+
+/**
+ * =========================================================================
+ * APPLICATION STATE MANAGEMENT
+ * =========================================================================
+ */
 const AppState = {
   documents: [],
   categories: new Set(),
   activeCategory: "ALL",
   activeFormatChip: "ALL",
   searchQuery: "",
-  activeSort: "name-asc",
-  activeView: "grid" // 'grid' | 'list'
+  activeSort: APP_CONFIG.features.defaultSortCriteria,
+  activeView: APP_CONFIG.features.defaultViewLayout,
+  inspectedHistory: []
 };
 
 // MIME / Format Extension Definitions
@@ -23,13 +126,102 @@ const FORMAT_SPECS = {
   code: ["txt", "md", "json", "html", "css", "js", "ts", "py", "sql", "sh", "yaml", "yml", "xml"]
 };
 
+// ==============================================================
+// INITIALIZATION
+// ==============================================================
 document.addEventListener("DOMContentLoaded", () => {
+  hydrateAppConfig();
   setupUIEventListeners();
-  startAssetDiscovery();
+  if (APP_CONFIG.features.enableAutoScanOnLoad) {
+    startAssetDiscovery();
+  }
 });
 
+/**
+ * Triggers a subtle tactile pulse on modern mobile devices.
+ * Simulates mechanical click feedback.
+ */
+function triggerHapticPulse() {
+  if (
+    APP_CONFIG.features.enableHapticFeedback &&
+    typeof navigator !== "undefined" &&
+    "vibrate" in navigator
+  ) {
+    try {
+      navigator.vibrate(12);
+    } catch (_) {}
+  }
+}
+
+/**
+ * Hydrates static document elements from APP_CONFIG
+ */
+function hydrateAppConfig() {
+  document.title = APP_CONFIG.identity.appName;
+  document.getElementById("pageEyebrowSlot").textContent = APP_CONFIG.identity.eyebrowText;
+  document.getElementById("pageTitleSlot").textContent = APP_CONFIG.content.headers.defaultTitle;
+  document.getElementById("pageSubtitleSlot").textContent = APP_CONFIG.content.headers.defaultSubtitle;
+  document.getElementById("backNavLabel").textContent = APP_CONFIG.navigation.backLabel;
+
+  // Restore saved view and sort preferences if available
+  try {
+    const savedView = localStorage.getItem(APP_CONFIG.storageKeys.viewPreference);
+    if (savedView === "grid" || savedView === "list") {
+      AppState.activeView = savedView;
+    }
+    const savedSort = localStorage.getItem(APP_CONFIG.storageKeys.sortPreference);
+    if (savedSort) {
+      AppState.activeSort = savedSort;
+      const sortSelect = document.getElementById("sortSelect");
+      if (sortSelect) sortSelect.value = savedSort;
+    }
+  } catch (_) {}
+
+  renderBottomDock();
+}
+
+/**
+ * Renders the persistent mobile thumb dock from configuration
+ */
+function renderBottomDock() {
+  const dockContainer = document.getElementById("bottomDockNavItems");
+  if (!dockContainer) return;
+  dockContainer.innerHTML = "";
+
+  APP_CONFIG.navigation.items.filter(item => item.showInBottomBar && item.enabled).forEach((item, index) => {
+    const btn = document.createElement("a");
+    btn.href = item.route;
+    btn.className = `nav-tab-item interactive-tactile ${index === 0 ? "nav-tab-item--active" : ""}`;
+    btn.setAttribute("data-tab-id", item.id);
+
+    btn.innerHTML = `
+      <span>${escapeHTML(item.label)}</span>
+      <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+    `;
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      triggerHapticPulse();
+      document.querySelectorAll(".nav-tab-item").forEach(t => t.classList.remove("nav-tab-item--active"));
+      btn.classList.add("nav-tab-item--active");
+
+      if (item.id === "categories") {
+        document.getElementById("categoryTrack").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } else if (item.id === "recent") {
+        renderInspectedHistory();
+      } else if (item.id === "archive") {
+        AppState.activeCategory = "ALL";
+        renderCategoryTrack();
+        applyCatalogFilters();
+      }
+    });
+
+    dockContainer.appendChild(btn);
+  });
+}
+
 // ==============================================================
-// 1. DISCOVERY & AUTO-CRAWLING ENGINE
+// 1. ASSET DISCOVERY & AUTO-CRAWLING ENGINE
 // ==============================================================
 async function startAssetDiscovery() {
   const badge = document.getElementById("docCountBadge");
@@ -37,53 +229,51 @@ async function startAssetDiscovery() {
   const emptyView = document.getElementById("emptyView");
 
   refreshBtn.classList.add("syncing");
-  badge.textContent = "Scanning directory structure…";
+  badge.textContent = APP_CONFIG.content.notifications.scanning;
   hideBanner();
 
   let discovered = [];
 
-  // Local file:// protocol requires user file picker
+  // Local file:// protocol fallback
   if (window.location.protocol === "file:") {
     document.getElementById("localPickerBtn").classList.remove("hidden");
-    showBanner("Local Protocol Active: Click 'Select Assets' to choose your folder.");
+    showBanner(APP_CONFIG.content.notifications.localPrompt);
     refreshBtn.classList.remove("syncing");
     emptyView.classList.remove("hidden");
     return;
   }
 
-  // Attempt 1: Scrape local web server directory indexes (Node, LiveServer, Python, Nginx)
+  // Attempt 1: Server directory crawl
   try {
-    discovered = await crawlServerDirectory("./assets/");
+    discovered = await crawlServerDirectory(APP_CONFIG.paths.assetsRoot);
   } catch (_) {
     discovered = [];
   }
 
-  // Attempt 2: Structured assets.json index (fallback if user provides static manifest)
+  // Attempt 2: Manifest JSON fallback
   if (!discovered || discovered.length === 0) {
     try {
-      const res = await fetch("./assets.json?t=" + Date.now());
+      const res = await fetch(`${APP_CONFIG.paths.manifestJson}?t=${Date.now()}`);
       if (res.ok) discovered = await res.json();
     } catch (_) {}
   }
 
-  // Attempt 3: GitHub Pages API Crawl (if published on GitHub)
+  // Attempt 3: GitHub Pages API Crawl
   if (!discovered || discovered.length === 0) {
     discovered = await crawlGitHubRepo();
   }
 
-  // Final Assessment
+  // Hydration evaluation
   if (discovered && discovered.length > 0) {
     hydrateDocuments(discovered);
     renderCategoryTrack();
     applyCatalogFilters();
     emptyView.classList.add("hidden");
   } else {
-    badge.textContent = "0 items available";
+    badge.textContent = "0 records available";
     emptyView.classList.remove("hidden");
-    document.getElementById("emptyMsg").innerHTML = `
-      No catalog files located inside <code>assets/</code>.<br>
-      Ensure resources are arranged as: <code>assets/CategoryName/Document.ext</code>
-    `;
+    document.getElementById("emptyHeading").textContent = APP_CONFIG.content.emptyStates.noDataHeading;
+    document.getElementById("emptyMsg").innerHTML = APP_CONFIG.content.emptyStates.noDataDescription;
     document.getElementById("localPickerBtn").classList.remove("hidden");
   }
 
@@ -218,13 +408,14 @@ function handleLocalFolderPicker(e) {
     applyCatalogFilters();
     document.getElementById("emptyView").classList.add("hidden");
     hideBanner();
+    triggerHapticPulse();
   } else {
-    alert("Please select an 'assets' directory that contains category subfolders.");
+    alert("Please select an assets directory that contains category subfolders.");
   }
 }
 
 // ==============================================================
-// 2. PARSING & FILTERS
+// 2. DATA HYDRATION & FILTERING
 // ==============================================================
 function hydrateDocuments(rawList) {
   AppState.categories.clear();
@@ -260,9 +451,10 @@ function renderCategoryTrack() {
   const createPill = (catName, label, count) => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = `tab-pill ${AppState.activeCategory === catName ? "active" : ""}`;
+    btn.className = `tab-pill interactive-tactile ${AppState.activeCategory === catName ? "tab-pill--active" : ""}`;
     btn.textContent = `${label} (${count})`;
     btn.onclick = () => {
+      triggerHapticPulse();
       AppState.activeCategory = catName;
       renderCategoryTrack();
       applyCatalogFilters();
@@ -270,7 +462,7 @@ function renderCategoryTrack() {
     return btn;
   };
 
-  track.appendChild(createPill("ALL", "All Assets", AppState.documents.length));
+  track.appendChild(createPill("ALL", "Complete Index", AppState.documents.length));
 
   Array.from(AppState.categories).sort().forEach(cat => {
     const count = AppState.documents.filter(d => d.category === cat).length;
@@ -314,60 +506,77 @@ function sortDocuments(list, criteria) {
 }
 
 // ==============================================================
-// 3. RENDERING DOM
+// 3. CATALOG RENDERING & DOM ARCHITECTURE
 // ==============================================================
 function renderCatalogDOM(docs) {
   const grid = document.getElementById("documentGrid");
   const countBadge = document.getElementById("docCountBadge");
   const heading = document.getElementById("currentCategoryTitle");
 
-  heading.textContent = AppState.activeCategory === "ALL" ? "All Documents" : AppState.activeCategory;
-  countBadge.textContent = `${docs.length} ${docs.length === 1 ? "item" : "items"} available`;
+  heading.textContent = AppState.activeCategory === "ALL" ? "Complete Index" : AppState.activeCategory;
+  countBadge.textContent = `${docs.length} ${docs.length === 1 ? "record" : "records"} available`;
 
   grid.innerHTML = "";
 
   if (docs.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column: 1/-1; text-align:center; padding: 3rem 1rem; color: var(--text-dim);">
-        <p>No resources correspond with your query criteria.</p>
+      <div style="grid-column: 1/-1; text-align: center; padding: var(--space-10) var(--space-4);">
+        <h4 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: var(--space-1);">${escapeHTML(APP_CONFIG.content.emptyStates.noSearchResultsHeading)}</h4>
+        <p style="color: var(--color-text-secondary); font-size: 0.875rem;">${escapeHTML(APP_CONFIG.content.emptyStates.noSearchResultsDescription)}</p>
       </div>`;
     return;
   }
 
   docs.forEach(doc => {
     const card = document.createElement("article");
-    card.className = "doc-card";
+    card.className = "paper-card";
+    card.setAttribute("data-component", "archival-card");
 
     card.innerHTML = `
-      <div class="doc-top-block">
-        <div class="doc-badge-row">
-          <div class="doc-ext-glyph">${escapeHTML(doc.ext.toUpperCase())}</div>
-          <div class="doc-titles">
-            <span class="doc-category-tag">${escapeHTML(doc.category)}</span>
-            <h3 class="doc-name">${escapeHTML(doc.title)}</h3>
-          </div>
+      <div class="paper-card__top">
+        <div class="paper-card__glyph">${escapeHTML(doc.ext.toUpperCase())}</div>
+        <div class="paper-card__meta-group">
+          <span class="paper-card__category">${escapeHTML(doc.category)}</span>
+          <h3 class="paper-card__title">${escapeHTML(doc.title)}</h3>
         </div>
       </div>
-      <div class="doc-card-meta">
-        <span class="doc-size-tag">${formatBytes(doc.size)}</span>
-        <div class="doc-action-group">
-          <button type="button" class="doc-btn preview-trigger">Inspect</button>
-          <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="doc-btn">Download</a>
+      <div class="paper-card__footer">
+        <span class="paper-card__size">${formatBytes(doc.size)}</span>
+        <div class="paper-card__actions">
+          <button type="button" class="btn-paper-secondary interactive-tactile inspect-btn">${escapeHTML(APP_CONFIG.content.actions.inspect)}</button>
+          <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="btn-paper-primary interactive-tactile">${escapeHTML(APP_CONFIG.content.actions.download)}</a>
         </div>
       </div>
     `;
 
-    card.querySelector(".preview-trigger").onclick = () => openInspector(doc);
+    card.querySelector(".inspect-btn").onclick = () => {
+      triggerHapticPulse();
+      openInspector(doc);
+    };
+
     grid.appendChild(card);
   });
 }
 
+function renderInspectedHistory() {
+  const heading = document.getElementById("currentCategoryTitle");
+  heading.textContent = "Recently Inspected";
+  const uniqueHistory = Array.from(new Set(AppState.inspectedHistory));
+  const docs = AppState.documents.filter(d => uniqueHistory.includes(d.path));
+  renderCatalogDOM(docs);
+}
+
 // ==============================================================
-// 4. EXPANDED MULTI-FORMAT VIEWER
+// 4. MULTI-FORMAT PAPER INSPECTOR MODAL
 // ==============================================================
 function openInspector(doc) {
   const modal = document.getElementById("readerModal");
   const stage = document.getElementById("modalStage");
+
+  // Track inspected history
+  if (!AppState.inspectedHistory.includes(doc.path)) {
+    AppState.inspectedHistory.unshift(doc.path);
+  }
 
   document.getElementById("modalCategory").textContent = doc.category;
   document.getElementById("modalExtBadge").textContent = doc.ext.toUpperCase();
@@ -380,8 +589,9 @@ function openInspector(doc) {
   dl.setAttribute("download", doc.filename);
 
   document.getElementById("modalCopyLink").onclick = () => {
+    triggerHapticPulse();
     navigator.clipboard.writeText(window.location.origin + "/" + doc.path);
-    alert("Resource path copied to clipboard.");
+    alert(APP_CONFIG.content.notifications.linkCopied);
   };
 
   stage.innerHTML = "";
@@ -390,33 +600,33 @@ function openInspector(doc) {
   if (doc.ext === "pdf") {
     stage.innerHTML = `<iframe src="${doc.url}#view=FitH" title="PDF Preview"></iframe>`;
   }
-  // 2. High-res Images & Vectors
+  // 2. Images & Vectors
   else if (["png", "jpg", "jpeg", "webp", "gif", "svg"].includes(doc.ext)) {
     stage.innerHTML = `<img src="${doc.url}" alt="${escapeHTML(doc.title)}">`;
   }
-  // 3. Audio Player
+  // 3. Audio Media
   else if (["mp3", "wav", "ogg", "m4a", "flac"].includes(doc.ext)) {
     stage.innerHTML = `
       <div class="audio-stage-card">
-        <div class="audio-glyph">♬</div>
-        <h4 style="margin-bottom:0.4rem;">${escapeHTML(doc.title)}</h4>
-        <span class="doc-category-tag">${escapeHTML(doc.category)}</span>
-        <audio controls src="${doc.url}" style="margin-top:1.5rem;"></audio>
+        <div class="audio-stage-glyph">♬</div>
+        <h4 style="margin-bottom: var(--space-1);">${escapeHTML(doc.title)}</h4>
+        <span class="paper-status-pill paper-status-pill--ochre">${escapeHTML(doc.category)}</span>
+        <audio controls src="${doc.url}"></audio>
       </div>`;
   }
-  // 4. Video Player
+  // 4. Video Media
   else if (["mp4", "webm", "mov"].includes(doc.ext)) {
     stage.innerHTML = `<video controls autoplay playsinline src="${doc.url}"></video>`;
   }
   // 5. Office Documents via Office Live Viewer
   else if (["doc", "docx", "xls", "xlsx", "ppt", "pptx"].includes(doc.ext)) {
-    if (doc.url.startsWith("http")) {
-      stage.innerHTML = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(doc.url)}"></iframe>`;
+    if (APP_CONFIG.features.enableOfficeLiveViewer && doc.url.startsWith("http")) {
+      stage.innerHTML = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(doc.url)}" title="Office Viewer"></iframe>`;
     } else {
       stage.innerHTML = `
-        <div style="text-align:center; padding:2rem; color:var(--text-dim);">
-          <p>Office Web Viewer requires active online hosting to parse remote formats.</p>
-          <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="glass-btn-primary" style="margin-top:1rem; display:inline-block;">Download File</a>
+        <div style="text-align: center; padding: var(--space-6);">
+          <p style="color: var(--color-text-secondary); margin-bottom: var(--space-3);">Remote Office Web Viewer requires active public web hosting.</p>
+          <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="btn-paper-primary interactive-tactile">Download File</a>
         </div>`;
     }
   }
@@ -425,29 +635,31 @@ function openInspector(doc) {
     fetch(doc.url)
       .then(res => res.text())
       .then(text => { stage.innerHTML = `<pre><code>${escapeHTML(text)}</code></pre>`; })
-      .catch(() => { stage.innerHTML = `<p style="color:var(--text-dim); padding:2rem;">Unable to render text source preview.</p>`; });
+      .catch(() => { stage.innerHTML = `<p style="padding: var(--space-6); color: var(--color-text-secondary);">Unable to render text source preview.</p>`; });
   }
-  // 7. Fallback Binary
+  // 7. Binary Fallback
   else {
     stage.innerHTML = `
-      <div style="text-align:center; padding:2.5rem; color:var(--text-dim);">
-        <p>No inline preview exists for <strong>.${escapeHTML(doc.ext)}</strong> documents.</p>
-        <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="glass-btn-primary" style="margin-top:1rem; display:inline-block;">Download ${escapeHTML(doc.filename)}</a>
+      <div style="text-align: center; padding: var(--space-8);">
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4);">No direct inline preview engine available for <strong>.${escapeHTML(doc.ext)}</strong> documents.</p>
+        <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="btn-paper-primary interactive-tactile">Download ${escapeHTML(doc.filename)}</a>
       </div>`;
   }
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  stage.focus();
 }
 
 function closeInspector() {
+  triggerHapticPulse();
   document.getElementById("readerModal").classList.add("hidden");
   document.getElementById("modalStage").innerHTML = "";
   document.body.style.overflow = "";
 }
 
 // ==============================================================
-// 5. USER CONTROLS & EVENT BINDINGS
+// 5. CONTROLS & EVENT BINDINGS
 // ==============================================================
 function setupUIEventListeners() {
   const searchInput = document.getElementById("searchInput");
@@ -460,6 +672,7 @@ function setupUIEventListeners() {
   });
 
   clearBtn.addEventListener("click", () => {
+    triggerHapticPulse();
     searchInput.value = "";
     AppState.searchQuery = "";
     clearBtn.classList.add("hidden");
@@ -467,47 +680,88 @@ function setupUIEventListeners() {
     searchInput.focus();
   });
 
-  // Type Filter Chips
+  // Format Filter Chips
   document.getElementById("formatChips").addEventListener("click", e => {
-    const chip = e.target.closest(".chip");
+    const chip = e.target.closest(".filter-chip");
     if (!chip) return;
-    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    chip.classList.add("active");
+    triggerHapticPulse();
+    document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("filter-chip--active"));
+    chip.classList.add("filter-chip--active");
     AppState.activeFormatChip = chip.dataset.format;
     applyCatalogFilters();
   });
 
-  // Sorting Handler
+  // Sort Selection
   document.getElementById("sortSelect").addEventListener("change", e => {
+    triggerHapticPulse();
     AppState.activeSort = e.target.value;
+    try {
+      localStorage.setItem(APP_CONFIG.storageKeys.sortPreference, AppState.activeSort);
+    } catch (_) {}
     applyCatalogFilters();
   });
 
-  // Layout Switcher
+  // Layout View Switcher
   const gridBtn = document.getElementById("viewGridBtn");
   const listBtn = document.getElementById("viewListBtn");
-  const gridContainer = document.getElementById("documentGrid");
+  const feedContainer = document.getElementById("documentGrid");
 
-  gridBtn.onclick = () => {
-    gridBtn.classList.add("active");
-    listBtn.classList.remove("active");
-    gridContainer.className = "document-grid view-grid";
-    AppState.activeView = "grid";
+  const setViewMode = (mode) => {
+    AppState.activeView = mode;
+    try {
+      localStorage.setItem(APP_CONFIG.storageKeys.viewPreference, mode);
+    } catch (_) {}
+
+    if (mode === "grid") {
+      gridBtn.classList.add("seg-btn--active");
+      gridBtn.setAttribute("aria-pressed", "true");
+      listBtn.classList.remove("seg-btn--active");
+      listBtn.setAttribute("aria-pressed", "false");
+      feedContainer.className = "document-feed view-grid";
+    } else {
+      listBtn.classList.add("seg-btn--active");
+      listBtn.setAttribute("aria-pressed", "true");
+      gridBtn.classList.remove("seg-btn--active");
+      gridBtn.setAttribute("aria-pressed", "false");
+      feedContainer.className = "document-feed view-list";
+    }
   };
 
-  listBtn.onclick = () => {
-    listBtn.classList.add("active");
-    gridBtn.classList.remove("active");
-    gridContainer.className = "document-grid view-list";
-    AppState.activeView = "list";
-  };
+  gridBtn.onclick = () => { triggerHapticPulse(); setViewMode("grid"); };
+  listBtn.onclick = () => { triggerHapticPulse(); setViewMode("list"); };
+  setViewMode(AppState.activeView);
 
-  document.getElementById("refreshBtn").onclick = startAssetDiscovery;
+  // Back Navigation Behavior
+  document.getElementById("btnBackNav").addEventListener("click", () => {
+    triggerHapticPulse();
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.hash = APP_CONFIG.navigation.defaultFallbackRoute;
+      AppState.activeCategory = "ALL";
+      renderCategoryTrack();
+      applyCatalogFilters();
+    }
+  });
+
+  // Modal Dismissals
   document.getElementById("modalClose").onclick = closeInspector;
-  window.addEventListener("keydown", e => { if (e.key === "Escape") closeInspector(); });
+  document.getElementById("readerModal").onclick = (e) => {
+    if (e.target.id === "readerModal") closeInspector();
+  };
+  window.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeInspector();
+  });
+
+  document.getElementById("refreshBtn").onclick = () => {
+    triggerHapticPulse();
+    startAssetDiscovery();
+  };
 
   const folderInput = document.getElementById("folderInput");
-  if (folderInput) folderInput.addEventListener("change", handleLocalFolderPicker);
+  if (folderInput) {
+    folderInput.addEventListener("change", handleLocalFolderPicker);
+  }
 }
 
 function showBanner(msg) {

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Artisanal CSV Architect & Reserve Puzzle Authoring Suite for The Cocktail Lounge Memory Match engine. Compose, audit, simulate, and export game-ready 17-column datasets.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Memory Match — Reserve Puzzle Architect</title>
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Physical Light & Grain Environment -->
+  <div class="ambient-paper-highlight" aria-hidden="true"></div>
+  <div class="ambient-vignette-overlay" aria-hidden="true"></div>
+
+  <!-- Primary Application Wrapper -->
+  <div class="app-shell">
+
+    <!-- Universal Standardized Application Header -->
+    <header class="app-page-header" id="appHeader">
+      <div class="app-page-header__controls">
+        <button type="button" class="btn-back-nav" id="btnHeaderBack" aria-label="Navigate to previous view">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="btnHeaderBackLabel">Back</span>
+        </button>
+
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <div class="status-indicator-badge status-indicator-badge--sage" id="chipDatasetStatus">
+            <span class="status-dot"></span>
+            <span id="txtDatasetSummary">0 Editions Loaded</span>
+          </div>
+          <button id="btnExportQuick" class="interactive-tactile btn-primary btn-sm" type="button" title="Jump straight to export suite">
+            <span>Export CSV</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17l9.2-9.2M17 17V8H8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">Reserve Tasting Architect</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Memory Match CSV Suite</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Compose, inspect, and export verified 17-column datasets for The Cocktail Lounge game engine.
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Dynamic Workflow Canvas -->
+    <main class="app-main" id="mainContent">
+
+      <!-- ====================================================================
+           VIEW 1: ONBOARDING & STARTING PATHWAYS
+           ==================================================================== -->
+      <section id="view-start" class="workflow-view">
+        <div class="hero-paper-card paper-card">
+          <div class="card-specular-edge" aria-hidden="true"></div>
+          <span class="badge-pill badge-pill--ochre">Game Engine Specification</span>
+          <h2 class="hero-title">Craft Verified Reserve Editions</h2>
+          <p class="hero-description">
+            The Memory Match game engine requires an exact 17-column CSV schema: 1 edition title followed by exactly 8 unique matching pairs (16 cards total) with paired SVG icons. This suite guarantees engine schema compliance, validates duplicate names, and simulates the physical card-flip experience.
+          </p>
+        </div>
+
+        <!-- Three Starting Pathways -->
+        <div class="pathways-grid">
+          <!-- Pathway 1: Add / Append -->
+          <div class="paper-card pathway-card">
+            <div class="card-specular-edge" aria-hidden="true"></div>
+            <div class="pathway-icon-box" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+            </div>
+            <h3 class="pathway-title">Add to Existing CSV</h3>
+            <p class="pathway-desc">
+              Import your current <code>puzzles.csv</code> file. Existing editions are fully preserved while you draft and append fresh reserve puzzle tiers.
+            </p>
+            <label class="interactive-tactile btn-primary btn-block file-input-label">
+              <span>Import Existing CSV</span>
+              <input type="file" id="input-file-append" accept=".csv,text/csv" class="sr-only">
+            </label>
+          </div>
+
+          <!-- Pathway 2: Fresh Dataset -->
+          <div class="paper-card pathway-card">
+            <div class="card-specular-edge" aria-hidden="true"></div>
+            <div class="pathway-icon-box" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+            </div>
+            <h3 class="pathway-title">Create Fresh CSV</h3>
+            <p class="pathway-desc">
+              Start with an immaculate canvas. Generates the exact 17-column specification and guides you through item naming and vector assignment.
+            </p>
+            <button id="btn-start-fresh" class="interactive-tactile btn-primary btn-block" type="button">
+              Start from Scratch
+            </button>
+          </div>
+
+          <!-- Pathway 3: Audit & Review -->
+          <div class="paper-card pathway-card">
+            <div class="card-specular-edge" aria-hidden="true"></div>
+            <div class="pathway-icon-box" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+              </svg>
+            </div>
+            <h3 class="pathway-title">Review & Audit File</h3>
+            <p class="pathway-desc">
+              Examine an active puzzle file for duplicate labels, missing SVG tokens, column length mismatches, and structural engine health.
+            </p>
+            <label class="interactive-tactile btn-secondary btn-block file-input-label">
+              <span>Open & Audit File</span>
+              <input type="file" id="input-file-audit" accept=".csv,text/csv" class="sr-only">
+            </label>
+          </div>
+        </div>
+
+        <!-- Curated Presets Bar -->
+        <div class="paper-card presets-block">
+          <div class="card-specular-edge" aria-hidden="true"></div>
+          <div class="presets-text">
+            <h4 class="presets-heading">Curated Tasting Presets</h4>
+            <p class="presets-sub">Load 5 pre-validated reserve editions (Barware, Classics, Glassware, Garnishes, Ice Craft) or retrieve a clean header schema.</p>
+          </div>
+          <div class="presets-buttons">
+            <button id="btn-load-sample-data" class="interactive-tactile btn-secondary btn-sm" type="button">Load 5 Sample Editions</button>
+            <button id="btn-quick-blank-template" class="interactive-tactile btn-secondary btn-sm" type="button">Download Empty Template</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 2: CELLAR REPOSITORY (ALL EDITIONS DATA TABLE)
+           ==================================================================== -->
+      <section id="view-manager" class="workflow-view hidden">
+        <div class="manager-toolbar">
+          <div class="manager-toolbar__meta">
+            <h2 class="section-title">Cellar Repository</h2>
+            <span class="badge-pill badge-pill--ochre" id="badge-total-records">0 Editions</span>
+          </div>
+
+          <div class="manager-toolbar__controls">
+            <button id="btn-nav-create-new" class="interactive-tactile btn-primary btn-sm" type="button">
+              <span>+ New Edition</span>
+            </button>
+            <button id="btn-nav-export-view" class="interactive-tactile btn-secondary btn-sm" type="button">
+              <span>Export Suite</span>
+            </button>
+            <button id="btn-reset-dataset" class="interactive-tactile btn-danger-subtle btn-sm" type="button">
+              <span>Clear Cellar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search & Filter Deck -->
+        <div class="paper-card filter-card">
+          <div class="search-input-wrapper">
+            <input type="text" id="filter-search" class="paper-input search-input" placeholder="Search editions by title or matching ingredient...">
+            <span class="search-adornment" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
+          </div>
+          <div class="filter-controls-group">
+            <select id="filter-status" class="paper-input filter-select" aria-label="Filter by engine compliance status">
+              <option value="all">All Status Tiers</option>
+              <option value="valid">Verified & Game-Ready</option>
+              <option value="invalid">Needs Attention / Unresolved</option>
+            </select>
+            <button id="btn-quick-import-more" class="interactive-tactile btn-secondary btn-sm" type="button">
+              <span>Append File</span>
+            </button>
+            <input type="file" id="input-file-merge" accept=".csv,text/csv" class="sr-only">
+          </div>
+        </div>
+
+        <!-- Repository Table Surface -->
+        <div class="paper-card table-paper-card">
+          <div class="table-responsive">
+            <table class="paper-table" id="table-editions">
+              <thead>
+                <tr>
+                  <th style="width: 48px;">#</th>
+                  <th>Edition Title</th>
+                  <th>Pairs (8 Required)</th>
+                  <th style="width: 130px;">Icons</th>
+                  <th style="width: 140px;">Status</th>
+                  <th style="width: 160px; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-editions">
+                <!-- Dynamically populated via script.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="table-empty-notice" class="empty-state-container hidden">
+            <p class="empty-state-title">No matching reserve editions found</p>
+            <p class="empty-state-desc">Select "+ New Edition" to author a puzzle, or clear your search filters.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 3: STEP-BY-STEP GUIDED EDITION BUILDER
+           ==================================================================== -->
+      <section id="view-editor" class="workflow-view hidden">
+        <div class="editor-subbar">
+          <div class="editor-subbar__lead">
+            <button id="btn-back-to-manager" class="interactive-tactile btn-secondary btn-sm" type="button">
+              ← Back to Cellar
+            </button>
+            <h2 id="editor-heading" class="section-title">Compose Reserve Edition</h2>
+            <span id="editor-mode-badge" class="badge-pill badge-pill--sage">Drafting</span>
+          </div>
+          <div class="editor-subbar__actions">
+            <button id="btn-editor-preview-board" class="interactive-tactile btn-secondary btn-sm" type="button">
+              Inspect Live 4×4 Board
+            </button>
+            <button id="btn-save-record" class="interactive-tactile btn-primary btn-sm" type="button">
+              Save Edition
+            </button>
+          </div>
+        </div>
+
+        <!-- Tactile Step Navigation -->
+        <nav class="stepper-track" aria-label="Creation Steps">
+          <button type="button" class="step-pill active" data-step="1">
+            <span class="step-index">1</span>
+            <span class="step-title">Theme Title</span>
+          </button>
+          <div class="step-connector" aria-hidden="true"></div>
+          <button type="button" class="step-pill" data-step="2">
+            <span class="step-index">2</span>
+            <span class="step-title">Pairs 1 – 4</span>
+          </button>
+          <div class="step-connector" aria-hidden="true"></div>
+          <button type="button" class="step-pill" data-step="3">
+            <span class="step-index">3</span>
+            <span class="step-title">Pairs 5 – 8</span>
+          </button>
+          <div class="step-connector" aria-hidden="true"></div>
+          <button type="button" class="step-pill" data-step="4">
+            <span class="step-index">4</span>
+            <span class="step-title">Validation & Board</span>
+          </button>
+        </nav>
+
+        <!-- Form Stage Panels -->
+        <div class="editor-stage-canvas">
+
+          <!-- STEP 1: Edition Title & Inspiration -->
+          <div class="editor-stage-panel" id="step-panel-1">
+            <div class="paper-card">
+              <div class="card-specular-edge" aria-hidden="true"></div>
+              <h3 class="panel-headline">Edition Title & Theme Category</h3>
+              <p class="panel-subtext">
+                The edition title appears in the game's header during Daily Tasting runs and is indexed inside the Vault.
+              </p>
+
+              <div class="paper-input-group">
+                <label for="input-puzzle-title" class="paper-label required">
+                  Edition Title
+                  <span class="label-info-tag" title="Max 60 characters recommended (e.g., 'Essential Bar Tools', 'Agave Nuances')">ℹ</span>
+                </label>
+                <input type="text" id="input-puzzle-title" class="paper-input" placeholder="e.g., Iconic Classic Cocktails" maxlength="65">
+                <span class="paper-input-hint">Aim for 2 to 5 words evoking a curated theme or bar technique.</span>
+              </div>
+
+              <div class="inspiration-chips-well">
+                <span class="inspiration-label">Inspiration suggestions (click to apply):</span>
+                <div class="chips-flex">
+                  <button type="button" class="filter-chip" data-title="Historic Pre-Prohibition Ratios">Historic Pre-Prohibition Ratios</button>
+                  <button type="button" class="filter-chip" data-title="Tropical & Tiki Exotics">Tropical & Tiki Exotics</button>
+                  <button type="button" class="filter-chip" data-title="The Sour Family Architectures">The Sour Family Architectures</button>
+                  <button type="button" class="filter-chip" data-title="Agave Expressions & Terroir">Agave Expressions & Terroir</button>
+                  <button type="button" class="filter-chip" data-title="Effervescent Highballs & Fizzes">Effervescent Highballs & Fizzes</button>
+                  <button type="button" class="filter-chip" data-title="Specialist Tools & Techniques">Specialist Tools & Techniques</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="stepper-footer-controls">
+              <div></div>
+              <button class="interactive-tactile btn-primary btn-next-step" data-target="2" type="button">Next: Pairs 1 – 4 →</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Pairs 1 to 4 -->
+          <div class="editor-stage-panel hidden" id="step-panel-2">
+            <div class="paper-card pairs-subbanner">
+              <div>
+                <h3 class="panel-headline">Initial 4 Pairs (Pairs 1 – 4 of 8)</h3>
+                <p class="panel-subtext">Every pair requires a unique label and an SVG vector token for the card flip reveal.</p>
+              </div>
+              <button type="button" id="btn-quick-fill-tools" class="interactive-tactile btn-secondary btn-sm">Preset: Barware Pack</button>
+            </div>
+
+            <div class="pairs-grid-container">
+              <!-- Pair 1 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="1">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 1</span>
+                  <div class="pair-preview-aperture" id="pair-preview-1">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="1" placeholder="e.g., Cocktail Shaker">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="1">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="1">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="1" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="1">
+                </div>
+              </div>
+
+              <!-- Pair 2 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="2">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 2</span>
+                  <div class="pair-preview-aperture" id="pair-preview-2">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="2" placeholder="e.g., Japanese Jigger">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="2">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="2">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="2" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="2">
+                </div>
+              </div>
+
+              <!-- Pair 3 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="3">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 3</span>
+                  <div class="pair-preview-aperture" id="pair-preview-3">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="3" placeholder="e.g., Hawthorne Strainer">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="3">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="3">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="3" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="3">
+                </div>
+              </div>
+
+              <!-- Pair 4 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="4">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 4</span>
+                  <div class="pair-preview-aperture" id="pair-preview-4">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="4" placeholder="e.g., Bar Spoon">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="4">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="4">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="4" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="4">
+                </div>
+              </div>
+            </div>
+
+            <div class="stepper-footer-controls">
+              <button class="interactive-tactile btn-secondary btn-prev-step" data-target="1" type="button">← Back: Theme</button>
+              <button class="interactive-tactile btn-primary btn-next-step" data-target="3" type="button">Next: Pairs 5 – 8 →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Pairs 5 to 8 -->
+          <div class="editor-stage-panel hidden" id="step-panel-3">
+            <div class="paper-card pairs-subbanner">
+              <div>
+                <h3 class="panel-headline">Final 4 Pairs (Pairs 5 – 8 of 8)</h3>
+                <p class="panel-subtext">Complete all 8 pairs to finalize the full 16-card matching board.</p>
+              </div>
+              <button type="button" id="btn-quick-fill-glasses" class="interactive-tactile btn-secondary btn-sm">Preset: Glassware Pack</button>
+            </div>
+
+            <div class="pairs-grid-container">
+              <!-- Pair 5 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="5">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 5</span>
+                  <div class="pair-preview-aperture" id="pair-preview-5">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="5" placeholder="e.g., Muddler">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="5">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="5">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="5" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="5">
+                </div>
+              </div>
+
+              <!-- Pair 6 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="6">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 6</span>
+                  <div class="pair-preview-aperture" id="pair-preview-6">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="6" placeholder="e.g., Mixing Glass">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="6">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="6">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="6" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="6">
+                </div>
+              </div>
+
+              <!-- Pair 7 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="7">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 7</span>
+                  <div class="pair-preview-aperture" id="pair-preview-7">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="7" placeholder="e.g., Y-Peeler">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="7">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="7">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="7" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="7">
+                </div>
+              </div>
+
+              <!-- Pair 8 -->
+              <div class="paper-card pair-slot-card" data-pair-idx="8">
+                <div class="pair-slot-header">
+                  <span class="pair-num-tag">Pair 8</span>
+                  <div class="pair-preview-aperture" id="pair-preview-8">
+                    <span class="empty-mark">?</span>
+                  </div>
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label required">Item Name</label>
+                  <input type="text" class="paper-input pair-item-name" data-pair="8" placeholder="e.g., Ice Tongs">
+                </div>
+                <div class="paper-input-group">
+                  <label class="paper-label">Icon Vector (SVG)</label>
+                  <div class="icon-trigger-row">
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-open-picker" data-pair="8">Select Icon</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-paste-custom-svg" data-pair="8">Custom SVG</button>
+                    <button type="button" class="interactive-tactile btn-secondary btn-sm btn-clear-icon" data-pair="8" aria-label="Clear icon">✕</button>
+                  </div>
+                  <input type="hidden" class="pair-svg-val" data-pair="8">
+                </div>
+              </div>
+            </div>
+
+            <div class="stepper-footer-controls">
+              <button class="interactive-tactile btn-secondary btn-prev-step" data-target="2" type="button">← Back: Pairs 1 – 4</button>
+              <button class="interactive-tactile btn-primary btn-next-step" data-target="4" type="button">Audit & Board Preview →</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: Engine Audit & Simulated Board -->
+          <div class="editor-stage-panel hidden" id="step-panel-4">
+            <div class="paper-card">
+              <div class="card-specular-edge" aria-hidden="true"></div>
+              <h3 class="panel-headline">Engine Compatibility Checklist</h3>
+              <p class="panel-subtext">Direct verification against the Memory Match runtime loader requirements.</p>
+
+              <div class="checklist-container" id="editor-checklist">
+                <!-- Hydrated dynamically -->
+              </div>
+            </div>
+
+            <div class="paper-card board-preview-card">
+              <div class="card-specular-edge" aria-hidden="true"></div>
+              <div class="board-preview-header">
+                <div>
+                  <h4 class="panel-headline">Tactile 4×4 Board Reveal</h4>
+                  <p class="panel-subtext">Interactive simulation: Tap any card to test flip physics and label legibility.</p>
+                </div>
+                <button type="button" id="btn-shuffle-preview" class="interactive-tactile btn-secondary btn-sm">
+                  Shuffle Layout
+                </button>
+              </div>
+
+              <!-- Mini 4x4 Board Simulator -->
+              <div class="sim-board-centering">
+                <div id="editor-live-board" class="tactile-board-grid"></div>
+              </div>
+            </div>
+
+            <div class="stepper-footer-controls">
+              <button class="interactive-tactile btn-secondary btn-prev-step" data-target="3" type="button">← Back: Pairs 5 – 8</button>
+              <button id="btn-save-and-add-another" class="interactive-tactile btn-secondary" type="button">Save & Add Another</button>
+              <button id="btn-save-record-final" class="interactive-tactile btn-primary" type="button">Save to Cellar</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 4: EXPORT & VALIDATION SUITE
+           ==================================================================== -->
+      <section id="view-export" class="workflow-view hidden">
+        <div class="manager-toolbar">
+          <div class="manager-toolbar__meta">
+            <button id="btn-back-from-export" class="interactive-tactile btn-secondary btn-sm" type="button">
+              ← Back to Cellar
+            </button>
+            <h2 class="section-title">Export & Validation Suite</h2>
+          </div>
+        </div>
+
+        <div class="export-grid-layout">
+          <!-- Sidebar: Health & Actions -->
+          <div class="export-sidebar-stack">
+            <div class="paper-card">
+              <div class="card-specular-edge" aria-hidden="true"></div>
+              <h3 class="panel-headline">Dataset Health</h3>
+
+              <div class="metrics-list">
+                <div class="metric-line">
+                  <span>Total Editions:</span>
+                  <strong id="stat-export-total">0</strong>
+                </div>
+                <div class="metric-line">
+                  <span>Engine Compatible:</span>
+                  <strong id="stat-export-valid" class="text-sage">0</strong>
+                </div>
+                <div class="metric-line">
+                  <span>Issues / Warnings:</span>
+                  <strong id="stat-export-issues">0</strong>
+                </div>
+                <div class="metric-line">
+                  <span>Schema Structure:</span>
+                  <strong>17 Columns (Exact)</strong>
+                </div>
+              </div>
+
+              <div id="export-validation-msg" class="validation-banner">
+                <!-- Hydrated dynamically -->
+              </div>
+            </div>
+
+            <div class="paper-card">
+              <div class="card-specular-edge" aria-hidden="true"></div>
+              <h3 class="panel-headline">Download Parameters</h3>
+
+              <div class="paper-input-group">
+                <label for="export-filename" class="paper-label">Filename</label>
+                <input type="text" id="export-filename" class="paper-input" value="puzzles.csv">
+              </div>
+
+              <div class="export-button-group">
+                <button id="btn-do-export-all" class="interactive-tactile btn-primary btn-block" type="button">
+                  Download Full CSV
+                </button>
+                <button id="btn-do-export-new-only" class="interactive-tactile btn-secondary btn-block" type="button">
+                  Download New Additions Only
+                </button>
+                <button id="btn-copy-csv-clipboard" class="interactive-tactile btn-secondary btn-block" type="button">
+                  Copy CSV to Clipboard
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main: Preview & Raw Inspector -->
+          <div class="export-main-pane">
+            <div class="paper-card tabbed-preview-card">
+              <div class="tab-controls-header">
+                <div class="tabs-group">
+                  <button id="tab-btn-friendly" class="paper-tab active" type="button">Table Preview</button>
+                  <button id="tab-btn-raw" class="paper-tab" type="button">Technical Raw CSV</button>
+                </div>
+                <span class="preview-counter-label" id="txt-preview-summary">0 rows rendered</span>
+              </div>
+
+              <!-- Friendly Table Preview -->
+              <div id="tab-content-friendly" class="tab-view-pane">
+                <div class="table-responsive table-scroll-limited">
+                  <table class="paper-table" id="table-export-preview">
+                    <thead>
+                      <tr>
+                        <th style="width: 50px;">#</th>
+                        <th>Edition Title</th>
+                        <th>Pairs (1 – 8)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-export-preview">
+                      <!-- Hydrated dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Raw Technical Inspector -->
+              <div id="tab-content-raw" class="tab-view-pane hidden">
+                <div class="raw-code-box">
+                  <pre><code id="raw-csv-code"></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Ergonomic Thumb-Zone Bottom Dock (Mobile Viewports) -->
+    <nav class="app-bottom-dock" aria-label="Primary Mobile Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Hydrated dynamically from APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+
+    <!-- Standard Footer -->
+    <footer class="app-footer">
+      <div class="app-footer__legal">
+        <span id="footerCopyright">Editorial Ledger Systems &copy; 2026. All rights reserved.</span>
+        <span class="footer-dot-sep">•</span>
+        <span>Standard 17-Column Schema</span>
+      </div>
+      <div class="app-footer__meta">
+        <span id="txt-draft-status">Auto-saved to local browser cache</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ====================================================================
+       MODALS & INTERACTIVE OVERLAYS
+       ==================================================================== -->
+
+  <!-- Modal 1: Cocktail Vector Icon Picker -->
+  <div id="modal-icon-picker" class="modal-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-window modal-wide">
+      <div class="modal-specular-edge" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Visual Token Library</span>
+          <h3 id="picker-title" class="modal-title">Select Pair Icon</h3>
+        </div>
+        <button class="btn-close-modal modal-dismiss" type="button" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="search-filter-stack">
+          <input type="text" id="icon-search-input" class="paper-input" placeholder="Search 50+ curated bar icons (shaker, jigger, coupe, citrus, ice)...">
+          <div class="filter-chip-tray" id="picker-categories">
+            <button type="button" class="filter-chip filter-chip--active" data-cat="all">All Tokens</button>
+            <button type="button" class="filter-chip" data-cat="tools">Bar Tools</button>
+            <button type="button" class="filter-chip" data-cat="glassware">Glassware</button>
+            <button type="button" class="filter-chip" data-cat="drinks">Cocktails</button>
+            <button type="button" class="filter-chip" data-cat="garnishes">Garnishes</button>
+            <button type="button" class="filter-chip" data-cat="spirits">Bottles</button>
+            <button type="button" class="filter-chip" data-cat="ice">Ice & Craft</button>
+          </div>
+        </div>
+
+        <div class="icons-grid-container" id="icons-grid-container">
+          <!-- Hydrated dynamically -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="interactive-tactile btn-secondary modal-dismiss" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Custom SVG Paste & Sanitize -->
+  <div id="modal-paste-svg" class="modal-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="paste-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-window">
+      <div class="modal-specular-edge" aria-hidden="true"></div>
+      <div class="modal-header">
+        <h3 id="paste-title" class="modal-title">Paste Custom Vector SVG</h3>
+        <button class="btn-close-modal modal-dismiss" type="button" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-note">
+          Paste valid <code>&lt;svg&gt;</code> code. The sanitizer will automatically strip scripting tags, enforce <code>viewBox="0 0 24 24"</code>, and normalize stroke attributes.
+        </p>
+        <div class="paper-input-group">
+          <textarea id="textarea-custom-svg" class="paper-input code-font" rows="5" placeholder='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">...</svg>'></textarea>
+        </div>
+        <div class="svg-live-preview-box">
+          <span class="preview-caption">Live Vector Render:</span>
+          <div id="custom-svg-preview-target" class="pair-preview-aperture mini-aperture">
+            <span class="empty-mark">—</span>
+          </div>
+          <span id="custom-svg-validation-label" class="validation-caption">Awaiting input...</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="interactive-tactile btn-secondary modal-dismiss" type="button">Cancel</button>
+        <button id="btn-apply-custom-svg" class="interactive-tactile btn-primary" type="button" disabled>Apply Vector</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Full 4x4 Interactive Board Simulator -->
+  <div id="modal-board-preview" class="modal-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="mbp-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-window modal-board-window">
+      <div class="modal-specular-edge" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Interactive Simulator</span>
+          <h3 id="mbp-title" class="modal-title">4×4 Reserve Board</h3>
+        </div>
+        <button class="btn-close-modal modal-dismiss" type="button" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="modal-note">
+          Tap tiles to trigger flip transitions, validating typography scale and icon proportion before engine deployment.
+        </p>
+        <div class="fullscreen-sim-wrap">
+          <div id="fullscreen-interactive-grid" class="tactile-board-grid full-grid"></div>
+        </div>
+      </div>
+      <div class="modal-footer modal-footer-split">
+        <button id="btn-fullscreen-shuffle" class="interactive-tactile btn-secondary" type="button">Reshuffle Board</button>
+        <button class="interactive-tactile btn-primary modal-dismiss" type="button">Looks Balanced</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessible Toast Feedback -->
+  <div id="toast" class="tactile-toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

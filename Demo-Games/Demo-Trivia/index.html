@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Daily Quiz — A refined daily trivia challenge set within a late-night cocktail lounge. Features a continuous daily cycle, archive vault, and player statistics.">
-  <title>Daily Quiz</title>
+  <meta name="description" content="Daily Quiz — A refined daily trivia challenge engineered with tactile stationery aesthetics, continuous calendar cycles, archive vault, and player telemetry.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Daily Quiz — Editorial Edition</title>
 
-  <!-- Typography: Display Serif (Cormorant Garamond) & Modern Sans (Plus Jakarta Sans) -->
+  <!-- Typography: Display Editorial Serif (Cormorant Garamond) & Modern Humanist Sans (Plus Jakarta Sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,266 +15,270 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <!-- Atmospheric Background: Caustic Light Fields, Micro-Texture, Fine Dot Grid & Garnish Flight Engine -->
-  <div class="bg-atmosphere" aria-hidden="true">
-    <div class="bg-radial-glow"></div>
-    <div class="bg-caustic-layer"></div>
-    <div class="bg-dotted-pinstripe"></div>
-    <div class="bg-micro-texture"></div>
-    <div id="floatingIconsContainer" class="floating-icons-container"></div>
-    <div class="bg-vignette"></div>
+  <!-- Ambient Paper Depth & Top-Down Lighting Atmosphere -->
+  <div class="bg-paper-depth" aria-hidden="true">
+    <div class="bg-light-wash"></div>
+    <div class="bg-ruled-matrix"></div>
+    <div id="tactileFoilContainer" class="tactile-foil-container"></div>
   </div>
 
-  <div class="app-container">
-    <!-- Application Header with Independent Alignment Anchors -->
-    <header class="app-header" id="appHeader">
-      <div class="header-left">
-        <a href="../Demo-Games/" id="headerHomeBtn" class="btn btn-icon header-nav-btn" aria-label="Return to Tileworks Home">
-          <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5h-5v-6h-5v6h-5A1.5 1.5 0 0 1 3 20V10.5z"/>
-          </svg>
-        </a>
-        <button id="headerBackBtn" class="btn btn-icon header-nav-btn hidden" aria-label="Back to Menu" type="button">
-          <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <div class="app-shell">
+    <!-- Standardized Uniform Application Header -->
+    <header class="app-page-header" id="appPageHeader">
+      <div class="app-page-header__controls">
+        <!-- 44x44px Ergonomic Back / Home Navigation Anchor -->
+        <button type="button" class="btn-back-nav hidden" id="headerBackBtn" aria-label="Navigate to main menu">
+          <svg class="icon-back" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <span class="back-label">Menu</span>
+          <span class="btn-back-nav__label" id="backBtnLabel">Menu</span>
         </button>
+
+        <a href="../Demo-Games/" class="btn-back-nav" id="headerHomeBtn" aria-label="Return to Tileworks Games Collection">
+          <svg class="icon-back" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5h-5v-6h-5v6h-5A1.5 1.5 0 0 1 3 20V10.5z"/>
+          </svg>
+          <span class="btn-back-nav__label">Home</span>
+        </a>
+
+        <!-- Contextual Header Control Tray -->
+        <div class="app-page-header__actions">
+          <button type="button" class="header-action-btn" id="quickAudioBtn" aria-label="Toggle Acoustic Feedback">
+            <span id="quickAudioIcon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
       </div>
 
-      <div class="header-center">
-        <div class="header-emblem" aria-hidden="true"></div>
-        <h1 id="appHeaderTitle" class="header-title">Daily Quiz</h1>
-      </div>
-
-      <div class="header-right">
-        <button id="quickSoundBtn" class="btn btn-icon header-nav-btn" aria-label="Toggle Sound" type="button">
-          <span id="quickSoundIcon" aria-hidden="true">
-            <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-          </span>
-        </button>
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">EDITION 2026</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Daily Quiz</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Curated intellectual challenges drawn daily from culture, sciences, and history.
+        </p>
       </div>
     </header>
 
-    <!-- Main Viewport Content Area -->
-    <main id="mainContent" class="main-content">
-      <!-- 1. Status & Initial Loading View -->
+    <!-- Main Viewport Arena -->
+    <main class="app-main-viewport" id="appMainViewport">
+      <!-- 1. System Status / Synchronization View -->
       <section id="statusView" class="view-panel" aria-live="polite">
-        <div class="card status-card">
-          <div class="spinner-cocktail" aria-hidden="true">
-            <div class="spinner-ring"></div>
-            <div class="spinner-amber-core"></div>
+        <div class="paper-card status-card">
+          <div class="stationery-seal-spinner" aria-hidden="true">
+            <div class="seal-ring"></div>
+            <div class="seal-core-gem"></div>
           </div>
-          <h2 id="statusTitle" class="card-headline">Synchronizing</h2>
-          <p id="statusMessage" class="text-muted">Loading puzzle records and initializing lounge challenge...</p>
-          <button id="statusRetryBtn" class="btn btn-primary hidden" type="button">Retry Connection</button>
+          <h2 id="statusTitle" class="paper-card__title text-center">Synchronizing Records</h2>
+          <p id="statusMessage" class="paper-card__description text-center">Ingesting authorized challenge matrix and calendar rotation...</p>
+          <button type="button" id="statusRetryBtn" class="interactive-tactile btn-primary hidden">Retry Connection</button>
         </div>
       </section>
 
-      <!-- 2. Main Menu View (Art-Directed Focal Stage) -->
+      <!-- 2. Main Menu / Dispatch Stage -->
       <section id="menuView" class="view-panel hidden">
-        <div class="menu-stage">
-          <div class="menu-intro-block">
-            <span class="lounge-eyebrow">The Nocturne Lounge</span>
-            <h2 class="menu-hero-title">Daily Challenge</h2>
-            <p class="menu-hero-subtitle">Five curated questions drawn from culture, science, and history.</p>
-            <div class="gold-divider" aria-hidden="true">
-              <span class="gold-divider-gem"></span>
+        <div class="menu-stage-wrapper">
+          <!-- Primary Dispatch: Daily Challenge Card -->
+          <article class="paper-card action-dispatch-card primary-dispatch" id="dailyDispatchCard" role="region" aria-label="Today's Service">
+            <div class="dispatch-header">
+              <span class="status-badge status-badge--ochre" id="menuTodayBadge">Today's Service</span>
+              <span class="dispatch-cycle-meta" id="menuReleaseDate">Local Calendar Sync...</span>
             </div>
-          </div>
-
-          <div class="menu-column">
-            <!-- Primary Action 1: Play Game -->
-            <button id="playTodayBtn" class="menu-action-card primary-action" type="button">
-              <div class="menu-action-content">
-                <div class="action-meta-row">
-                  <span class="action-tag">Today's Service</span>
-                  <span id="menuTodayBadge" class="badge">Ready</span>
-                </div>
-                <span id="playTodayTitle" class="action-title">Play Daily Quiz</span>
-                <span id="menuReleaseDate" class="action-subtitle">Connecting...</span>
-              </div>
-              <div class="action-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="dispatch-body">
+              <h2 class="dispatch-title" id="playTodayTitle">Daily Challenge</h2>
+              <p class="dispatch-desc">Five curated questions evaluated for intellectual acumen and active streak records.</p>
+            </div>
+            <div class="dispatch-footer">
+              <button type="button" class="interactive-tactile btn-primary btn-block" id="playTodayBtn">
+                <span>Start Daily Challenge</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
-              </div>
-            </button>
-
-            <!-- Primary Action 2: Vault -->
-            <button id="openVaultBtn" class="menu-action-card" type="button">
-              <div class="menu-action-content">
-                <div class="action-meta-row">
-                  <span class="action-tag">Archive</span>
-                  <span id="vaultCountBadge" class="badge">0</span>
-                </div>
-                <span class="action-title">The Vault</span>
-                <span class="action-subtitle">Browse and solve past daily puzzles</span>
-              </div>
-              <div class="action-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </div>
-            </button>
-
-            <!-- Primary Action 3: Settings -->
-            <button id="openSettingsBtn" class="menu-action-card" type="button">
-              <div class="menu-action-content">
-                <div class="action-meta-row">
-                  <span class="action-tag">Preferences</span>
-                </div>
-                <span class="action-title">Settings</span>
-                <span class="action-subtitle">Atmosphere, audio and storage controls</span>
-              </div>
-              <div class="action-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </div>
-            </button>
-
-            <!-- Primary Action 4: How to Play -->
-            <button id="openHowToPlayBtn" class="menu-action-card" type="button">
-              <div class="menu-action-content">
-                <div class="action-meta-row">
-                  <span class="action-tag">Lounge Guide</span>
-                </div>
-                <span class="action-title">How to Play</span>
-                <span class="action-subtitle">Rules, scoring and streak mechanics</span>
-              </div>
-              <div class="action-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </div>
-            </button>
-
-            <!-- Bottom Utility Controls -->
-            <div class="utility-row" role="group" aria-label="Quick Utilities">
-              <button id="statsUtilityBtn" class="utility-btn" type="button" aria-label="View Player Statistics">
-                <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M18 20V10M12 20V4M6 20v-6"/>
-                </svg>
-                <span class="utility-label">Stats</span>
-              </button>
-
-              <button id="shareUtilityBtn" class="utility-btn" type="button" aria-label="Share Daily Quiz">
-                <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                </svg>
-                <span class="utility-label">Share</span>
-              </button>
-
-              <button id="plusUtilityBtn" class="utility-btn" type="button" aria-label="More Tileworks Games">
-                <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                <span class="utility-label">Plus</span>
               </button>
             </div>
+          </article>
+
+          <!-- Secondary Operational Actions -->
+          <div class="card-feed-container">
+            <button type="button" class="interactive-tactile menu-row-card" id="openVaultBtn">
+              <div class="menu-row-card__icon menu-row-card__icon--sage" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div class="menu-row-card__meta">
+                <div class="menu-row-card__headline-row">
+                  <span class="menu-row-card__title">The Vault</span>
+                  <span class="status-badge" id="vaultCountBadge">0 Challenges</span>
+                </div>
+                <p class="menu-row-card__desc">Browse and solve past daily puzzles at your own pace</p>
+              </div>
+              <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+
+            <button type="button" class="interactive-tactile menu-row-card" id="openHowToPlayBtn">
+              <div class="menu-row-card__icon menu-row-card__icon--ochre" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <div class="menu-row-card__meta">
+                <span class="menu-row-card__title">How to Play</span>
+                <p class="menu-row-card__desc">Guidelines, scoring mechanics, and streak protocols</p>
+              </div>
+              <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+
+            <button type="button" class="interactive-tactile menu-row-card" id="openSettingsBtn">
+              <div class="menu-row-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </div>
+              <div class="menu-row-card__meta">
+                <span class="menu-row-card__title">Preferences</span>
+                <p class="menu-row-card__desc">Acoustic tones, tactile haptics, and storage reset</p>
+              </div>
+              <svg class="chevron-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
           </div>
         </div>
       </section>
 
-      <!-- 3. Gameplay View -->
+      <!-- 3. Interactive Gameplay View -->
       <section id="gameView" class="view-panel hidden">
-        <div class="game-column">
-          <!-- Game Meta Bar -->
-          <div class="game-meta-card">
-            <span id="gameModeBadge" class="game-mode-tag">Daily Challenge</span>
-            <div id="stepperTrack" class="stepper-track" role="group" aria-label="Question Progress"></div>
+        <div class="game-stage-wrapper">
+          <!-- Stepper & Telemetry Progress Track -->
+          <div class="paper-card game-telemetry-card">
+            <div class="game-telemetry-header">
+              <span class="status-badge" id="gameModeBadge">Daily Challenge</span>
+              <span class="question-tracker-label" id="questionCounterLabel">Question 1 of 5</span>
+            </div>
+            <div class="stepper-track" id="stepperTrack" role="group" aria-label="Question progress sequence">
+              <!-- Dynamically hydrated step pips -->
+            </div>
           </div>
 
-          <!-- Central Game Board -->
-          <div class="card game-board-card" id="gameBoard">
-            <div class="question-header">
-              <span id="questionCounterLabel" class="question-counter">Question 1 of 5</span>
-              <span class="glass-rim-accent" aria-hidden="true"></span>
+          <!-- Question Surface Card -->
+          <article class="paper-card question-board-card">
+            <h2 class="question-board-title" id="questionText">Preparing inquiry...</h2>
+            <div class="options-grid" id="optionsContainer" role="radiogroup" aria-label="Multiple choice options">
+              <!-- Tactile option buttons hydrated dynamically -->
             </div>
-            <h2 id="questionText" class="question-text">Question loading...</h2>
-            <div id="optionsContainer" class="options-container" role="radiogroup" aria-label="Quiz Options"></div>
-          </div>
+          </article>
 
-          <!-- Supporting Text & Answer Feedback -->
-          <div id="explanationPanel" class="card explanation-panel hidden" aria-live="polite">
-            <div class="explanation-header">
-              <span id="answerIndicator" class="badge"></span>
-              <h3 class="explanation-title">Explanation</h3>
+          <!-- Verified Educational Explanation Panel -->
+          <aside class="paper-card explanation-card hidden" id="explanationPanel" aria-live="polite">
+            <div class="explanation-card__header">
+              <span class="status-badge" id="answerIndicator">Result</span>
+              <h3 class="explanation-card__title">Historical Reference</h3>
             </div>
-            <p id="explanationText" class="explanation-text"></p>
-            <button id="nextQuestionBtn" class="btn btn-primary" type="button">Next Question</button>
-          </div>
+            <p class="explanation-card__text" id="explanationText"></p>
+            <button type="button" class="interactive-tactile btn-primary btn-block" id="nextQuestionBtn">
+              Continue to Next Question
+            </button>
+          </aside>
         </div>
       </section>
 
-      <!-- 4. Results View -->
+      <!-- 4. Round Completion Summary View -->
       <section id="resultsView" class="view-panel hidden">
-        <div class="card results-card">
-          <span class="action-tag">Summary</span>
-          <h2 id="resultsHeadline" class="results-title">Quiz Complete</h2>
-          <div class="score-display">
-            <span id="scoreValue" class="score-number">0</span>
-            <span id="scoreTotal" class="score-denom">/ 5</span>
+        <article class="paper-card results-dossier-card">
+          <div class="dossier-emblem" aria-hidden="true">
+            <span class="dossier-seal-icon">✦</span>
           </div>
-          <p id="resultsSubtitle" class="text-muted">Breakdown of answers</p>
-          <div id="resultsBreakdown" class="results-breakdown" aria-label="Answer breakdown"></div>
+          <span class="status-badge status-badge--sage" id="resultsBadge">Challenge Concluded</span>
+          <h2 class="dossier-title" id="resultsHeadline">Performance Record</h2>
+          
+          <div class="dossier-score-frame">
+            <span class="dossier-score-val" id="scoreValue">0</span>
+            <span class="dossier-score-denom" id="scoreTotal">/ 5</span>
+          </div>
+          
+          <p class="paper-card__description text-center" id="resultsSubtitle">Verification breakdown for this challenge</p>
+          <div class="dossier-breakdown-row" id="resultsBreakdown" aria-label="Question accuracy breakdown"></div>
 
-          <div class="results-stats-row">
-            <div class="stat-pill">
-              <span class="stat-pill-label">Streak</span>
-              <strong id="resultsStreakValue" class="stat-pill-value">0</strong>
+          <div class="dossier-metrics-grid">
+            <div class="dossier-metric-cell">
+              <span class="metric-label">Current Streak</span>
+              <strong class="metric-value" id="resultsStreakValue">0</strong>
             </div>
-            <div class="stat-pill">
-              <span class="stat-pill-label">Accuracy</span>
-              <strong id="resultsAccuracyValue" class="stat-pill-value">0%</strong>
+            <div class="dossier-metric-cell">
+              <span class="metric-label">Accuracy</span>
+              <strong class="metric-value" id="resultsAccuracyValue">0%</strong>
             </div>
           </div>
 
-          <div class="results-actions">
-            <button id="shareScoreBtn" class="btn btn-primary" type="button">Share Results</button>
-            <div class="button-row">
-              <button id="reviewQuizBtn" class="btn btn-secondary" type="button">Review Answers</button>
-              <button id="resultsVaultBtn" class="btn btn-secondary" type="button">The Vault</button>
+          <div class="dossier-action-stack">
+            <button type="button" class="interactive-tactile btn-primary btn-block" id="shareScoreBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              <span>Share Performance</span>
+            </button>
+            <div class="action-dual-row">
+              <button type="button" class="interactive-tactile btn-secondary" id="reviewQuizBtn">Review Inquiries</button>
+              <button type="button" class="interactive-tactile btn-secondary" id="resultsVaultBtn">The Vault</button>
             </div>
-            <button id="resultsMenuBtn" class="btn btn-secondary" type="button">Return to Menu</button>
+            <button type="button" class="interactive-tactile btn-secondary" id="resultsMenuBtn">Return to Overview</button>
           </div>
-        </div>
+        </article>
       </section>
 
-      <!-- 5. Vault View -->
+      <!-- 5. Archive Vault View -->
       <section id="vaultView" class="view-panel hidden">
-        <div class="card vault-card">
-          <div class="card-header-row">
+        <div class="paper-card vault-archive-card">
+          <div class="paper-card__header">
             <div>
-              <span class="action-tag">Archive</span>
-              <h2 class="card-headline">The Vault</h2>
+              <span class="status-badge status-badge--sage">The Archives</span>
+              <h2 class="paper-card__title">Historical Challenges</h2>
             </div>
-            <span id="vaultTotalBadge" class="badge">0 Puzzles</span>
+            <span class="status-badge" id="vaultTotalBadge">0 Records</span>
           </div>
-          <p class="text-muted">Browse and play every puzzle in the complete collection. Vault puzzles do not affect your daily streak.</p>
-          <div id="vaultList" class="vault-list" role="list"></div>
-          <p id="vaultEmptyMsg" class="text-muted hidden">No puzzles available in the archive yet.</p>
+          <p class="paper-card__description">
+            Access the complete collection of cataloged trivia challenges. Vault practice does not alter active daily streaks.
+          </p>
+          <div class="vault-entries-list" id="vaultList" role="list"></div>
+          <p class="vault-empty-note hidden" id="vaultEmptyMsg">No historical challenges currently cataloged.</p>
         </div>
       </section>
     </main>
 
-    <!-- Contextual Right-Side Drawers (Strict Right-to-Left Entrance) -->
-    <div id="panelBackdrop" class="panel-backdrop hidden" aria-hidden="true"></div>
+    <!-- Ergonomic Bottom Thumb-Zone Navigation Dock -->
+    <nav class="app-bottom-dock" aria-label="Primary Mobile Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Dynamically rendered according to APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
 
-    <!-- Panel 1: How to Play Drawer -->
+    <!-- Contextual Right-Side Slide Drawers -->
+    <div id="drawerScrim" class="drawer-scrim hidden" aria-hidden="true"></div>
+
+    <!-- Drawer 1: How to Play -->
     <aside id="howToPlayDrawer" class="side-drawer" aria-labelledby="howToPlayTitle" aria-modal="true" role="dialog" hidden>
       <div class="drawer-header">
         <div>
-          <span class="action-tag">Instructions</span>
+          <span class="status-badge status-badge--ochre">Lounge Codex</span>
           <h2 id="howToPlayTitle" class="drawer-title">How to Play</h2>
         </div>
-        <button id="closeHowToBtn" class="btn btn-icon drawer-close-btn" aria-label="Close Instructions" type="button">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" class="drawer-close-btn" id="closeHowToBtn" aria-label="Close Guidelines">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -281,49 +286,49 @@
       </div>
 
       <div class="drawer-body">
-        <div class="guide-step">
-          <div class="guide-num">1</div>
-          <div class="guide-content">
-            <h4>Daily Challenge</h4>
-            <p>A fresh 5-question trivia challenge cycles every day at midnight in your local calendar. Each day advances one step through the lounge catalog.</p>
+        <div class="stationery-instruction-step">
+          <div class="instruction-index">1</div>
+          <div class="instruction-content">
+            <h4>Continuous Daily Cycles</h4>
+            <p>Every local midnight, a fresh 5-question challenge advances smoothly through the catalog without duplicate fatigue.</p>
           </div>
         </div>
 
-        <div class="guide-step">
-          <div class="guide-num">2</div>
-          <div class="guide-content">
-            <h4>One-Tap Answers</h4>
-            <p>Select the best answer from the four choices provided. Immediate tactile verification and verified explanations appear below.</p>
+        <div class="stationery-instruction-step">
+          <div class="instruction-index">2</div>
+          <div class="instruction-content">
+            <h4>Tactile Verification</h4>
+            <p>Select your answer with physical micro-press feedback. Instant verified educational insights ground each solution.</p>
           </div>
         </div>
 
-        <div class="guide-step">
-          <div class="guide-num">3</div>
-          <div class="guide-content">
-            <h4>Streaks &amp; Scoring</h4>
-            <p>Complete today's challenge before local midnight to maintain your daily streak. Missing consecutive days resets your current streak upon next completion.</p>
+        <div class="stationery-instruction-step">
+          <div class="instruction-index">3</div>
+          <div class="instruction-content">
+            <h4>Streak Retention</h4>
+            <p>Complete today's challenge before local midnight to increment your streak. Consecutive days are required to protect your run.</p>
           </div>
         </div>
 
-        <div class="guide-step">
-          <div class="guide-num">4</div>
-          <div class="guide-content">
-            <h4>The Vault</h4>
-            <p>Access the full library of puzzles anytime for practice. Vault puzzles do not affect your active daily streak.</p>
+        <div class="stationery-instruction-step">
+          <div class="instruction-index">4</div>
+          <div class="instruction-content">
+            <h4>Archive Solves</h4>
+            <p>The Vault offers open practice across all challenges anytime without penalizing your active daily streak.</p>
           </div>
         </div>
       </div>
     </aside>
 
-    <!-- Panel 2: Settings Drawer -->
+    <!-- Drawer 2: Settings & Preferences -->
     <aside id="settingsDrawer" class="side-drawer" aria-labelledby="settingsTitle" aria-modal="true" role="dialog" hidden>
       <div class="drawer-header">
         <div>
-          <span class="action-tag">Preferences</span>
-          <h2 id="settingsTitle" class="drawer-title">Settings</h2>
+          <span class="status-badge">Configuration</span>
+          <h2 id="settingsTitle" class="drawer-title">Preferences</h2>
         </div>
-        <button id="closeSettingsBtn" class="btn btn-icon drawer-close-btn" aria-label="Close Settings" type="button">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" class="drawer-close-btn" id="closeSettingsBtn" aria-label="Close Preferences">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -331,45 +336,45 @@
       </div>
 
       <div class="drawer-body">
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Background Atmosphere</span>
-            <span class="setting-desc">Lounge botanicals and glowing garnishes</span>
+        <div class="setting-preference-item">
+          <div class="setting-preference-info">
+            <span class="setting-preference-title">Acoustic Feedback</span>
+            <span class="setting-preference-desc">Harmonic crystal and brass tones on tap</span>
           </div>
-          <button id="toggleAnimationBtn" class="btn btn-toggle" type="button" role="switch" aria-checked="true">
+          <button type="button" class="interactive-tactile btn-toggle" id="toggleSoundBtn" role="switch" aria-checked="true">
             <span class="toggle-state">ON</span>
           </button>
         </div>
 
-        <div class="setting-item">
-          <div class="setting-info">
-            <span class="setting-label">Acoustic Feedback</span>
-            <span class="setting-desc">Harmonic crystal and brass audio notes</span>
+        <div class="setting-preference-item">
+          <div class="setting-preference-info">
+            <span class="setting-preference-title">Tactile Depth Simulation</span>
+            <span class="setting-preference-desc">Floating stationery botanicals & paper light washes</span>
           </div>
-          <button id="toggleSoundBtn" class="btn btn-toggle" type="button" role="switch" aria-checked="true">
+          <button type="button" class="interactive-tactile btn-toggle" id="toggleAnimationBtn" role="switch" aria-checked="true">
             <span class="toggle-state">ON</span>
           </button>
         </div>
 
-        <div class="setting-item reset-item">
-          <div class="setting-info">
-            <span class="setting-label">Reset Local Progress</span>
-            <span class="setting-desc">Clear local history and streak data</span>
+        <div class="setting-preference-item setting-preference-item--danger">
+          <div class="setting-preference-info">
+            <span class="setting-preference-title">Clear Local Ledger</span>
+            <span class="setting-preference-desc">Erase completion streaks and question history</span>
           </div>
-          <button id="resetDataBtn" class="btn btn-danger" type="button">Reset</button>
+          <button type="button" class="interactive-tactile btn-danger" id="resetDataBtn">Reset</button>
         </div>
       </div>
     </aside>
 
-    <!-- Panel 3: Stats Drawer -->
+    <!-- Drawer 3: Player Telemetry & Statistics -->
     <aside id="statsDrawer" class="side-drawer" aria-labelledby="statsTitle" aria-modal="true" role="dialog" hidden>
       <div class="drawer-header">
         <div>
-          <span class="action-tag">Record</span>
-          <h2 id="statsTitle" class="drawer-title">Player Stats</h2>
+          <span class="status-badge status-badge--sage">Player Ledger</span>
+          <h2 id="statsTitle" class="drawer-title">Historical Stats</h2>
         </div>
-        <button id="closeStatsBtn" class="btn btn-icon drawer-close-btn" aria-label="Close Stats" type="button">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" class="drawer-close-btn" id="closeStatsBtn" aria-label="Close Statistics">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -377,34 +382,34 @@
       </div>
 
       <div class="drawer-body">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-big-val" id="statPlayed">0</span>
-            <span class="stat-sub">Played</span>
+        <div class="stats-overview-grid">
+          <div class="stat-stationery-card">
+            <span class="stat-number" id="statPlayed">0</span>
+            <span class="stat-label">Rounds</span>
           </div>
-          <div class="stat-card">
-            <span class="stat-big-val" id="statAccuracy">0%</span>
-            <span class="stat-sub">Accuracy</span>
+          <div class="stat-stationery-card">
+            <span class="stat-number" id="statAccuracy">0%</span>
+            <span class="stat-label">Accuracy</span>
           </div>
-          <div class="stat-card">
-            <span class="stat-big-val" id="statCurrentStreak">0</span>
-            <span class="stat-sub">Current Streak</span>
+          <div class="stat-stationery-card">
+            <span class="stat-number" id="statCurrentStreak">0</span>
+            <span class="stat-label">Streak</span>
           </div>
-          <div class="stat-card">
-            <span class="stat-big-val" id="statBestStreak">0</span>
-            <span class="stat-sub">Max Streak</span>
+          <div class="stat-stationery-card">
+            <span class="stat-number" id="statBestStreak">0</span>
+            <span class="stat-label">Max Streak</span>
           </div>
         </div>
 
-        <div class="stat-section">
-          <h4 class="stat-section-title">Score Distribution</h4>
-          <div id="scoreDistributionChart" class="score-dist-chart"></div>
+        <div class="distribution-section">
+          <h4 class="distribution-section-title">Score Frequency Matrix</h4>
+          <div class="distribution-bars-container" id="scoreDistributionChart"></div>
         </div>
       </div>
     </aside>
 
-    <!-- Toast Feedback Notification -->
-    <div id="toastMessage" class="toast" role="status" aria-live="polite"></div>
+    <!-- Toast Notification Banner -->
+    <div id="toastMessage" class="tactile-toast" role="status" aria-live="polite"></div>
   </div>
 
   <script src="./script.js"></script>

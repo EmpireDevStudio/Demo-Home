@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Checkpoint Studio — Intelligent Operational Procedure & CSV Builder for Checkpoint Pro.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Checkpoint Studio — Operational Procedure Architect</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Light Backdrop Overlay -->
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="ambient-glow ambient-glow-1"></div>
+    <div class="ambient-glow ambient-glow-2"></div>
+    <div class="ambient-glow ambient-glow-3"></div>
+    <div class="subtle-noise-overlay"></div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- Standardized Top Navigation Header -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__inner">
+        <div class="app-page-header__controls">
+          <button type="button" class="btn-back-nav interactive-tactile" id="globalBackBtn" aria-label="Navigate back">
+            <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span class="btn-back-nav__label" id="backBtnLabel">Home</span>
+          </button>
+
+          <div class="app-page-header__actions" id="headerActionsSlot">
+            <!-- Telemetry Badges -->
+            <div class="telemetry-pill" title="Total operational steps staged">
+              <span class="pill-label">Steps:</span>
+              <span class="pill-val" id="telemetryStepCount">0</span>
+            </div>
+
+            <div class="telemetry-pill mono-pill" title="Target export filename">
+              <span class="pill-label">File:</span>
+              <span class="pill-val mono" id="telemetryFilename">procedure.csv</span>
+            </div>
+
+            <!-- Audio Feedback Switch -->
+            <button type="button" id="audioToggleBtn" class="interactive-tactile icon-pill-btn" title="Toggle audio chime" aria-label="Toggle audio feedback">
+              <svg id="audioIconOn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+              <svg id="audioIconOff" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+              </svg>
+            </button>
+
+            <!-- Reset / Fresh Session -->
+            <button type="button" id="newSessionBtn" class="interactive-tactile btn-paper-secondary" title="Reset procedure session">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <span>Reset</span>
+            </button>
+
+            <!-- Export Trigger -->
+            <button type="button" id="exportLaunchBtn" class="interactive-tactile btn-paper-primary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="app-page-header__title-block">
+          <div class="brand-eyebrow-row">
+            <span class="app-page-header__eyebrow" id="pageEyebrowSlot">PROCEDURE DESIGNER</span>
+            <span class="header-edition-pill" id="appEditionSlot">Pro Suite</span>
+          </div>
+          <h1 class="app-page-header__title" id="pageTitleSlot">Operational Procedure Architect</h1>
+          <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+            Author, inspect, and export RFC 4180 checklist spreadsheets with verified step sequences.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Stage -->
+    <main class="studio-main" role="main" id="mainContentArea">
+
+      <!-- SECTION: ONBOARDING & WORKFLOW SELECTION -->
+      <section id="onboardingSection" class="paper-card onboarding-card" aria-labelledby="onboardingHeading">
+        <div class="card-eyebrow">
+          <span class="paper-status-indicator paper-status-indicator--sage">
+            <span class="status-dot"></span>
+            <span class="status-label">Fast Setup</span>
+          </span>
+          <span class="file-stamp">Select Architecture Strategy</span>
+        </div>
+        <h2 id="onboardingHeading" class="card-hero-title">Select Procedure Origin</h2>
+        <p class="card-hero-desc">
+          Checkpoint Pro checklists are clean two-column spreadsheets (<strong>Task</strong> and optional <strong>Description</strong>). Choose a starting point to begin staging steps.
+        </p>
+
+        <div class="intent-grid">
+          <!-- Strategy A: Append to CSV -->
+          <article class="paper-card intent-card" id="intentUploadAdd">
+            <div class="intent-icon intent-icon--terracotta">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+              </svg>
+            </div>
+            <h3 class="intent-title">Append to Existing CSV</h3>
+            <p class="intent-desc">Upload a production CSV (e.g. <code>closing.csv</code>) to inspect order, modify parameters, and append steps.</p>
+            <label class="interactive-tactile btn-paper-secondary file-input-label">
+              <span>Choose Local CSV</span>
+              <input type="file" id="uploadCsvInputAppend" accept=".csv,text/csv" class="visually-hidden">
+            </label>
+          </article>
+
+          <!-- Strategy B: New Standard Procedure -->
+          <article class="paper-card intent-card is-recommended" id="intentNewBlank">
+            <div class="intent-icon intent-icon--sage">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </div>
+            <h3 class="intent-title">Create New Procedure</h3>
+            <p class="intent-desc">Initialize an empty procedure or load industry blueprints (Commercial Kitchen, Bar Close, Facility Egress).</p>
+            <div class="intent-button-row">
+              <button type="button" class="interactive-tactile btn-paper-primary" id="startBlankBtn">Blank Canvas</button>
+              <button type="button" class="interactive-tactile btn-paper-secondary" id="templatePickerBtn">Use Standard Blueprint</button>
+            </div>
+          </article>
+
+          <!-- Strategy C: Audit & Repair CSV -->
+          <article class="paper-card intent-card" id="intentReview">
+            <div class="intent-icon intent-icon--ochre">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </div>
+            <h3 class="intent-title">Audit &amp; Repair File</h3>
+            <p class="intent-desc">Inspect an existing CSV file for unclosed quotations, malformed delimiters, or duplicate task headers.</p>
+            <label class="interactive-tactile btn-paper-secondary file-input-label">
+              <span>Audit CSV File</span>
+              <input type="file" id="uploadCsvInputAudit" accept=".csv,text/csv" class="visually-hidden">
+            </label>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECTION: ACTIVE WORKSPACE (Visible once initialized) -->
+      <section id="workspaceSection" class="workspace-layout" hidden>
+
+        <!-- Column 1: Authoring Controls & Simulator -->
+        <div class="builder-column">
+          
+          <!-- Metadata Configuration -->
+          <div class="paper-card metadata-card">
+            <div class="meta-row">
+              <div class="paper-input-group flex-2">
+                <label for="procedureNameInput" class="paper-label">Procedure Title</label>
+                <input type="text" id="procedureNameInput" class="paper-input" placeholder="e.g. Bar Closing Checklist" value="Bar Closing Checklist">
+                <span class="field-hint">Display name rendered in Checkpoint Pro viewports.</span>
+              </div>
+              <div class="paper-input-group flex-1">
+                <label for="procedureFilenameInput" class="paper-label">Export Filename</label>
+                <input type="text" id="procedureFilenameInput" class="paper-input mono" placeholder="closing.csv" value="closing.csv">
+                <span class="field-hint">Must end with <code>.csv</code>.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Form Editor -->
+          <div class="paper-card form-card">
+            <div class="card-header-bar">
+              <div>
+                <span class="paper-status-indicator paper-status-indicator--sage" id="formModeBadge">
+                  <span class="status-dot"></span>
+                  <span class="status-label">New Step</span>
+                </span>
+                <h3 class="section-heading" id="formHeading">Add Verification Step</h3>
+              </div>
+              <div class="form-shortcut-hint">
+                <kbd>Enter</kbd> commits step
+              </div>
+            </div>
+
+            <form id="stepForm" class="step-form" novalidate>
+              <input type="hidden" id="editingIndex" value="-1">
+
+              <!-- Step Title Input -->
+              <div class="paper-input-group">
+                <div class="field-label-group">
+                  <label for="stepTitleInput" class="paper-label">
+                    Step / Action Title <span class="required-mark" aria-hidden="true">*</span>
+                  </label>
+                  <span class="field-csv-ref">CSV Column A</span>
+                </div>
+                <input 
+                  type="text" 
+                  id="stepTitleInput" 
+                  class="paper-input"
+                  placeholder="e.g. Secure and padlock back liquor cabinets"
+                  autocomplete="off"
+                  required
+                />
+                <span class="field-hint">Precise, imperative operational directive.</span>
+              </div>
+
+              <!-- Quick Verb Anchors -->
+              <div class="suggestion-bar" aria-label="Action verb suggestions">
+                <span class="suggestion-label">Suggested Verbs:</span>
+                <div class="suggestion-chips-flow">
+                  <button type="button" class="interactive-tactile verb-chip" data-verb="Inspect">Inspect…</button>
+                  <button type="button" class="interactive-tactile verb-chip" data-verb="Sanitize">Sanitize…</button>
+                  <button type="button" class="interactive-tactile verb-chip" data-verb="Power down">Power down…</button>
+                  <button type="button" class="interactive-tactile verb-chip" data-verb="Secure & lock">Secure &amp; lock…</button>
+                  <button type="button" class="interactive-tactile verb-chip" data-verb="Restock">Restock…</button>
+                  <button type="button" class="interactive-tactile verb-chip" data-verb="Verify temperature of">Verify temperature…</button>
+                </div>
+              </div>
+
+              <!-- Step Instructions / Description -->
+              <div class="paper-input-group">
+                <div class="field-label-group">
+                  <label for="stepDescInput" class="paper-label">
+                    Instructions &amp; Verification Details <span class="optional-tag">(Optional)</span>
+                  </label>
+                  <span class="field-csv-ref">CSV Column B</span>
+                </div>
+                <textarea 
+                  id="stepDescInput" 
+                  class="paper-input paper-textarea"
+                  rows="3" 
+                  placeholder="e.g. Verify padlocks are engaged on lockers #1 through #4. Deposit master key into wall safe."
+                ></textarea>
+                <span class="field-hint">Detailed operating parameters, equipment numbers, or safety thresholds.</span>
+              </div>
+
+              <!-- Action Toolbar -->
+              <div class="form-actions-row">
+                <button type="submit" id="saveStepBtn" class="interactive-tactile btn-paper-primary">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span id="saveStepBtnText">Add Step to Checklist</span>
+                </button>
+                <button type="button" id="cancelEditBtn" class="interactive-tactile btn-paper-secondary" hidden>Cancel Edit</button>
+                <button type="button" id="openBatchModalBtn" class="interactive-tactile btn-paper-secondary ml-auto">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M4 6h16M4 12h16M4 18h7"></path>
+                  </svg>
+                  <span>Batch Paste</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Component Live Simulator -->
+          <div class="paper-card preview-card">
+            <div class="card-header-bar">
+              <div>
+                <span class="paper-status-indicator paper-status-indicator--ochre">
+                  <span class="status-dot"></span>
+                  <span class="status-label">Checkpoint Pro Simulator</span>
+                </span>
+                <h4 class="section-subheading">Runtime Component Appearance</h4>
+              </div>
+              <span class="simulator-tag">Pixel Match</span>
+            </div>
+            <p class="field-hint">Live rendering of active step inside Checkpoint Pro:</p>
+
+            <div class="simulator-stage">
+              <div id="simulatedTaskCard" class="task-card-sim interactive-tactile" role="checkbox" aria-checked="false" tabindex="0">
+                <div class="neo-checkbox-sim" aria-hidden="true">
+                  <svg class="neo-check-sim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <div class="task-copy-sim">
+                  <span class="task-title-sim" id="simTitle">Step Title Preview</span>
+                  <p class="task-desc-sim" id="simDesc">Instructions and verification parameters will appear here.</p>
+                </div>
+                <span class="task-flag-sim">Pending</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Column 2: Staged Sequence & Re-ordering -->
+        <div class="staged-column">
+          
+          <div class="paper-card steps-container-card">
+            <div class="steps-top-bar">
+              <div class="steps-heading-group">
+                <h3 class="section-heading">Procedure Sequence</h3>
+                <span class="steps-tally" id="stepsCountBadge">0 Steps</span>
+              </div>
+
+              <!-- Quick Search Filter -->
+              <div class="filter-box">
+                <input type="search" id="stepSearchInput" class="paper-input paper-input--sm" placeholder="Filter staged steps…" aria-label="Filter staged steps">
+              </div>
+            </div>
+
+            <!-- Staged Step Elements -->
+            <div id="stagedList" class="staged-list" role="list">
+              <!-- Hydrated dynamically -->
+            </div>
+
+            <!-- Empty Step State -->
+            <div id="emptyStepsPlaceholder" class="empty-list-state">
+              <div class="empty-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+              </div>
+              <h4 class="empty-title">No Steps Staged in Procedure</h4>
+              <p class="empty-desc">Use the editor on the left or load a blueprint to populate this sequence.</p>
+            </div>
+
+            <!-- Sequence Toolbar -->
+            <div class="steps-footer-bar">
+              <div class="format-choice-group">
+                <label class="paper-checkbox-label">
+                  <input type="checkbox" id="includeHeaderToggle" checked>
+                  <span>Include Header Row (<code>Task,Description</code>)</span>
+                </label>
+                <span class="field-hint sm">Supported in Checkpoint Pro with or without headers.</span>
+              </div>
+
+              <div class="steps-footer-actions">
+                <button type="button" id="clearAllStepsBtn" class="interactive-tactile btn-paper-secondary subtle-danger-btn">
+                  Clear Sequence
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Technical RFC 4180 Preview Collapsible -->
+          <div class="paper-card technical-card">
+            <details id="technicalCsvDetails">
+              <summary class="technical-summary interactive-tactile">
+                <div class="summary-title-cluster">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                  </svg>
+                  <span>Raw RFC 4180 CSV Stream</span>
+                </div>
+                <span class="tag-badge mono" id="csvSizeBadge">0 bytes</span>
+              </summary>
+              <div class="technical-content">
+                <pre><code id="rawCsvPreview" class="raw-csv-code"></code></pre>
+                <button type="button" id="copyRawCsvBtn" class="interactive-tactile btn-paper-secondary sm">
+                  Copy Raw Text
+                </button>
+              </div>
+            </details>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Standardized Sticky Thumb-Zone Bottom Dock (Mobile Viewports) -->
+    <nav class="app-bottom-dock" aria-label="Mobile Navigation Dock">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Hydrated dynamically from APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+
+    <!-- MODAL: BATCH MULTI-LINE PASTE -->
+    <div id="batchModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="batchModalTitle" hidden>
+      <div class="paper-card paper-modal-card">
+        <div class="modal-header">
+          <span class="paper-status-indicator paper-status-indicator--sage">
+            <span class="status-dot"></span>
+            <span class="status-label">Batch Entry</span>
+          </span>
+          <button type="button" id="closeBatchModalBtn" class="interactive-tactile modal-close-btn" aria-label="Close batch modal">&times;</button>
+        </div>
+        <h3 class="modal-heading" id="batchModalTitle">Batch Import Steps</h3>
+        <p class="modal-description">
+          Paste bullet lists, notes, or tab-delimited spreadsheets. Lines containing commas or tabs split automatically into <strong>Task</strong> and <strong>Description</strong>.
+        </p>
+        <div class="paper-input-group">
+          <textarea id="batchInput" class="paper-input paper-textarea" rows="7" placeholder="Close bar, Check lock on alcohol locker&#10;Power down ovens, Turn off master switches&#10;Log cooler temp, Walk-in must be 38F or lower"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelBatchBtn" class="interactive-tactile btn-paper-secondary">Cancel</button>
+          <button type="button" id="confirmBatchBtn" class="interactive-tactile btn-paper-primary">Import Into Sequence</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: BLUEPRINT TEMPLATE PICKER -->
+    <div id="templateModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="templateModalTitle" hidden>
+      <div class="paper-card paper-modal-card large">
+        <div class="modal-header">
+          <span class="paper-status-indicator paper-status-indicator--sage">
+            <span class="status-dot"></span>
+            <span class="status-label">Standard Procedures</span>
+          </span>
+          <button type="button" id="closeTemplateModalBtn" class="interactive-tactile modal-close-btn" aria-label="Close blueprints modal">&times;</button>
+        </div>
+        <h3 class="modal-heading" id="templateModalTitle">Select Operational Blueprint</h3>
+        <p class="modal-description">
+          Pre-calibrated checklists formatted specifically for the Checkpoint Pro workflow.
+        </p>
+
+        <div class="template-list-grid">
+          <article class="paper-card template-pick-card interactive-tactile" data-template-key="closing" tabindex="0">
+            <div class="template-pick-header">
+              <span class="template-pick-title">Hospitality Closing</span>
+              <span class="template-pick-count">3 steps</span>
+            </div>
+            <p class="template-pick-desc">Matches the standard <code>closing.csv</code> protocol (Bar, refrigeration, sanitation shutdown).</p>
+          </article>
+
+          <article class="paper-card template-pick-card interactive-tactile" data-template-key="kitchen_open" tabindex="0">
+            <div class="template-pick-header">
+              <span class="template-pick-title">Commercial Kitchen Opening</span>
+              <span class="template-pick-count">5 steps</span>
+            </div>
+            <p class="template-pick-desc">Appliance warmups, HACCP refrigeration log, surface sanitation, and exhaust lines.</p>
+          </article>
+
+          <article class="paper-card template-pick-card interactive-tactile" data-template-key="facility_safety" tabindex="0">
+            <div class="template-pick-header">
+              <span class="template-pick-title">Facility Safety &amp; Egress</span>
+              <span class="template-pick-count">5 steps</span>
+            </div>
+            <p class="template-pick-desc">Emergency exits, panic hardware verification, AED unit readiness, and fire alarms.</p>
+          </article>
+
+          <article class="paper-card template-pick-card interactive-tactile" data-template-key="it_server_shutdown" tabindex="0">
+            <div class="template-pick-header">
+              <span class="template-pick-title">IT Infrastructure Maintenance</span>
+              <span class="template-pick-count">4 steps</span>
+            </div>
+            <p class="template-pick-desc">Offsite replication check, channel notification, cluster drain, and UPS battery check.</p>
+          </article>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="closeTemplateCancelBtn" class="interactive-tactile btn-paper-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: EXPORT PROCEDURES -->
+    <div id="exportModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle" hidden>
+      <div class="paper-card paper-modal-card">
+        <div class="modal-header">
+          <span class="paper-status-indicator paper-status-indicator--sage">
+            <span class="status-dot"></span>
+            <span class="status-label">Export Verification</span>
+          </span>
+          <button type="button" id="closeExportModalBtn" class="interactive-tactile modal-close-btn" aria-label="Close export modal">&times;</button>
+        </div>
+        <h3 class="modal-heading" id="exportModalTitle">Export Checkpoint Procedure</h3>
+        <p class="modal-description">
+          RFC 4180 compliant CSV stream ready for Checkpoint Pro consumption.
+        </p>
+
+        <div class="export-summary-box">
+          <div class="export-stat">
+            <span class="export-label">Filename:</span>
+            <span class="export-value mono" id="exportTargetFilename">closing.csv</span>
+          </div>
+          <div class="export-stat">
+            <span class="export-label">Staged Steps:</span>
+            <span class="export-value" id="exportTotalCount">0</span>
+          </div>
+          <div class="export-stat">
+            <span class="export-label">Delimiter Standard:</span>
+            <span class="export-value">Comma / CRLF (RFC 4180)</span>
+          </div>
+        </div>
+
+        <div class="modal-actions vertical">
+          <button type="button" id="downloadFullCsvBtn" class="interactive-tactile btn-paper-primary full-w">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download CSV (<span id="downloadBtnFilename">procedure.csv</span>)</span>
+          </button>
+          
+          <button type="button" id="copyCsvClipboardBtn" class="interactive-tactile btn-paper-secondary full-w">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy Stream to Clipboard</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TACTILE TOAST NOTIFICATION -->
+    <aside id="toastNotification" class="paper-toast" role="status" aria-live="polite" hidden>
+      <div class="toast-dot" aria-hidden="true"></div>
+      <span id="toastMessage">Workspace state saved</span>
+    </aside>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

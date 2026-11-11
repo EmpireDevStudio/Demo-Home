@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Intelligent CSV Builder, YouTube Link Purifier, and Category Architecture Studio.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Curator Studio — Intelligent CSV Builder for The Video Library</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Accessible Keyboard Skip Navigation -->
+  <a href="#studioApp" class="skip-link">Skip to studio workflow</a>
+
+  <div class="site-wrapper">
+
+    <!-- UNIFORM STANDARDIZED PAGE HEADER -->
+    <header class="app-page-header" role="banner">
+      <div class="app-page-header__controls">
+        <!-- Back Navigation Control (Standardized 44x44px Touch Target) -->
+        <button type="button" class="btn-back-nav interactive-tactile" id="globalBackBtn" aria-label="Navigate to previous view">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="backBtnLabel">Back</span>
+        </button>
+
+        <!-- Contextual Actions Tray & Collection Meter -->
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <div class="collection-meter" id="datasetMeter" aria-live="polite">
+            <span class="meter-label">CATALOGUE</span>
+            <span class="meter-count" id="totalVideosCount">0</span>
+            <span class="meter-suffix">VIDEOS</span>
+            <span class="meter-divider" aria-hidden="true">•</span>
+            <span class="meter-count" id="totalCategoriesCount">0</span>
+            <span class="meter-suffix">COLUMNS</span>
+          </div>
+
+          <div class="header-action-group">
+            <button type="button" class="interactive-tactile btn-tactile btn-tactile--secondary" id="headerNewCsvBtn" title="Start a fresh blank dataset">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+              </svg>
+              <span>New CSV</span>
+            </button>
+
+            <label for="masterCsvUpload" class="interactive-tactile btn-tactile btn-tactile--secondary" title="Upload existing data.csv">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>Import data.csv</span>
+              <input type="file" id="masterCsvUpload" accept=".csv,text/csv" class="visually-hidden">
+            </label>
+
+            <button type="button" class="interactive-tactile btn-tactile btn-tactile--primary" id="headerExportJumpBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export CSV</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">CURATION ARCHITECT</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Curator Studio</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Search YouTube, cleanse direct canonical links, organize category columns, and export perfectly formatted data.csv files.
+        </p>
+      </div>
+    </header>
+
+    <!-- App Stage Container -->
+    <main id="studioApp" class="studio-stage">
+
+      <!-- Toast Feedback Region -->
+      <div id="toastRegion" class="toast-region" aria-live="assertive" aria-atomic="true"></div>
+
+      <!-- ONBOARDING WELCOME CARD -->
+      <section id="onboardingSection" class="paper-card onboarding-card">
+        <div class="onboarding-header">
+          <span class="card-eyebrow">WORKFLOW LAUNCHPAD</span>
+          <h2 class="card-heading">Select How You Wish to Curate</h2>
+          <p class="card-subtext">The Video Library organizes records where <strong>each column header is a Category tab</strong>, and each row entry contains a direct canonical YouTube link.</p>
+        </div>
+
+        <div class="launch-options-grid">
+          <!-- Option A: Add to Existing -->
+          <div class="launch-card">
+            <div class="launch-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <h3>Add to Existing CSV</h3>
+            <p>Upload your current <code>data.csv</code> file to inspect columns, append new entries, or safely reorganize category tracks.</p>
+            <label for="launchCsvUpload" class="interactive-tactile btn-tactile btn-tactile--primary full-width">
+              Upload data.csv
+              <input type="file" id="launchCsvUpload" accept=".csv,text/csv" class="visually-hidden">
+            </label>
+          </div>
+
+          <!-- Option B: Create Fresh -->
+          <div class="launch-card">
+            <div class="launch-icon accent">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <h3>Create a New CSV</h3>
+            <p>Start with a pristine slate, configure your own custom categories (e.g., Philosophy, Science, Lectures), and catalogue videos.</p>
+            <button type="button" id="launchNewFreshBtn" class="interactive-tactile btn-tactile btn-tactile--secondary full-width">
+              Start Fresh Dataset
+            </button>
+          </div>
+
+          <!-- Option C: Load Sample -->
+          <div class="launch-card">
+            <div class="launch-icon muted">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            </div>
+            <h3>Load Sample Archives</h3>
+            <p>Load the standard 4-column archive sample (Test 1, Test 2, Test 3, Test 4) to review matrix structures immediately.</p>
+            <button type="button" id="launchSampleBtn" class="interactive-tactile btn-tactile btn-tactile--tertiary full-width">
+              Load Original Sample
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAIN WORKSPACE WORKFLOW TABS (DESKTOP / TABLET) -->
+      <section class="workspace-section">
+        
+        <nav class="workflow-tabs-nav" aria-label="Desktop Studio Navigation">
+          <div class="tabs-group" id="desktopNavTabs">
+            <button type="button" class="workflow-tab is-active" data-view="curate">
+              <span class="tab-step">01</span>
+              <span class="tab-name">Browse &amp; Add Videos</span>
+            </button>
+            <button type="button" class="workflow-tab" data-view="categories">
+              <span class="tab-step">02</span>
+              <span class="tab-name">Manage Categories</span>
+              <span class="tab-badge" id="categoryBadgeCount">0</span>
+            </button>
+            <button type="button" class="workflow-tab" data-view="catalogue">
+              <span class="tab-step">03</span>
+              <span class="tab-name">Review Catalogue Matrix</span>
+              <span class="tab-badge" id="videoBadgeCount">0</span>
+            </button>
+            <button type="button" class="workflow-tab" data-view="export">
+              <span class="tab-step">04</span>
+              <span class="tab-name">Validate &amp; Export CSV</span>
+            </button>
+          </div>
+
+          <div class="storage-indicator" id="storageStatus" title="Synchronized to local browser storage">
+            <span class="status-dot"></span>
+            <span>Local Draft Active</span>
+          </div>
+        </nav>
+
+        <!-- VIEW 1: BROWSE & ADD VIDEOS -->
+        <div id="viewCurate" class="workspace-view is-active">
+          
+          <div class="dual-column-layout">
+
+            <!-- LEFT: IN-APP YOUTUBE BROWSER & SEARCH SUITE -->
+            <div class="panel-column">
+              <div class="paper-card youtube-browser-card">
+                <div class="card-masthead">
+                  <div>
+                    <span class="card-eyebrow">YOUTUBE SEARCH &amp; EXPLORER</span>
+                    <h2 class="card-heading">Browse YouTube in Studio</h2>
+                  </div>
+                  <span class="badge-tag badge-tag--sage">Direct Link Generator</span>
+                </div>
+                <p class="card-subtext">Search YouTube directly within the studio, preview playback, and click <strong>+ Add to Category</strong> to store direct canonical links without tracking parameters.</p>
+
+                <!-- Search Input Bar -->
+                <form id="youtubeSearchForm" class="yt-search-form" onsubmit="return false;">
+                  <div class="search-input-wrapper">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input 
+                      type="search" 
+                      id="ytSearchQuery" 
+                      class="paper-input search-input" 
+                      placeholder="Search YouTube for science, lectures, music, documentaries…" 
+                      autocomplete="off" 
+                      required
+                    >
+                    <button type="submit" id="ytSearchSubmitBtn" class="interactive-tactile btn-tactile btn-tactile--primary search-action-btn">
+                      <span>Search</span>
+                    </button>
+                  </div>
+                </form>
+
+                <!-- Quick Suggested Topics -->
+                <div class="quick-topics">
+                  <span class="quick-label">Suggestions:</span>
+                  <div class="filter-chip-tray">
+                    <button type="button" class="filter-chip topic-chip" data-query="Veritasium physics science">Science &amp; Physics</button>
+                    <button type="button" class="filter-chip topic-chip" data-query="Harvard lecture philosophy">Philosophy Lectures</button>
+                    <button type="button" class="filter-chip topic-chip" data-query="BBC documentary nature 4K">BBC Nature</button>
+                    <button type="button" class="filter-chip topic-chip" data-query="Classical piano masterclass">Classical Music</button>
+                    <button type="button" class="filter-chip topic-chip" data-query="Computer science architecture">Computer Architecture</button>
+                  </div>
+                </div>
+
+                <!-- API Key Config Drawer -->
+                <details class="api-key-drawer">
+                  <summary>YouTube Data API Key Settings (Active: Pre-configured)</summary>
+                  <div class="api-key-form">
+                    <p class="field-hint">Curator Studio is pre-loaded with an archive API key. You can substitute a personal Google API key if public query limits are reached.</p>
+                    <div class="api-key-input-row">
+                      <input type="text" id="customApiKeyInput" class="paper-input" placeholder="Enter custom YouTube Data API v3 Key" spellcheck="false">
+                      <button type="button" id="saveApiKeyBtn" class="interactive-tactile btn-tactile btn-tactile--secondary">Save Key</button>
+                      <button type="button" id="resetApiKeyBtn" class="interactive-tactile btn-tactile btn-tactile--tertiary">Reset</button>
+                    </div>
+                  </div>
+                </details>
+
+                <!-- YouTube Results Container -->
+                <div class="yt-results-container">
+                  <div class="yt-results-header">
+                    <span id="ytResultsCountNotice">Recommended Explorations</span>
+                    <span id="ytResultsStatus" class="yt-status-note">Ready to query</span>
+                  </div>
+
+                  <div id="ytResultsLoading" class="yt-loading-indicator" hidden>
+                    <div class="spinner"></div>
+                    <p>Contacting YouTube Data API…</p>
+                  </div>
+
+                  <div id="ytResultsGrid" class="yt-results-grid card-feed-container">
+                    <!-- Populated dynamically via script -->
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- RIGHT: DIRECT URL PURIFIER & MANUAL QUICK-ADD -->
+            <div class="panel-column">
+              
+              <!-- Direct URL Purifier Card -->
+              <div class="paper-card purifier-card">
+                <div class="card-masthead">
+                  <div>
+                    <span class="card-eyebrow">LINK PURIFIER &amp; VALIDATOR</span>
+                    <h2 class="card-heading">Paste Any YouTube Link</h2>
+                  </div>
+                  <span class="badge-tag badge-tag--sage">Canonical Purifier</span>
+                </div>
+                <p class="card-subtext">Paste messy links (e.g. share links with <code>?si=...</code>, Shorts, Embeds, or Timestamps <code>&amp;t=...</code>). It will instantly convert into the canonical specification: <code>https://www.youtube.com/watch?v=XXXXXXXXXXX</code>.</p>
+
+                <div class="purifier-form">
+                  <div class="paper-input-group">
+                    <label for="rawUrlInput" class="paper-label">Raw YouTube Link or 11-Character Video ID</label>
+                    <div class="input-with-clear">
+                      <input 
+                        type="url" 
+                        id="rawUrlInput" 
+                        class="paper-input" 
+                        placeholder="https://youtu.be/Uzr0gv4N4-s?si=fL81h8x1&t=45s or ID" 
+                        spellcheck="false"
+                      >
+                      <button type="button" id="clearRawUrlBtn" class="input-clear-btn" title="Clear input" hidden>&times;</button>
+                    </div>
+                    <span class="field-hint">Supports <code>youtu.be</code>, <code>watch?v=</code>, <code>shorts</code>, <code>embed</code>, and raw IDs.</span>
+                  </div>
+
+                  <!-- Live Purified Preview Box -->
+                  <div id="purifiedResultBox" class="purified-result-box" hidden>
+                    <div class="purified-status-row">
+                      <span class="clean-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Clean Canonical Link Ready
+                      </span>
+                      <span class="video-id-badge" id="purifiedIdBadge">ID: --------</span>
+                    </div>
+
+                    <div class="purified-url-display">
+                      <input type="text" id="cleanUrlResult" class="paper-input paper-input--readonly" readonly value="https://www.youtube.com/watch?v=...">
+                      <button type="button" id="copyCleanUrlBtn" class="interactive-tactile btn-tactile btn-tactile--secondary copy-url-btn" title="Copy clean link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span>Copy</span>
+                      </button>
+                    </div>
+
+                    <!-- Video Meta Preview Card -->
+                    <div class="video-meta-preview" id="purifiedMetaPreview">
+                      <div class="preview-thumb-wrap">
+                        <img id="purifiedThumbImg" src="" alt="Video thumbnail preview">
+                        <button type="button" id="purifiedPlayTrigger" class="preview-play-btn" title="Watch in preview modal">
+                          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                        </button>
+                      </div>
+                      <div class="preview-meta-info">
+                        <h4 id="purifiedTitle">Loading video metadata…</h4>
+                        <p id="purifiedAuthor">Channel / Creator</p>
+                      </div>
+                    </div>
+
+                    <!-- Category Assignment & Add Button -->
+                    <div class="add-to-category-action">
+                      <div class="paper-input-group">
+                        <label for="assignCategorySelect" class="paper-label">Target Category Column</label>
+                        <select id="assignCategorySelect" class="paper-input paper-select">
+                          <!-- Populated via script -->
+                        </select>
+                      </div>
+
+                      <button type="button" id="confirmAddPurifiedBtn" class="interactive-tactile btn-tactile btn-tactile--primary full-width add-hero-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>Add Video to Category</span>
+                      </button>
+                    </div>
+
+                  </div>
+
+                  <!-- Error message if invalid -->
+                  <div id="purifierErrorBox" class="purifier-error-box" hidden>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <div>
+                      <strong>Invalid YouTube Format</strong>
+                      <p>Unable to resolve an 11-character YouTube video ID. Please check the URL syntax and retry.</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Recently Added In Current Session Stream -->
+              <div class="paper-card recent-added-card">
+                <div class="card-masthead">
+                  <div>
+                    <span class="card-eyebrow">SESSION HISTORY</span>
+                    <h3 class="card-heading">Curated This Session (<span id="sessionAddedCount">0</span>)</h3>
+                  </div>
+                  <button type="button" class="interactive-tactile btn-tactile btn-tactile--tertiary small-btn" id="jumpToCatalogueBtn">View Matrix</button>
+                </div>
+                <div id="sessionAddedList" class="session-added-list">
+                  <div class="empty-list-notice">
+                    <p>No videos added yet this session. Search YouTube or paste a URL above to begin.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- VIEW 2: MANAGE CATEGORIES -->
+        <div id="viewCategories" class="workspace-view">
+          <div class="paper-card">
+            <div class="card-masthead">
+              <div>
+                <span class="card-eyebrow">DATA SPECIFICATION</span>
+                <h2 class="card-heading">CSV Category Columns Architecture</h2>
+              </div>
+              <span class="badge-tag badge-tag--ochre">Row 0 Header Matrix</span>
+            </div>
+            <p class="card-subtext">In The Video Library archive, <strong>each column header represents a category shelf</strong> (e.g. <code>Documentaries</code>, <code>Lectures</code>, <code>Philosophy</code>). Manage and re-order columns below.</p>
+
+            <!-- Add New Category Bar -->
+            <form id="createCategoryForm" class="add-category-bar" onsubmit="return false;">
+              <div class="category-input-group">
+                <label for="newCategoryInput" class="visually-hidden">New Category Column Name</label>
+                <input 
+                  type="text" 
+                  id="newCategoryInput" 
+                  class="paper-input" 
+                  placeholder="e.g. Lectures, Science, Philosophy, Masterclasses" 
+                  required
+                >
+                <button type="submit" id="submitNewCategoryBtn" class="interactive-tactile btn-tactile btn-tactile--primary">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Add Category Column</span>
+                </button>
+              </div>
+            </form>
+
+            <!-- Category Columns Roster -->
+            <div class="categories-roster-header">
+              <h3>Active Columns in data.csv (<span id="categoriesCountHeader">0</span>)</h3>
+              <span class="roster-tip">Tip: Reordering columns shifts their horizontal position in the exported CSV.</span>
+            </div>
+
+            <div id="categoriesListContainer" class="categories-list-grid">
+              <!-- Rendered dynamically via script -->
+            </div>
+
+          </div>
+        </div>
+
+        <!-- VIEW 3: REVIEW CATALOGUE MATRIX -->
+        <div id="viewCatalogue" class="workspace-view">
+          <div class="paper-card">
+            <div class="card-masthead">
+              <div>
+                <span class="card-eyebrow">DATA REVIEW</span>
+                <h2 class="card-heading">Catalogue Columnar Matrix</h2>
+              </div>
+              <div class="catalogue-view-switches">
+                <button type="button" class="view-switch-btn is-active" id="btnViewColumns" title="Grouped by category column">Column View</button>
+                <button type="button" class="view-switch-btn" id="btnViewFlatTable" title="Flat table of all entries">All Videos List</button>
+              </div>
+            </div>
+            <p class="card-subtext">Inspect every catalogued video. Relocate entries between category columns, preview playback, or safely delete individual rows.</p>
+
+            <!-- Catalogue Filter & Search Bar -->
+            <div class="catalogue-toolbar">
+              <div class="filter-input-wrap">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="catalogueSearchInput" class="paper-input" placeholder="Filter catalogue by title, URL or ID…">
+              </div>
+              <div class="category-filter-select">
+                <select id="catalogueCategoryFilter" class="paper-input paper-select">
+                  <option value="ALL">All Categories</option>
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+              <button type="button" id="clearAllVideosBtn" class="interactive-tactile btn-tactile btn-tactile--tertiary small-btn danger-hover" title="Remove all videos from dataset">
+                Clear All Videos
+              </button>
+            </div>
+
+            <!-- Category Column View (Default) -->
+            <div id="categoryColumnViewContainer" class="category-columns-scroller">
+              <!-- Rendered dynamically via script -->
+            </div>
+
+            <!-- Flat Table View (Alternative) -->
+            <div id="flatTableViewContainer" class="flat-table-wrapper" hidden>
+              <table class="editorial-table" id="flatVideosTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Category Column</th>
+                    <th>Video Preview &amp; Title</th>
+                    <th>Direct Clean YouTube URL</th>
+                    <th>Video ID</th>
+                    <th class="actions-col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="flatVideosTableBody">
+                  <!-- Populated dynamically via script -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- VIEW 4: VALIDATE & EXPORT CSV -->
+        <div id="viewExport" class="workspace-view">
+          
+          <div class="dual-column-layout">
+
+            <!-- LEFT: VALIDATION REPORT & EXPORT TRIGGERS -->
+            <div class="panel-column">
+              <div class="paper-card">
+                <div class="card-masthead">
+                  <div>
+                    <span class="card-eyebrow">INTEGRITY CHECK</span>
+                    <h2 class="card-heading">Dataset Audit &amp; Validation</h2>
+                  </div>
+                  <span id="auditStatusBadge" class="badge-tag badge-tag--sage">Verified Compatible</span>
+                </div>
+                <p class="card-subtext">Before exporting, the studio engine cross-references your records against The Video Library standard schema.</p>
+
+                <!-- Audit Checklist -->
+                <div class="audit-checklist">
+                  <div class="audit-item" id="auditCategories">
+                    <span class="audit-icon pass">✓</span>
+                    <div class="audit-text">
+                      <strong>Valid Category Headers:</strong>
+                      <span id="auditCategoriesText">Checking…</span>
+                    </div>
+                  </div>
+
+                  <div class="audit-item" id="auditUrls">
+                    <span class="audit-icon pass">✓</span>
+                    <div class="audit-text">
+                      <strong>Canonical URL Adherence:</strong>
+                      <span id="auditUrlsText">All URLs strictly adhere to <code>https://www.youtube.com/watch?v=...</code></span>
+                    </div>
+                  </div>
+
+                  <div class="audit-item" id="auditDuplicates">
+                    <span class="audit-icon pass">✓</span>
+                    <div class="audit-text">
+                      <strong>Duplicate ID Check:</strong>
+                      <span id="auditDuplicatesText">Checking for duplicate entries…</span>
+                    </div>
+                  </div>
+
+                  <div class="audit-item" id="auditShape">
+                    <span class="audit-icon pass">✓</span>
+                    <div class="audit-text">
+                      <strong>RFC 4180 CSV Matrix Alignment:</strong>
+                      <span id="auditShapeText">Proper rectangular matrix structure with uniform comma delimiters.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Export Controls Box -->
+                <div class="export-actions-card">
+                  <div class="filename-config">
+                    <label for="exportFilenameInput" class="paper-label">Target CSV Filename</label>
+                    <div class="filename-input-wrap">
+                      <input type="text" id="exportFilenameInput" class="paper-input" value="data.csv" spellcheck="false">
+                      <span class="extension-label">.csv</span>
+                    </div>
+                    <span class="field-hint">The Video Library reads from <code>data.csv</code> placed in its root folder.</span>
+                  </div>
+
+                  <div class="export-buttons-stack">
+                    <button type="button" id="downloadFullCsvBtn" class="interactive-tactile btn-tactile btn-tactile--primary full-width large-action-btn">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download Ready data.csv</span>
+                    </button>
+
+                    <div class="export-sub-buttons">
+                      <button type="button" id="copyCsvClipboardBtn" class="interactive-tactile btn-tactile btn-tactile--secondary" title="Copy raw CSV contents to clipboard">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span>Copy CSV Text</span>
+                      </button>
+
+                      <button type="button" id="downloadBlankTemplateBtn" class="interactive-tactile btn-tactile btn-tactile--tertiary" title="Download only header categories">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        <span>Blank Headers Only</span>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <!-- RIGHT: LIVE RAW CSV PREVIEW CODE BLOCK -->
+            <div class="panel-column">
+              <div class="paper-card preview-code-card">
+                <div class="card-masthead">
+                  <div>
+                    <span class="card-eyebrow">SERIALIZED OUTPUT</span>
+                    <h3 class="card-heading">Live Serialized CSV Inspection</h3>
+                  </div>
+                  <span class="code-stats" id="rawCsvStats">0 lines • 0 B</span>
+                </div>
+                <p class="card-subtext">This exact text is generated dynamically and serialized according to RFC 4180 standards.</p>
+
+                <div class="code-preview-wrapper">
+                  <pre><code id="rawCsvCodeBlock">Loading preview…</code></pre>
+                </div>
+
+                <div class="preview-footer-note">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  <span>Replace your application's <code>data.csv</code> file with this export to see your new archive updates immediately.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- UNIFORM BOTTOM THUMB-ZONE NAVIGATION (MOBILE & TABLET DOCK) -->
+    <nav class="app-bottom-dock" aria-label="Mobile Studio Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <!-- Injected dynamically from APP_CONFIG.navigation.items -->
+      </div>
+    </nav>
+
+    <!-- IN-APP VIDEO PREVIEW PLAYER MODAL -->
+    <div id="videoPlayerModal" class="modal-backdrop" hidden>
+      <div class="modal-window paper-modal" role="dialog" aria-modal="true" aria-labelledby="modalVideoTitle">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-eyebrow">CANONICAL PLAYER</span>
+            <h3 id="modalVideoTitle">YouTube Preview</h3>
+          </div>
+          <button type="button" id="closeModalBtn" class="modal-close-btn" aria-label="Close preview dialog">&times;</button>
+        </div>
+        <div class="modal-player-wrap">
+          <iframe 
+            id="modalIframe" 
+            src="" 
+            title="YouTube video player preview" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="modal-footer">
+          <div class="modal-url-display">
+            <span class="modal-clean-tag">Canonical URL:</span>
+            <code id="modalCleanUrlText">https://www.youtube.com/watch?v=...</code>
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="modalCopyUrlBtn" class="interactive-tactile btn-tactile btn-tactile--secondary small-btn">Copy Clean Link</button>
+            <button type="button" id="modalDismissBtn" class="interactive-tactile btn-tactile btn-tactile--tertiary small-btn">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ADD FROM MODAL / SEARCH DIALOG -->
+    <div id="categoryPickerModal" class="modal-backdrop" hidden>
+      <div class="modal-window modal-window-sm paper-modal" role="dialog" aria-modal="true" aria-labelledby="pickerModalTitle">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-eyebrow">COLUMN SELECTION</span>
+            <h3 id="pickerModalTitle">Add Video to Category</h3>
+          </div>
+          <button type="button" id="closePickerModalBtn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+        </div>
+        <div class="modal-body-padding">
+          <div class="picker-item-summary">
+            <img id="pickerVideoThumb" src="" alt="Thumbnail preview">
+            <div>
+              <h4 id="pickerVideoTitle">Title</h4>
+              <code id="pickerVideoUrl">Clean Canonical URL</code>
+            </div>
+          </div>
+          <div class="paper-input-group">
+            <label for="pickerCategorySelect" class="paper-label">Select Target Category</label>
+            <select id="pickerCategorySelect" class="paper-input paper-select">
+              <!-- Dynamically populated via script -->
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="pickerCancelBtn" class="interactive-tactile btn-tactile btn-tactile--tertiary small-btn">Cancel</button>
+          <button type="button" id="pickerConfirmBtn" class="interactive-tactile btn-tactile btn-tactile--primary small-btn">Confirm Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editorial Colophon Footer -->
+    <footer class="app-page-footer" role="contentinfo">
+      <div class="footer-inner">
+        <div class="footer-colophon">
+          <span class="colophon-title" id="footerBrandTitle">THE VIDEO ARCHIVE • CURATOR STUDIO</span>
+          <p id="footerBrandTagline">Purpose-built data architect for generating RFC 4180 compliant, canonical data.csv archives.</p>
+        </div>
+        <div class="footer-meta">
+          <span>Schema: <code>Category-per-column</code></span>
+          <span>RFC 4180 Escaped</span>
+          <span id="footerLegalCopyright">© 2026 Curator Studio Systems</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

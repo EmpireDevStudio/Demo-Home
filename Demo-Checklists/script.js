@@ -1,39 +1,109 @@
 "use strict";
 
-/* ==========================================================================
-   1. CENTRALISED APPLICATION CONFIGURATION
-   All runtime settings, repositories, thresholds and audio feedback
-   ========================================================================== */
-const APP_CONFIG = {
-  // Identity
-  APP_NAME: "Checkpoint Pro",
-  APP_VERSION: "v2.5 Production",
+/**
+ * =========================================================================
+ * CLIENT CONFIGURATION ENGINE (APP_CONFIG)
+ * Production-Ready White-Label Master Configuration
+ * All application identity, typography, endpoints, content, and switches.
+ * =========================================================================
+ */
+const APP_CONFIG = Object.freeze({
+  // 1. APPLICATION IDENTITY & METADATA
+  identity: {
+    appId: "checkpoint-pro-verification",
+    appName: "Checklist PRO",
+    appTagline: "Procedural Operations & Verification Protocol",
+    version: "v2.5 Production",
+    environment: "production",
+    canonicalUrl: window.location.origin || "../",
+    language: "en-US",
+    locale: "en-US",
+  },
+
+  // 2. BRANDING & ACCESSIBLE PALETTE OVERRIDES
+  branding: {
+    accentColor: "#A25750",      // Terracotta
+    accentSecondary: "#3E5B42",  // Sage Green
+    accentHighlight: "#6E5614",  // Warm Ochre
+    fontFamilyBase: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+    fontFamilyMono: "'JetBrains Mono', monospace",
+  },
+
+  // 3. GLOBAL NAVIGATION ARCHITECTURE
+  navigation: {
+    enableTopBackNavigation: true,
+    defaultFallbackRoute: "catalog",
+    items: [
+      { id: "catalog", label: "Procedures Catalog", icon: "catalog", enabled: true, showInBottomBar: true },
+      { id: "all_tasks", label: "All Steps", icon: "list", enabled: true, showInBottomBar: true },
+      { id: "audit_log", label: "Audit Log", icon: "shield", enabled: true, showInBottomBar: true },
+      { id: "settings", label: "Repository Source", icon: "settings", enabled: true, showInBottomBar: true },
+    ],
+  },
+
+  // 4. APPLICATION COPY & CONTENT MATRIX (ZERO-PLACEHOLDER PRODUCTION DATA)
+  content: {
+    headers: {
+      defaultTitle: "Operational Verification Protocol",
+      defaultSubtitle: "Execute verified procedural checklists with instant tactile telemetry and local sign-off.",
+    },
+    emptyStates: {
+      noDataHeading: "No Operational Checklists Detected",
+      noDataDescription: "Connect your GitHub repository source or import local CSV operational procedures to begin verification.",
+      noSearchResultsHeading: "No Matching Steps Documented",
+      noSearchResultsDescription: "No checklist steps match the current search term or filter status.",
+    },
+    actions: {
+      confirm: "Confirm & Proceed",
+      cancel: "Discard Changes",
+      save: "Save Verification",
+      reset: "Reset All Steps",
+      sync: "Synchronize",
+      exportAudit: "Export Audit Log",
+    },
+    notifications: {
+      saveSuccess: "Verification Progress Saved",
+      resetSuccess: "Procedure Steps Reset",
+      exportSuccess: "Certified Audit Log Exported",
+      storageError: "Local Storage Restricted",
+      audioEnabled: "Tactile Audio Active",
+      audioMuted: "Tactile Audio Muted",
+    },
+    legal: {
+      certificationAuthority: "Checkpoint Operational Standards Protocol",
+      signOffStandard: "ISO 9001:2015 Procedural Verification",
+    },
+  },
+
+  // 5. REPOSITORY SOURCE & DISCOVERY COORDINATES
+  repository: {
+    owner: "",
+    repo: "",
+    branch: "main",
+    checklistsPath: "",
+    csvHasHeader: "auto", // 'auto' | 'always' | 'never'
+  },
+
+  // 6. FEATURE SWITCHES & INTERACTION PHYSICS
+  features: {
+    enableHapticFeedback: true,    // Gentle navigator.vibrate(12) on mobile touch
+    enableTactileSound: true,      // Web Audio physical haptic clicks
+    enableAutoSave: true,          // Local browser persistence
+    autoRefreshIntervalMs: 300000, // 5 minutes background check (0 to disable)
+  },
+
+  // 7. STORAGE KEYS
+  storage: {
+    prefix: "checkpoint_ops_v2_",
+    repoOwnerKey: "checkpoint_repo_owner",
+    repoNameKey: "checkpoint_repo_name",
+    repoBranchKey: "checkpoint_repo_branch",
+    repoFolderKey: "checkpoint_repo_folder",
+    audioPrefKey: "checkpoint_audio_pref",
+  },
+
   
-  // Repository source detection (if left empty, auto-detects from GitHub Pages)
-  GITHUB_OWNER: "",
-  GITHUB_REPO: "",
-  GITHUB_BRANCH: "main",
-
-  // Directory path inside repo. Empty string ("") = repository root
-  CHECKLISTS_PATH: "",
-
-  // Header detection: 'auto' | 'always' | 'never'
-  CSV_HAS_HEADER: "auto",
-
-  // Background auto-refresh interval in ms (5 minutes; 0 to disable)
-  AUTO_REFRESH_INTERVAL: 300000,
-
-  // Save progress locally in browser localStorage
-  SAVE_PROGRESS: true,
-
-  // Audio tactile feedback
-  ENABLE_SOUND: true,
-
-  // Storage key prefix
-  STORAGE_PREFIX: "checkpoint_ops_v2_",
-
-  
-};
+});
 
 /* ==========================================================================
    2. APPLICATION STATE
@@ -41,14 +111,14 @@ const APP_CONFIG = {
 const State = {
   owner: "",
   repo: "",
-  branch: APP_CONFIG.GITHUB_BRANCH,
+  branch: APP_CONFIG.repository.branch,
   checklists: new Map(), // filename -> ChecklistModel
   activeChecklistId: null,
   activeFilter: "all",   // 'all' | 'remaining' | 'completed'
   searchQuery: "",
   checklistSearchQuery: "",
   isSyncing: false,
-  soundEnabled: APP_CONFIG.ENABLE_SOUND,
+  soundEnabled: APP_CONFIG.features.enableTactileSound,
   audioContext: null,
   lastFocusedElement: null
 };
@@ -118,8 +188,18 @@ class ChecklistModel {
 }
 
 /* ==========================================================================
-   3. WEB AUDIO SYNTHESIZED TACTILE FEEDBACK (ZERO EXTERNAL ASSETS)
+   3. TACTILE SENSORY PHYSICS (WEB AUDIO & MICRO-HAPTICS)
    ========================================================================== */
+function triggerHapticPulse() {
+  if (APP_CONFIG.features.enableHapticFeedback && typeof navigator !== "undefined" && "vibrate" in navigator) {
+    try {
+      navigator.vibrate(12); // Subtle 12ms mechanical pulse
+    } catch (e) {
+      // Graceful fallback for non-supported browsers
+    }
+  }
+}
+
 function playTactileFeedback(type = "tick") {
   if (!State.soundEnabled) return;
 
@@ -139,46 +219,46 @@ function playTactileFeedback(type = "tick") {
     const now = ctx.currentTime;
 
     if (type === "complete") {
-      // Harmonic chord for procedure completion
+      // Warm chord resolution for verified completion
       [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, now + i * 0.06);
-        gain.gain.setValueAtTime(0, now + i * 0.06);
-        gain.gain.linearRampToValueAtTime(0.08, now + i * 0.06 + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.06 + 0.38);
+        osc.frequency.setValueAtTime(freq, now + i * 0.05);
+        gain.gain.setValueAtTime(0, now + i * 0.05);
+        gain.gain.linearRampToValueAtTime(0.08, now + i * 0.05 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.05 + 0.35);
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.start(now + i * 0.06);
-        osc.stop(now + i * 0.06 + 0.4);
+        osc.start(now + i * 0.05);
+        osc.stop(now + i * 0.05 + 0.38);
       });
     } else if (type === "tick") {
-      // Subtle Apple-like mechanical haptic click
+      // Mechanical cardstock click
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(800, now);
-      osc.frequency.exponentialRampToValueAtTime(240, now + 0.04);
-      gain.gain.setValueAtTime(0.07, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.045);
-    } else if (type === "untick") {
-      // Soft release click
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(320, now);
-      osc.frequency.exponentialRampToValueAtTime(160, now + 0.035);
-      gain.gain.setValueAtTime(0.04, now);
+      osc.frequency.setValueAtTime(740, now);
+      osc.frequency.exponentialRampToValueAtTime(260, now + 0.035);
+      gain.gain.setValueAtTime(0.06, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now);
       osc.stop(now + 0.04);
+    } else if (type === "untick") {
+      // Soft release click
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.exponentialRampToValueAtTime(180, now + 0.03);
+      gain.gain.setValueAtTime(0.03, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.035);
     }
   } catch (err) {
     // Non-fatal if audio context is blocked by browser policy
@@ -186,31 +266,31 @@ function playTactileFeedback(type = "tick") {
 }
 
 /* ==========================================================================
-   4. REPOSITORY IDENTITY AUTO-DETECTION
+   4. REPOSITORY COORDINATE AUTO-RESOLUTION
    ========================================================================== */
 function resolveRepositoryCoordinates() {
   try {
-    const storedOwner = localStorage.getItem("checkpoint_repo_owner");
-    const storedRepo = localStorage.getItem("checkpoint_repo_name");
-    const storedBranch = localStorage.getItem("checkpoint_repo_branch");
-    const storedFolder = localStorage.getItem("checkpoint_repo_folder");
+    const storedOwner = localStorage.getItem(APP_CONFIG.storage.repoOwnerKey);
+    const storedRepo = localStorage.getItem(APP_CONFIG.storage.repoNameKey);
+    const storedBranch = localStorage.getItem(APP_CONFIG.storage.repoBranchKey);
+    const storedFolder = localStorage.getItem(APP_CONFIG.storage.repoFolderKey);
 
     if (storedOwner && storedRepo) {
       State.owner = storedOwner.trim();
       State.repo = storedRepo.trim();
-      State.branch = storedBranch ? storedBranch.trim() : APP_CONFIG.GITHUB_BRANCH;
-      if (storedFolder !== null) APP_CONFIG.CHECKLISTS_PATH = storedFolder.trim();
+      State.branch = storedBranch ? storedBranch.trim() : APP_CONFIG.repository.branch;
+      if (storedFolder !== null) APP_CONFIG.repository.checklistsPath = storedFolder.trim();
       updateRepoTargetUI();
       return;
     }
   } catch (e) {
-    console.warn("Storage access warning:", e);
+    console.warn("Storage warning:", e);
   }
 
-  let owner = APP_CONFIG.GITHUB_OWNER.trim();
-  let repo = APP_CONFIG.GITHUB_REPO.trim();
+  let owner = APP_CONFIG.repository.owner.trim();
+  let repo = APP_CONFIG.repository.repo.trim();
 
-  // Automatic GitHub Pages URL parsing (<owner>.github.io/<repo>/)
+  // Automatic GitHub Pages host detection (<owner>.github.io/<repo>/)
   if (!owner || !repo) {
     const hostname = window.location.hostname || "";
     const pathname = window.location.pathname || "";
@@ -227,7 +307,7 @@ function resolveRepositoryCoordinates() {
 
   State.owner = owner;
   State.repo = repo;
-  State.branch = APP_CONFIG.GITHUB_BRANCH;
+  State.branch = APP_CONFIG.repository.branch;
   updateRepoTargetUI();
 }
 
@@ -237,13 +317,13 @@ function updateRepoTargetUI() {
     if (State.owner && State.repo) {
       label.textContent = `${State.owner}/${State.repo}`;
     } else {
-      label.textContent = "Offline / Bundled Checklists";
+      label.textContent = "Bundled Operational Procedures";
     }
   }
 }
 
 /* ==========================================================================
-   5. MULTI-SOURCE DISCOVERY ENGINE (REST API + RAW TREE + BUNDLED DEMO)
+   5. CSV DISCOVERY & CONTENT PARSING (RFC 4180 COMPLIANT)
    ========================================================================== */
 async function discoverChecklists(forceNetwork = false) {
   const syncNotice = document.getElementById("syncStatusNotice");
@@ -253,10 +333,10 @@ async function discoverChecklists(forceNetwork = false) {
   if (syncNotice) syncNotice.textContent = "Scanning…";
   if (loadingIndicator) loadingIndicator.hidden = false;
 
-  const cleanFolder = APP_CONFIG.CHECKLISTS_PATH.replace(/^\/+|\/+$/g, "");
+  const cleanFolder = APP_CONFIG.repository.checklistsPath.replace(/^\/+|\/+$/g, "");
   let discovered = false;
 
-  // Strategy 1: GitHub Contents API
+  // Remote Strategy 1: GitHub Contents API
   if (State.owner && State.repo) {
     try {
       const contentsUrl = `https://api.github.com/repos/${encodeURIComponent(State.owner)}/${encodeURIComponent(State.repo)}/contents/${cleanFolder ? encodeURIComponent(cleanFolder) : ""}`;
@@ -280,10 +360,10 @@ async function discoverChecklists(forceNetwork = false) {
         }
       }
     } catch (e) {
-      console.warn("Contents API lookup error:", e);
+      console.warn("Contents API lookup exception:", e);
     }
 
-    // Strategy 2: Git Trees API (recursive scan)
+    // Remote Strategy 2: Git Trees API (recursive fallback)
     if (!discovered) {
       const candidateBranches = [State.branch, State.branch === "main" ? "master" : "main"];
       for (const branchName of candidateBranches) {
@@ -319,26 +399,25 @@ async function discoverChecklists(forceNetwork = false) {
             break;
           }
         } catch (e) {
-          console.warn("Tree API lookup error:", e);
+          console.warn("Tree API lookup exception:", e);
         }
       }
     }
   }
 
-  // Strategy 3: Graceful fallback to bundled high-grade operational procedures
+  // Strategy 3: Immediate Bundled Procedures Fallback (Includes closing.csv)
   if (!discovered && State.checklists.size === 0) {
-    APP_CONFIG.BUNDLED_DEMO_CHECKLISTS.forEach(demo => {
-      const checklist = new ChecklistModel(demo.filename, demo.filename, "#", 0, true);
-      checklist.tasks = parseChecklistCsv(demo.csv, demo.filename);
+    APP_CONFIG.bundledChecklists.forEach(bundled => {
+      const checklist = new ChecklistModel(bundled.filename, bundled.filename, "#", 0, true);
+      checklist.tasks = parseChecklistCsv(bundled.csv, bundled.filename);
       checklist.isLoaded = true;
       restoreChecklistProgress(checklist);
-      State.checklists.set(demo.filename, checklist);
+      State.checklists.set(bundled.filename, checklist);
     });
     discovered = true;
     if (syncNotice) syncNotice.textContent = "Bundled";
   }
 
-  // Load contents of discovered CSV files if not already loaded
   if (discovered && State.checklists.size > 0) {
     await fetchAllChecklistContents();
     if (noChecklistsState) noChecklistsState.hidden = true;
@@ -354,9 +433,6 @@ async function discoverChecklists(forceNetwork = false) {
   initializeActiveChecklist();
 }
 
-/**
- * Downloads and parses every remote CSV file
- */
 async function fetchAllChecklistContents() {
   const promises = Array.from(State.checklists.values()).map(async (checklist) => {
     if (checklist.isLoaded) return;
@@ -373,20 +449,15 @@ async function fetchAllChecklistContents() {
       const text = await res.text();
       checklist.tasks = parseChecklistCsv(text, checklist.filename);
       checklist.isLoaded = true;
-
       restoreChecklistProgress(checklist);
     } catch (err) {
-      console.warn(`Could not read ${checklist.filename}:`, err);
+      console.warn(`Could not read remote file ${checklist.filename}:`, err);
     }
   });
 
   await Promise.all(promises);
 }
 
-/* ==========================================================================
-   6. RFC 4180 COMPLIANT CSV PARSER
-   Column A = Task / Title, Column B = Instructions / Description
-   ========================================================================== */
 function parseChecklistCsv(rawCsvText, checklistId) {
   if (!rawCsvText) return [];
 
@@ -448,20 +519,17 @@ function parseChecklistCsv(rawCsvText, checklistId) {
 
   if (rows.length === 0) return [];
 
-  // Header detection
+  // Header Keyword Auto-Detection
   let startIndex = 0;
-  if (APP_CONFIG.CSV_HAS_HEADER === "always") {
+  if (APP_CONFIG.repository.csvHasHeader === "always") {
     startIndex = 1;
-  } else if (APP_CONFIG.CSV_HAS_HEADER === "auto") {
+  } else if (APP_CONFIG.repository.csvHasHeader === "auto") {
     const firstRowA = (rows[0][0] || "").toLowerCase().trim();
     const firstRowB = (rows[0][1] || "").toLowerCase().trim();
-    const headerKeywordsA = ["task", "task title", "title", "todo", "item", "action", "step", "name", "protocol", "action item", "inspection point"];
-    const headerKeywordsB = ["description", "details", "desc", "instructions", "notes", "summary", "spec", "procedure details", "verification protocol"];
+    const keywordsA = ["task", "task title", "title", "step", "action", "item", "protocol", "inspection"];
+    const keywordsB = ["description", "details", "instructions", "notes", "summary", "spec"];
 
-    const isHeaderA = headerKeywordsA.includes(firstRowA);
-    const isHeaderB = headerKeywordsB.includes(firstRowB);
-
-    if (isHeaderA || (isHeaderA && isHeaderB)) {
+    if (keywordsA.includes(firstRowA) || (keywordsA.includes(firstRowA) && keywordsB.includes(firstRowB))) {
       startIndex = 1;
     }
   }
@@ -487,15 +555,15 @@ function parseChecklistCsv(rawCsvText, checklistId) {
 }
 
 /* ==========================================================================
-   7. PROGRESS PERSISTENCE (LOCALSTORAGE)
+   6. PROGRESS PERSISTENCE (LOCAL STORAGE)
    ========================================================================== */
 function getStorageKey(checklistId) {
   const repoSlug = `${State.owner || 'local'}_${State.repo || 'ops'}_`.replace(/[^a-zA-Z0-9_]/g, "");
-  return `${APP_CONFIG.STORAGE_PREFIX}${repoSlug}${checklistId}`;
+  return `${APP_CONFIG.storage.prefix}${repoSlug}${checklistId}`;
 }
 
 function restoreChecklistProgress(checklist) {
-  if (!APP_CONFIG.SAVE_PROGRESS) return;
+  if (!APP_CONFIG.features.enableAutoSave) return;
 
   try {
     const rawSaved = localStorage.getItem(getStorageKey(checklist.filename));
@@ -520,12 +588,12 @@ function restoreChecklistProgress(checklist) {
       }
     });
   } catch (err) {
-    console.warn("Storage restoration warning:", err);
+    console.warn("Storage restoration exception:", err);
   }
 }
 
 function saveChecklistProgress(checklist) {
-  if (!APP_CONFIG.SAVE_PROGRESS) return;
+  if (!APP_CONFIG.features.enableAutoSave) return;
 
   try {
     const completedRecords = checklist.tasks
@@ -533,10 +601,10 @@ function saveChecklistProgress(checklist) {
       .map(t => ({ id: t.id, completedAt: t.completedAt || new Date().toISOString() }));
 
     localStorage.setItem(getStorageKey(checklist.filename), JSON.stringify(completedRecords));
-    showAutosaveToast("Progress Saved");
+    showAutosaveToast(APP_CONFIG.content.notifications.saveSuccess);
   } catch (err) {
-    console.warn("LocalStorage save error:", err);
-    showAutosaveToast("Storage Restricted");
+    console.warn("LocalStorage save exception:", err);
+    showAutosaveToast(APP_CONFIG.content.notifications.storageError);
   }
 }
 
@@ -554,11 +622,11 @@ function showAutosaveToast(message) {
   toastTimer = setTimeout(() => {
     toast.hidden = true;
     toast.classList.remove("is-visible");
-  }, 1400);
+  }, 1600);
 }
 
 /* ==========================================================================
-   8. CHECKLIST REGISTRY & SIDEBAR
+   7. SIDEBAR RENDERING & PROCEDURE NAVIGATION
    ========================================================================== */
 function renderSidebar() {
   const listEl = document.getElementById("checklistItemsList");
@@ -617,6 +685,7 @@ function renderSidebar() {
     btn.appendChild(progressBar);
 
     btn.addEventListener("click", () => {
+      triggerHapticPulse();
       selectChecklist(checklist.filename);
       closeMobileDrawer();
     });
@@ -652,15 +721,20 @@ function initializeActiveChecklist() {
     const subEl = document.getElementById("activeChecklistDescription");
     const fileStamp = document.getElementById("activeFileIndicator");
 
-    if (titleEl) titleEl.textContent = "No Checklist Selected";
-    if (subEl) subEl.textContent = "Select or load a procedure from your catalog to begin execution.";
-    if (fileStamp) fileStamp.textContent = "NO_CSV_LOADED";
+    if (titleEl) titleEl.textContent = APP_CONFIG.content.headers.defaultTitle;
+    if (subEl) subEl.textContent = APP_CONFIG.content.headers.defaultSubtitle;
+    if (fileStamp) fileStamp.textContent = "NO_PROCEDURE_LOADED";
     return;
   }
 
   let targetId = State.activeChecklistId;
   if (!targetId || !State.checklists.has(targetId)) {
-    targetId = State.checklists.keys().next().value;
+    // Default to closing.csv if present, else first entry
+    if (State.checklists.has("closing.csv")) {
+      targetId = "closing.csv";
+    } else {
+      targetId = State.checklists.keys().next().value;
+    }
   }
 
   selectChecklist(targetId);
@@ -688,7 +762,7 @@ function selectChecklist(filename) {
 }
 
 /* ==========================================================================
-   9. ACTIVE CHECKLIST RENDERING & TELEMETRY
+   8. ACTIVE WORKSPACE RENDERING & TELEMETRY
    ========================================================================== */
 function renderActiveChecklistWorkspace() {
   const checklist = State.checklists.get(State.activeChecklistId);
@@ -697,21 +771,10 @@ function renderActiveChecklistWorkspace() {
   const titleEl = document.getElementById("activeChecklistTitle");
   const subEl = document.getElementById("activeChecklistDescription");
   const fileStamp = document.getElementById("activeFileIndicator");
-  const statusBadge = document.getElementById("activeStatusBadge");
 
   if (titleEl) titleEl.textContent = checklist.displayName;
-  if (subEl) subEl.textContent = `${checklist.totalCount} operational procedures loaded and ready for step-by-step verification.`;
+  if (subEl) subEl.textContent = `${checklist.totalCount} operational procedures loaded. Execute step-by-step verification below.`;
   if (fileStamp) fileStamp.textContent = checklist.filename.toUpperCase();
-
-  if (statusBadge) {
-    if (checklist.isFullyComplete) {
-      statusBadge.textContent = "Verified Complete";
-      statusBadge.classList.add("is-done");
-    } else {
-      statusBadge.textContent = "Operational Protocol";
-      statusBadge.classList.remove("is-done");
-    }
-  }
 
   updateProgressUI(checklist);
   renderTaskList();
@@ -746,7 +809,6 @@ function updateProgressUI(checklist) {
   }
   if (progressFill) {
     progressFill.style.width = `${checklist.percent}%`;
-    progressFill.classList.toggle("is-fully-complete", checklist.isFullyComplete);
   }
 
   if (completionBanner) {
@@ -757,10 +819,10 @@ function updateProgressUI(checklist) {
   if (statusBadge) {
     if (checklist.isFullyComplete) {
       statusBadge.textContent = "Verified Complete";
-      statusBadge.classList.add("is-done");
+      statusBadge.className = "status-stamp status-stamp--sage";
     } else {
       statusBadge.textContent = "Operational Protocol";
-      statusBadge.classList.remove("is-done");
+      statusBadge.className = "status-stamp status-stamp--ochre";
     }
   }
 }
@@ -815,15 +877,15 @@ function createTaskCardElement(task, checklist) {
   toggleHitbox.className = "task-toggle-hitbox";
   toggleHitbox.setAttribute("aria-hidden", "true");
 
-  const neoCheckbox = document.createElement("div");
-  neoCheckbox.className = "neo-checkbox";
+  const paperCheckbox = document.createElement("div");
+  paperCheckbox.className = "paper-checkbox";
 
-  neoCheckbox.innerHTML = `
-    <svg class="neo-check-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  paperCheckbox.innerHTML = `
+    <svg class="check-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
   `;
-  toggleHitbox.appendChild(neoCheckbox);
+  toggleHitbox.appendChild(paperCheckbox);
 
   const copyContainer = document.createElement("div");
   copyContainer.className = "task-copy";
@@ -850,7 +912,6 @@ function createTaskCardElement(task, checklist) {
   card.appendChild(flagSpan);
 
   const toggleAction = () => {
-    const wasCompleted = task.completed;
     task.completed = !task.completed;
     task.completedAt = task.completed ? new Date().toISOString() : null;
 
@@ -858,7 +919,9 @@ function createTaskCardElement(task, checklist) {
     card.setAttribute("aria-checked", task.completed ? "true" : "false");
     flagSpan.textContent = task.completed ? "Done" : "Pending";
 
-    // Audio tactile feedback
+    // Tactile sensory feedback
+    triggerHapticPulse();
+
     if (task.completed) {
       if (checklist.completedCount === checklist.totalCount) {
         playTactileFeedback("complete");
@@ -870,7 +933,7 @@ function createTaskCardElement(task, checklist) {
     }
 
     if (State.activeFilter !== "all") {
-      setTimeout(() => renderTaskList(), 140);
+      setTimeout(() => renderTaskList(), 120);
     }
 
     updateProgressUI(checklist);
@@ -892,7 +955,7 @@ function createTaskCardElement(task, checklist) {
 }
 
 /* ==========================================================================
-   10. GLOBAL METRICS & AUDIT EXPORT
+   9. GLOBAL METRICS & AUDIT SIGN-OFF EXPORT
    ========================================================================== */
 function updateGlobalMetrics() {
   const globalChecklistsEl = document.getElementById("globalChecklistCount");
@@ -916,13 +979,15 @@ function exportAuditReport() {
   const checklist = State.checklists.get(State.activeChecklistId);
   if (!checklist) return;
 
+  triggerHapticPulse();
+
   const now = new Date();
   const timestamp = now.toISOString().replace(/[:.]/g, "-");
-  const header = `CHECKPOINT OPERATIONAL AUDIT SIGN-OFF REPORT\nProtocol: ${checklist.displayName}\nGenerated: ${now.toUTCString()}\nVerification Rate: ${checklist.completedCount}/${checklist.totalCount} (${checklist.percent}%)\nStatus: ${checklist.isFullyComplete ? "VERIFIED & CERTIFIED" : "INCOMPLETE / IN PROGRESS"}\n=======================================================\n\n`;
+  const header = `CHECKPOINT OPERATIONAL AUDIT SIGN-OFF REPORT\nProtocol: ${checklist.displayName}\nFile Reference: ${checklist.filename}\nGenerated: ${now.toUTCString()}\nVerification Rate: ${checklist.completedCount}/${checklist.totalCount} (${checklist.percent}%)\nStatus: ${checklist.isFullyComplete ? "VERIFIED & CERTIFIED" : "INCOMPLETE / IN PROGRESS"}\nAuthority: ${APP_CONFIG.content.legal.certificationAuthority}\nStandard: ${APP_CONFIG.content.legal.signOffStandard}\n=======================================================\n\n`;
 
   const rows = checklist.tasks.map((t, idx) => {
     const status = t.completed ? "[x] DONE" : "[ ] PENDING";
-    const time = t.completedAt ? `(Signed: ${t.completedAt})` : "";
+    const time = t.completedAt ? `(Verified: ${t.completedAt})` : "";
     const desc = t.description ? `\n    Details: ${t.description}` : "";
     return `${String(idx + 1).padStart(2, "0")}. ${status} ${t.title} ${time}${desc}`;
   }).join("\n\n");
@@ -939,15 +1004,17 @@ function exportAuditReport() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  showAutosaveToast("Audit Log Exported");
+  showAutosaveToast(APP_CONFIG.content.notifications.exportSuccess);
 }
 
 /* ==========================================================================
-   11. RESET CONFIRMATION MODAL
+   10. MODAL WORKFLOWS (RESET & CONFIGURATION)
    ========================================================================== */
 function openResetModal() {
   const checklist = State.checklists.get(State.activeChecklistId);
   if (!checklist) return;
+
+  triggerHapticPulse();
 
   const modal = document.getElementById("resetModal");
   const nameEl = document.getElementById("resetTargetChecklistName");
@@ -977,6 +1044,8 @@ function executeResetChecklist() {
   const checklist = State.checklists.get(State.activeChecklistId);
   if (!checklist) return;
 
+  triggerHapticPulse();
+
   checklist.tasks.forEach(t => {
     t.completed = false;
     t.completedAt = null;
@@ -991,13 +1060,12 @@ function executeResetChecklist() {
   renderTaskList();
 
   playTactileFeedback("untick");
-  showAutosaveToast("Procedure Reset");
+  showAutosaveToast(APP_CONFIG.content.notifications.resetSuccess);
 }
 
-/* ==========================================================================
-   12. REPOSITORY CONFIGURATION MODAL
-   ========================================================================== */
 function openRepoModal() {
+  triggerHapticPulse();
+
   const modal = document.getElementById("repoModal");
   const inputOwner = document.getElementById("inputOwner");
   const inputRepo = document.getElementById("inputRepo");
@@ -1007,7 +1075,7 @@ function openRepoModal() {
   if (inputOwner) inputOwner.value = State.owner || "";
   if (inputRepo) inputRepo.value = State.repo || "";
   if (inputBranch) inputBranch.value = State.branch || "main";
-  if (inputFolder) inputFolder.value = APP_CONFIG.CHECKLISTS_PATH || "";
+  if (inputFolder) inputFolder.value = APP_CONFIG.repository.checklistsPath || "";
 
   if (modal) {
     State.lastFocusedElement = document.activeElement;
@@ -1037,30 +1105,32 @@ function handleRepoFormSubmit(e) {
 
   if (!owner || !repo) return;
 
+  triggerHapticPulse();
+
   State.owner = owner;
   State.repo = repo;
   State.branch = branch;
-  APP_CONFIG.CHECKLISTS_PATH = folder;
+  APP_CONFIG.repository.checklistsPath = folder;
 
   try {
-    localStorage.setItem("checkpoint_repo_owner", owner);
-    localStorage.setItem("checkpoint_repo_name", repo);
-    localStorage.setItem("checkpoint_repo_branch", branch);
-    localStorage.setItem("checkpoint_repo_folder", folder);
+    localStorage.setItem(APP_CONFIG.storage.repoOwnerKey, owner);
+    localStorage.setItem(APP_CONFIG.storage.repoNameKey, repo);
+    localStorage.setItem(APP_CONFIG.storage.repoBranchKey, branch);
+    localStorage.setItem(APP_CONFIG.storage.repoFolderKey, folder);
   } catch (err) {
-    console.warn("Storage write failed:", err);
+    console.warn("Storage write failure:", err);
   }
 
   updateRepoTargetUI();
   closeRepoModal();
-
   discoverChecklists(true);
 }
 
 /* ==========================================================================
-   13. MOBILE DRAWER NAVIGATION
+   11. MOBILE DRAWER NAVIGATION
    ========================================================================== */
 function openMobileDrawer() {
+  triggerHapticPulse();
   const sidebar = document.getElementById("sidebarPanel");
   const overlay = document.getElementById("drawerOverlay");
   const trigger = document.getElementById("mobileDrawerBtn");
@@ -1083,10 +1153,38 @@ function closeMobileDrawer() {
 }
 
 /* ==========================================================================
-   14. EVENT LISTENERS
+   12. HYDRATION & EVENT DELEGATION
    ========================================================================== */
+function hydrateFromConfig() {
+  document.title = `${APP_CONFIG.identity.appName} — ${APP_CONFIG.identity.appTagline}`;
+
+  const brandTitleEl = document.getElementById("appBrandTitle");
+  const brandTaglineEl = document.getElementById("appBrandTagline");
+  const versionBadge = document.getElementById("appVersionBadge");
+
+  if (brandTitleEl) brandTitleEl.textContent = APP_CONFIG.identity.appName;
+  if (brandTaglineEl) brandTaglineEl.textContent = APP_CONFIG.identity.appTagline;
+  if (versionBadge) versionBadge.textContent = APP_CONFIG.identity.version;
+
+  // Restore audio preference if saved
+  try {
+    const savedAudio = localStorage.getItem(APP_CONFIG.storage.audioPrefKey);
+    if (savedAudio !== null) {
+      State.soundEnabled = savedAudio === "true";
+      const audioToggleBtn = document.getElementById("audioToggleBtn");
+      const audioIconOn = document.getElementById("audioIconOn");
+      const audioIconOff = document.getElementById("audioIconOff");
+      if (audioToggleBtn) audioToggleBtn.setAttribute("aria-pressed", State.soundEnabled ? "true" : "false");
+      if (audioIconOn) audioIconOn.hidden = !State.soundEnabled;
+      if (audioIconOff) audioIconOff.hidden = State.soundEnabled;
+    }
+  } catch (e) {
+    // Non-fatal
+  }
+}
+
 function setupEventListeners() {
-  // Mobile Drawer
+  // Mobile Drawer Triggers
   const mobileDrawerBtn = document.getElementById("mobileDrawerBtn");
   const drawerCloseBtn = document.getElementById("drawerCloseBtn");
   const drawerOverlay = document.getElementById("drawerOverlay");
@@ -1095,6 +1193,24 @@ function setupEventListeners() {
   if (drawerCloseBtn) drawerCloseBtn.addEventListener("click", closeMobileDrawer);
   if (drawerOverlay) drawerOverlay.addEventListener("click", closeMobileDrawer);
 
+  // Standardized Back Navigation (Header)
+  const universalBackBtn = document.getElementById("universalBackBtn");
+  if (universalBackBtn) {
+    universalBackBtn.addEventListener("click", () => {
+      triggerHapticPulse();
+      // Reset filter and scroll to billboard top
+      State.activeFilter = "all";
+      const segmentTabs = document.querySelectorAll(".paper-segment-tab");
+      segmentTabs.forEach(b => {
+        const isAll = b.getAttribute("data-filter") === "all";
+        b.classList.toggle("is-active", isAll);
+        b.setAttribute("aria-selected", isAll ? "true" : "false");
+      });
+      renderTaskList();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
   // Audio Toggle
   const audioToggleBtn = document.getElementById("audioToggleBtn");
   const audioIconOn = document.getElementById("audioIconOn");
@@ -1102,15 +1218,20 @@ function setupEventListeners() {
 
   if (audioToggleBtn) {
     audioToggleBtn.addEventListener("click", () => {
+      triggerHapticPulse();
       State.soundEnabled = !State.soundEnabled;
+      try {
+        localStorage.setItem(APP_CONFIG.storage.audioPrefKey, String(State.soundEnabled));
+      } catch (e) {}
+
       audioToggleBtn.setAttribute("aria-pressed", State.soundEnabled ? "true" : "false");
       if (audioIconOn) audioIconOn.hidden = !State.soundEnabled;
       if (audioIconOff) audioIconOff.hidden = State.soundEnabled;
-      showAutosaveToast(State.soundEnabled ? "Audio Enabled" : "Audio Muted");
+      showAutosaveToast(State.soundEnabled ? APP_CONFIG.content.notifications.audioEnabled : APP_CONFIG.content.notifications.audioMuted);
     });
   }
 
-  // Sidebar Checklist Filter
+  // Sidebar Filter Input
   const checklistFilterInput = document.getElementById("checklistFilterInput");
   const clearChecklistFilterBtn = document.getElementById("clearChecklistFilterBtn");
 
@@ -1124,6 +1245,7 @@ function setupEventListeners() {
 
   if (clearChecklistFilterBtn && checklistFilterInput) {
     clearChecklistFilterBtn.addEventListener("click", () => {
+      triggerHapticPulse();
       checklistFilterInput.value = "";
       clearChecklistFilterBtn.hidden = true;
       State.checklistSearchQuery = "";
@@ -1132,10 +1254,11 @@ function setupEventListeners() {
     });
   }
 
-  // Segmented Tabs
-  const segmentTabs = document.querySelectorAll(".segment-tab");
+  // Segmented Completion Tabs
+  const segmentTabs = document.querySelectorAll(".paper-segment-tab");
   segmentTabs.forEach(btn => {
     btn.addEventListener("click", () => {
+      triggerHapticPulse();
       const mode = btn.getAttribute("data-filter");
       if (mode === State.activeFilter) return;
 
@@ -1165,12 +1288,13 @@ function setupEventListeners() {
       searchDebounce = setTimeout(() => {
         State.searchQuery = val;
         renderTaskList();
-      }, 70);
+      }, 60);
     });
   }
 
   if (clearSearchBtn && taskSearchInput) {
     clearSearchBtn.addEventListener("click", () => {
+      triggerHapticPulse();
       taskSearchInput.value = "";
       clearSearchBtn.hidden = true;
       State.searchQuery = "";
@@ -1181,6 +1305,7 @@ function setupEventListeners() {
 
   if (resetFiltersAction && taskSearchInput) {
     resetFiltersAction.addEventListener("click", () => {
+      triggerHapticPulse();
       taskSearchInput.value = "";
       if (clearSearchBtn) clearSearchBtn.hidden = true;
       State.searchQuery = "";
@@ -1194,6 +1319,40 @@ function setupEventListeners() {
 
       renderTaskList();
     });
+  }
+
+  // Mobile Bottom Dock Controls
+  const dockBtnProcedures = document.getElementById("dockBtnProcedures");
+  const dockBtnFilterAll = document.getElementById("dockBtnFilterAll");
+  const dockBtnAudit = document.getElementById("dockBtnAudit");
+  const dockBtnConfig = document.getElementById("dockBtnConfig");
+
+  if (dockBtnProcedures) {
+    dockBtnProcedures.addEventListener("click", () => {
+      openMobileDrawer();
+    });
+  }
+
+  if (dockBtnFilterAll) {
+    dockBtnFilterAll.addEventListener("click", () => {
+      triggerHapticPulse();
+      State.activeFilter = "all";
+      segmentTabs.forEach(b => {
+        const isAll = b.getAttribute("data-filter") === "all";
+        b.classList.toggle("is-active", isAll);
+        b.setAttribute("aria-selected", isAll ? "true" : "false");
+      });
+      renderTaskList();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  if (dockBtnAudit) {
+    dockBtnAudit.addEventListener("click", exportAuditReport);
+  }
+
+  if (dockBtnConfig) {
+    dockBtnConfig.addEventListener("click", openRepoModal);
   }
 
   // Reset Modal Triggers
@@ -1214,13 +1373,13 @@ function setupEventListeners() {
     });
   }
 
-  // Export Audit Report
+  // Audit Export Trigger
   const exportAuditBtn = document.getElementById("exportAuditBtn");
   if (exportAuditBtn) {
     exportAuditBtn.addEventListener("click", exportAuditReport);
   }
 
-  // Repo Configuration Modal Triggers
+  // Repository Configuration Modal Triggers
   const repoConfigTrigger = document.getElementById("repoConfigTrigger");
   const openConfigBtn = document.getElementById("openConfigBtn");
   const closeRepoModalBtn = document.getElementById("closeRepoModalBtn");
@@ -1247,6 +1406,7 @@ function setupEventListeners() {
   if (syncRepoBtn) {
     syncRepoBtn.addEventListener("click", async () => {
       if (State.isSyncing) return;
+      triggerHapticPulse();
       State.isSyncing = true;
       if (syncIcon) syncIcon.classList.add("is-spinning");
 
@@ -1262,6 +1422,7 @@ function setupEventListeners() {
   // Local File Upload Tester (Immediate Reader)
   const handleLocalCsvFiles = (files) => {
     if (!files || files.length === 0) return;
+    triggerHapticPulse();
 
     let filesRead = 0;
     const validFiles = Array.from(files).filter(f => f.name.toLowerCase().endsWith(".csv"));
@@ -1283,7 +1444,7 @@ function setupEventListeners() {
           updateGlobalMetrics();
           renderSidebar();
           selectChecklist(validFiles[0].name);
-          showAutosaveToast(`${validFiles.length} Checklist${validFiles.length > 1 ? "s" : ""} Loaded`);
+          showAutosaveToast(`${validFiles.length} Procedure${validFiles.length > 1 ? "s" : ""} Loaded`);
         }
       };
       reader.readAsText(file);
@@ -1314,17 +1475,18 @@ function setupEventListeners() {
   });
 
   // Background Auto-Refresh
-  if (APP_CONFIG.AUTO_REFRESH_INTERVAL > 0) {
+  if (APP_CONFIG.features.autoRefreshIntervalMs > 0) {
     setInterval(() => {
       discoverChecklists(false);
-    }, APP_CONFIG.AUTO_REFRESH_INTERVAL);
+    }, APP_CONFIG.features.autoRefreshIntervalMs);
   }
 }
 
 /* ==========================================================================
-   15. INITIALIZATION
+   13. BOOTSTRAP INITIALIZATION
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
+  hydrateFromConfig();
   resolveRepositoryCoordinates();
   setupEventListeners();
   discoverChecklists(false);

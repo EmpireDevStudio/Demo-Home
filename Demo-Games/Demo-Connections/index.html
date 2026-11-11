@@ -3,234 +3,371 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Connections — Find groups of four items that share a common connection.">
-  <meta name="theme-color" content="#0E0604">
-  <title>Connections</title>
+  <meta name="description" content="Connections — Artisanal Daily Wordplay & Categorical Reasoning.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Connections — Artisanal Daily Wordplay</title>
 
+  <!-- Typography: Clean Modern UI Sans & Classic Editorial Serif -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Charter:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="luxury-bg-texture" aria-hidden="true"></div>
-  <div class="caustic-light-layer" aria-hidden="true"></div>
+  <!-- Ambient Stationery Texture Backdrop -->
+  <div class="paper-texture-overlay" aria-hidden="true"></div>
 
-  <div id="ambient-icons-layer" class="ambient-icons-layer" aria-hidden="true"></div>
+  <!-- Accessible Toast Feedback -->
+  <div id="toast" class="tactile-toast hidden" role="status" aria-live="polite"></div>
 
-  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+  <!-- Primary Application Container -->
+  <div class="app-viewport-shell">
 
-  <div class="app-shell">
-    <header class="master-header">
-      <div class="header-left">
-        <a id="btn-home" href="https://tileworksgamesstudio.github.io/86/" class="home-btn" aria-label="Return to Games Home" title="Home">
-          <svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    <!-- UNIVERSAL STANDARDIZED PAGE HEADER -->
+    <header class="app-page-header" id="masterHeader">
+      <div class="app-page-header__controls">
+        <button type="button" class="btn-back-nav" id="btnHeaderBack" aria-label="Navigate back">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-        </a>
+          <span class="btn-back-nav__label" id="btnBackNavLabel">Overview</span>
+        </button>
+
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <span id="live-time-indicator" class="status-badge status-badge--sage">
+            <span class="status-badge__dot" aria-hidden="true"></span>
+            <span id="headerEditionText">Daily Edition</span>
+          </span>
+        </div>
       </div>
-      <div class="header-center">
-        <h1 id="app-title" class="app-title">Connections</h1>
-      </div>
-      <div class="header-right">
-        <span id="live-time-indicator" class="sync-badge">Daily</span>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">EDITION 2026</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Connections</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Find groups of four items that share a common connection.
+        </p>
       </div>
     </header>
 
-    <main class="master-main">
-      <section id="screen-menu" class="screen screen-menu" aria-label="Main Menu">
-        <div class="menu-centered-container">
-          <div class="menu-title-block">
-            <h2 class="menu-display-title">Daily Tasting</h2>
-            <p class="menu-subtitle">Find groups of four items that share a common connection.</p>
+    <!-- MASTER CONTENT VIEWPORT -->
+    <main class="master-main-surface" id="mainContentArea">
+
+      <!-- SCREEN: MAIN MENU -->
+      <section id="screen-menu" class="screen screen-menu" aria-label="Overview & Daily Tasting">
+        <div class="menu-content-stack">
+          <div class="daily-hero-card paper-card">
+            <div class="paper-card__header">
+              <span class="paper-badge-pill" id="menuHeroBadge">Featured Daily</span>
+              <span class="paper-card__timestamp" id="menu-puzzle-date">Loading date...</span>
+            </div>
+            <div class="paper-card__body">
+              <h2 class="hero-card__title" id="heroCardTitle">Daily Association</h2>
+              <p class="hero-card__copy">
+                Sixteen curated tiles awaiting pattern recognition. Categorize them into four cohesive groups.
+              </p>
+            </div>
+            <div class="hero-card__cta">
+              <button id="btn-play-game" class="interactive-tactile btn-primary btn-large w-full" type="button">
+                <span class="btn-primary__inner">
+                  <span id="btn-play-title" class="btn-title-text">Begin Daily Puzzle</span>
+                  <span id="menu-play-status" class="btn-tag-pill">Ready</span>
+                </span>
+              </button>
+            </div>
           </div>
 
-          <nav class="primary-nav-group" aria-label="Main Navigation">
-            <button id="btn-play-game" class="menu-card-btn primary-action" type="button">
-              <span class="btn-label-group">
-                <span id="btn-play-title" class="btn-main-label">Play Connections</span>
-                <span id="menu-puzzle-date" class="btn-sub-label">Loading...</span>
-              </span>
-              <span id="menu-play-status" class="btn-status-badge">Ready</span>
+          <!-- Secondary Menu Selection Stack -->
+          <div class="menu-selection-grid">
+            <button id="btn-open-vault" class="interactive-tactile menu-tile-card" type="button">
+              <div class="menu-tile-card__icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                  <line x1="7" y1="8" x2="17" y2="8"></line>
+                  <line x1="7" y1="12" x2="17" y2="12"></line>
+                  <line x1="7" y1="16" x2="13" y2="16"></line>
+                </svg>
+              </div>
+              <div class="menu-tile-card__text">
+                <span class="menu-tile-card__heading">Puzzle Ledger</span>
+                <span class="menu-tile-card__caption">Browse the archive vault</span>
+              </div>
+              <span class="menu-tile-card__arrow" aria-hidden="true">&rarr;</span>
             </button>
 
-            <button id="btn-open-vault" class="menu-card-btn" type="button">
-              <span class="btn-label-group">
-                <span class="btn-main-label">Vault</span>
-                <span class="btn-sub-label">Puzzle archive</span>
-              </span>
-              <span class="btn-arrow" aria-hidden="true">&rsaquo;</span>
+            <button id="btn-open-howtoplay" class="interactive-tactile menu-tile-card" type="button">
+              <div class="menu-tile-card__icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+              <div class="menu-tile-card__text">
+                <span class="menu-tile-card__heading">Instructions</span>
+                <span class="menu-tile-card__caption">Rules, difficulty & scoring</span>
+              </div>
+              <span class="menu-tile-card__arrow" aria-hidden="true">&rarr;</span>
             </button>
 
-            <button id="btn-open-settings" class="menu-card-btn" type="button">
-              <span class="btn-label-group">
-                <span class="btn-main-label">Settings</span>
-                <span class="btn-sub-label">Preferences & motion</span>
-              </span>
-              <span class="btn-arrow" aria-hidden="true">&rsaquo;</span>
+            <button id="btn-open-settings" class="interactive-tactile menu-tile-card" type="button">
+              <div class="menu-tile-card__icon-box">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </div>
+              <div class="menu-tile-card__text">
+                <span class="menu-tile-card__heading">Preferences</span>
+                <span class="menu-tile-card__caption">Haptics, themes & sound</span>
+              </div>
+              <span class="menu-tile-card__arrow" aria-hidden="true">&rarr;</span>
             </button>
+          </div>
 
-            <button id="btn-open-howtoplay" class="menu-card-btn" type="button">
-              <span class="btn-label-group">
-                <span class="btn-main-label">How to Play</span>
-                <span class="btn-sub-label">Rules and categories</span>
-              </span>
-              <span class="btn-arrow" aria-hidden="true">&rsaquo;</span>
-            </button>
-          </nav>
-
-          <footer class="menu-utility-row" aria-label="Quick utilities">
-            <button id="btn-open-stats" class="utility-btn" type="button" aria-label="Player Statistics" title="Player Statistics">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- Quick Action Utility Row -->
+          <div class="menu-action-cluster" aria-label="Quick operations">
+            <button id="btn-open-stats" class="interactive-tactile utility-capsule-btn" type="button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M18 20V10M12 20V4M6 20v-6"></path>
               </svg>
+              <span>Performance</span>
             </button>
 
-            <button id="btn-share-game" class="utility-btn" type="button" aria-label="Share Game" title="Share Game">
-              <svg viewBox="0 -1 25.5 25.5" fill="none" stroke="currentColor" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <button id="btn-share-game" class="interactive-tactile utility-capsule-btn" type="button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="18" cy="5" r="3"></circle>
                 <circle cx="6" cy="12" r="3"></circle>
                 <circle cx="18" cy="19" r="3"></circle>
                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
                 <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
               </svg>
+              <span>Share Application</span>
             </button>
-
-            <button id="btn-reserved-plus" class="utility-btn reserved-btn" type="button" aria-label="More Games" title="More Games">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </button>
-          </footer>
-        </div>
-      </section>
-
-      <section id="screen-game" class="screen screen-game hidden" aria-label="Active Game Board">
-        <div class="screen-subbar">
-          <button id="btn-game-back" class="subbar-back-btn" type="button" aria-label="Return to Main Menu">
-            &larr; Menu
-          </button>
-          <div class="subbar-info">
-            <span id="game-puzzle-title" class="subbar-title">Daily Puzzle</span>
           </div>
         </div>
-
-        <div class="mistakes-banner" aria-label="Attempts status">
-          <span class="mistakes-caption">Mistakes remaining:</span>
-          <div id="mistake-dots" class="mistake-dots" aria-label="4 attempts left">
-            <span class="dot filled" aria-hidden="true"></span>
-            <span class="dot filled" aria-hidden="true"></span>
-            <span class="dot filled" aria-hidden="true"></span>
-            <span class="dot filled" aria-hidden="true"></span>
-          </div>
-        </div>
-
-        <div class="game-board-area">
-          <div id="solved-stack" class="solved-stack" aria-live="polite"></div>
-          <div id="grid" class="grid" role="group" aria-label="Tile selection grid"></div>
-        </div>
-
-        <div class="board-action-bar">
-          <button id="btn-shuffle" class="game-btn secondary" type="button">Shuffle</button>
-          <button id="btn-deselect" class="game-btn secondary" type="button" disabled>Deselect All</button>
-          <button id="btn-submit" class="game-btn primary" type="button" disabled>Submit</button>
-        </div>
       </section>
 
-      <section id="screen-vault" class="screen screen-vault hidden" aria-label="Vault Archive">
-        <div class="screen-subbar">
-          <button id="btn-vault-back" class="subbar-back-btn" type="button" aria-label="Return to Main Menu">
-            &larr; Menu
-          </button>
-          <span class="subbar-title">Vault</span>
-        </div>
-        <p class="vault-instructions">Select any puzzle from the archive to play.</p>
-        <div id="vault-list" class="vault-scroll-list" role="list"></div>
-      </section>
-
-      <section id="screen-settings" class="screen screen-settings hidden" aria-label="Game Settings">
-        <div class="screen-subbar">
-          <button id="btn-settings-back" class="subbar-back-btn" type="button" aria-label="Return to Main Menu">
-            &larr; Menu
-          </button>
-          <span class="subbar-title">Settings</span>
-        </div>
-
-        <div class="settings-stack">
-          <div class="settings-row">
-            <div class="setting-text">
-              <span class="setting-name">Atmospheric Motion</span>
-              <span class="setting-desc">Ambient upward drift of floating garnishes</span>
+      <!-- SCREEN: ACTIVE GAME BOARD -->
+      <section id="screen-game" class="screen screen-game hidden" aria-label="Interactive Game Board">
+        <!-- Sub-bar & Attempts Status -->
+        <div class="game-status-strip paper-card">
+          <div class="mistakes-counter" aria-label="Mistakes allowance status">
+            <span class="mistakes-counter__label">Attempts Remaining:</span>
+            <div id="mistake-dots" class="mistake-dots-tray" role="status" aria-label="4 attempts left">
+              <span class="mistake-pip filled" aria-hidden="true"></span>
+              <span class="mistake-pip filled" aria-hidden="true"></span>
+              <span class="mistake-pip filled" aria-hidden="true"></span>
+              <span class="mistake-pip filled" aria-hidden="true"></span>
             </div>
-            <button id="btn-toggle-animation" class="toggle-pill" type="button" role="switch" aria-checked="true">
-              <span class="toggle-label">On</span>
-            </button>
           </div>
+          <span id="game-puzzle-title" class="game-subbar-edition">Daily Puzzle</span>
+        </div>
+
+        <!-- Solved Category Stack & Active Tile Grid -->
+        <div class="game-board-container">
+          <div id="solved-stack" class="solved-category-stack" aria-live="polite"></div>
+          <div id="grid" class="paper-tile-grid" role="group" aria-label="Connections tile selection grid"></div>
+        </div>
+
+        <!-- Board Tactical Controls -->
+        <div class="game-controls-bar">
+          <button id="btn-shuffle" class="interactive-tactile btn-secondary control-btn" type="button">Shuffle</button>
+          <button id="btn-deselect" class="interactive-tactile btn-secondary control-btn" type="button" disabled>Deselect All</button>
+          <button id="btn-submit" class="interactive-tactile btn-primary control-btn" type="button" disabled>Submit</button>
+        </div>
+      </section>
+
+      <!-- SCREEN: PUZZLE LEDGER / VAULT -->
+      <section id="screen-vault" class="screen screen-vault hidden" aria-label="Archived Puzzles">
+        <div class="paper-card vault-header-card">
+          <h2 class="vault-header-title">Historical Puzzle Ledger</h2>
+          <p class="vault-header-desc">Replay previously published editions or complete missed assignments.</p>
+        </div>
+        <div id="vault-list" class="vault-catalog-list" role="list"></div>
+      </section>
+
+      <!-- SCREEN: SETTINGS & PREFERENCES -->
+      <section id="screen-settings" class="screen screen-settings hidden" aria-label="Client Preferences">
+        <div class="paper-card settings-sheet">
+          <h2 class="settings-sheet__title">Tactile & Display Settings</h2>
+          <p class="settings-sheet__subtitle">Configure physical interaction feedback and runtime behavior.</p>
+
+          <div class="settings-list">
+            <div class="settings-row">
+              <div class="settings-row__info">
+                <span class="settings-row__label">Haptic Vibrations</span>
+                <span class="settings-row__desc">Execute micro-tactile pulses on mobile button touches</span>
+              </div>
+              <button id="btn-toggle-haptics" class="interactive-tactile switch-toggle" type="button" role="switch" aria-checked="true">
+                <span class="switch-toggle__thumb"></span>
+                <span class="switch-toggle__text">On</span>
+              </button>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-row__info">
+                <span class="settings-row__label">Kinetic Page Transitions</span>
+                <span class="settings-row__desc">Engage smooth tactile transitions between views</span>
+              </div>
+              <button id="btn-toggle-animation" class="interactive-tactile switch-toggle" type="button" role="switch" aria-checked="true">
+                <span class="switch-toggle__thumb"></span>
+                <span class="switch-toggle__text">On</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="paper-card client-info-card">
+          <div class="client-info-card__title" id="clientOrgTitle">Connections Architectural Suite</div>
+          <p class="client-info-card__version" id="clientVersionTag">Version 2.4.0 &bull; Editorial Stationery Engine</p>
+          <a id="clientSupportLink" href="#" class="client-info-card__link">Contact Product Concierge &rarr;</a>
         </div>
       </section>
     </main>
 
-    <div id="howtoplay-backdrop" class="howtoplay-backdrop hidden" aria-hidden="true"></div>
-    <div id="howtoplay-wrapper" class="howtoplay-overlay-wrapper hidden" role="presentation">
-      <section id="panel-howtoplay" class="howtoplay-panel glass-panel" role="dialog" aria-modal="true" aria-labelledby="howtoplay-heading">
-        <div class="panel-header">
-          <button id="btn-close-howtoplay" class="panel-back-control" type="button" aria-label="Close instructions and return to menu">
-            &larr; Back
-          </button>
-          <h2 id="howtoplay-heading" class="panel-title">How to Play</h2>
-          <button id="btn-close-howtoplay-icon" class="panel-icon-close" type="button" aria-label="Close instructions">&times;</button>
-        </div>
-        <div class="panel-body">
-          <p class="how-lead">Find groups of four items that share a common connection.</p>
-          <ul class="how-steps">
-            <li>Select four tiles and press <strong>Submit</strong> to check your answer.</li>
-            <li>Find all 4 groups without making 4 mistakes.</li>
-            <li>Categories become trickier by level — look out for wordplay and red herrings!</li>
-          </ul>
-          <h3 class="how-legend-title">Category Difficulties</h3>
-          <div class="how-legend-list">
-            <div class="legend-chip"><span class="chip-swatch cat-1" aria-hidden="true"></span> Level 1 &mdash; Straightforward</div>
-            <div class="legend-chip"><span class="chip-swatch cat-2" aria-hidden="true"></span> Level 2 &mdash; Moderate</div>
-            <div class="legend-chip"><span class="chip-swatch cat-3" aria-hidden="true"></span> Level 3 &mdash; Tricky</div>
-            <div class="legend-chip"><span class="chip-swatch cat-4" aria-hidden="true"></span> Level 4 &mdash; Wordplay / Abstract</div>
+    <!-- UNIFORM BOTTOM THUMB-ZONE NAVIGATION DOCK -->
+    <nav class="app-bottom-dock" aria-label="Primary Mobile Navigation">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <button type="button" class="nav-tab-item nav-tab-item--active" data-route="menu" aria-label="Overview screen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          </svg>
+          <span class="nav-tab-item__text">Overview</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item" data-route="game" aria-label="Active Game screen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span class="nav-tab-item__text">Puzzle</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item" data-route="vault" aria-label="Vault screen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+            <line x1="7" y1="8" x2="17" y2="8"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+          </svg>
+          <span class="nav-tab-item__text">Ledger</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item" data-route="settings" aria-label="Settings screen">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span class="nav-tab-item__text">Settings</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- SLIDING INSTRUCTION PANEL (HOW TO PLAY) -->
+  <div id="howtoplay-backdrop" class="modal-backdrop hidden" aria-hidden="true"></div>
+  <div id="howtoplay-wrapper" class="howtoplay-overlay-wrapper hidden" role="presentation">
+    <section id="panel-howtoplay" class="howtoplay-panel paper-card" role="dialog" aria-modal="true" aria-labelledby="howtoplay-heading">
+      <div class="panel-header">
+        <button id="btn-close-howtoplay" class="interactive-tactile btn-secondary btn-compact" type="button" aria-label="Close instructions">
+          &larr; Back
+        </button>
+        <h2 id="howtoplay-heading" class="panel-title">Rules of Association</h2>
+        <button id="btn-close-howtoplay-icon" class="modal-icon-close" type="button" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="panel-body">
+        <p class="how-lead">Identify four discrete groups of four items that share a common unifying principle.</p>
+        <ul class="how-steps">
+          <li>Tap four tiles and choose <strong>Submit</strong> to evaluate your hypothesis.</li>
+          <li>Solve the puzzle completely without exhausting your four permissible mistakes.</li>
+          <li>Look out for clever wordplay, overlapping associations, and deliberate red herrings!</li>
+        </ul>
+
+        <h3 class="how-legend-title">Hierarchical Difficulty Levels</h3>
+        <div class="how-legend-list">
+          <div class="legend-card-chip cat-ochre">
+            <span class="chip-swatch-box" aria-hidden="true"></span>
+            <div class="legend-chip-copy">
+              <strong>Level 1 &mdash; Straightforward</strong>
+              <span>Immediate and categorical semantic groupings</span>
+            </div>
+          </div>
+          <div class="legend-card-chip cat-sage">
+            <span class="chip-swatch-box" aria-hidden="true"></span>
+            <div class="legend-chip-copy">
+              <strong>Level 2 &mdash; Moderate</strong>
+              <span>Common cultural, functional, or contextual pairings</span>
+            </div>
+          </div>
+          <div class="legend-card-chip cat-terracotta">
+            <span class="chip-swatch-box" aria-hidden="true"></span>
+            <div class="legend-chip-copy">
+              <strong>Level 3 &mdash; Nuanced</strong>
+              <span>Linguistic subtleties, synonyms, and trivia</span>
+            </div>
+          </div>
+          <div class="legend-card-chip cat-plum">
+            <span class="chip-swatch-box" aria-hidden="true"></span>
+            <div class="legend-chip-copy">
+              <strong>Level 4 &mdash; Abstract & Wordplay</strong>
+              <span>Anagrams, phonetic tricks, and compound words</span>
+            </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+  </div>
 
-    <div id="modal-stats" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="stats-heading" tabindex="-1">
-      <div class="modal-card glass-panel">
-        <div class="modal-header">
-          <h2 id="stats-heading" class="panel-title">Player Statistics</h2>
-          <button class="modal-close-btn" data-close="modal-stats" type="button" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="stats-matrix">
-            <div class="stat-box"><span id="stat-played" class="stat-val">0</span><span class="stat-lbl">Played</span></div>
-            <div class="stat-box"><span id="stat-win-pct" class="stat-val">0%</span><span class="stat-lbl">Win %</span></div>
-            <div class="stat-box"><span id="stat-streak" class="stat-val">0</span><span class="stat-lbl">Streak</span></div>
-            <div class="stat-box"><span id="stat-max-streak" class="stat-val">0</span><span class="stat-lbl">Max Streak</span></div>
+  <!-- MODAL: STATISTICAL PERFORMANCE -->
+  <div id="modal-stats" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="stats-heading" tabindex="-1">
+    <div class="modal-card paper-card">
+      <div class="modal-header">
+        <h2 id="stats-heading" class="panel-title">Performance Analytics</h2>
+        <button class="modal-icon-close" data-close="modal-stats" type="button" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="stats-matrix">
+          <div class="stat-box">
+            <span id="stat-played" class="stat-val">0</span>
+            <span class="stat-lbl">Played</span>
+          </div>
+          <div class="stat-box">
+            <span id="stat-win-pct" class="stat-val">0%</span>
+            <span class="stat-lbl">Win Ratio</span>
+          </div>
+          <div class="stat-box">
+            <span id="stat-streak" class="stat-val">0</span>
+            <span class="stat-lbl">Current Streak</span>
+          </div>
+          <div class="stat-box">
+            <span id="stat-max-streak" class="stat-val">0</span>
+            <span class="stat-lbl">Max Streak</span>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div id="modal-result" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="result-heading" tabindex="-1">
-      <div class="modal-card glass-panel modal-center">
-        <div class="modal-header">
-          <h2 id="result-heading" class="panel-title">Puzzle Complete</h2>
-          <button class="modal-close-btn" data-close="modal-result" type="button" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p id="result-msg" class="result-headline"></p>
-          <div id="result-grid" class="result-grid" aria-label="Guess history emoji blocks"></div>
-          <div class="result-actions">
-            <button id="btn-share-result" class="game-btn primary full-width" type="button">Share Result</button>
-            <button id="btn-result-menu" class="game-btn secondary full-width" type="button">Main Menu</button>
-          </div>
+  <!-- MODAL: PUZZLE OUTCOME & SHARE -->
+  <div id="modal-result" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="result-heading" tabindex="-1">
+    <div class="modal-card paper-card modal-center">
+      <div class="modal-header">
+        <h2 id="result-heading" class="panel-title">Puzzle Complete</h2>
+        <button class="modal-icon-close" data-close="modal-result" type="button" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="result-msg" class="result-headline">Splendid! Puzzle Solved.</p>
+        <div id="result-grid" class="result-grid-card" aria-label="Guess history representation"></div>
+        <div class="result-actions-cluster">
+          <button id="btn-share-result" class="interactive-tactile btn-primary w-full" type="button">Copy Result Grid</button>
+          <button id="btn-result-menu" class="interactive-tactile btn-secondary w-full" type="button">Return to Overview</button>
         </div>
       </div>
     </div>

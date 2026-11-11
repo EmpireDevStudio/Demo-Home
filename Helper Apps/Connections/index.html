@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Editorial puzzle composition suite and RFC-4180 CSV architecture for daily word groupings.">
+  <meta name="theme-color" content="#F5F3ED">
+  <title>Connections Studio — Editorial Puzzle Suite</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- System Notification Capsule -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <!-- Master Application Layout Frame -->
+  <div class="app-layout">
+    
+    <!-- UNIFORM STANDARDIZED PAGE HEADER -->
+    <header class="app-page-header">
+      <div class="app-page-header__controls">
+        <button type="button" id="btnHeaderBack" class="btn-back-nav" aria-label="Navigate to previous view">
+          <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="btn-back-nav__label" id="headerBackLabel">Overview</span>
+        </button>
+
+        <div class="app-page-header__actions" id="headerActionsSlot">
+          <span id="session-count-badge" class="status-pill status-pill--sage">0 Puzzles</span>
+          <button id="btn-quick-export" class="interactive-tactile btn-header-action" type="button" aria-label="Quick export dataset">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Export</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-page-header__title-block">
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">PUZZLE ARCHITECT</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Connections Studio</h1>
+        <p class="app-page-header__subtitle" id="pageSubtitleSlot">
+          Design 4-tier semantic association puzzles with strict uniqueness validation and RFC-4180 CSV compliance.
+        </p>
+      </div>
+    </header>
+
+    <!-- MAIN DYNAMIC CONTENT CONTAINER -->
+    <main class="master-main" id="mainContent">
+
+      <!-- ===============================================================
+           VIEW 1: START & INITIALIZATION MODES
+           =============================================================== -->
+      <section id="view-start" class="view view-start" aria-label="Dataset Initialization Modes">
+        <div class="mode-cards-grid">
+          
+          <!-- Mode Card 1: Append to Existing -->
+          <article class="paper-card mode-card">
+            <div class="mode-card__badge-row">
+              <span class="status-pill status-pill--terracotta">Existing File</span>
+            </div>
+            <div class="paper-card__body">
+              <h2 class="paper-card__title">Append to Existing CSV</h2>
+              <p class="paper-card__description">
+                Upload your current <code>puzzles.csv</code> ledger. Fresh daily puzzle entries will be appended while preserving existing records.
+              </p>
+            </div>
+            <div class="mode-card__action">
+              <label class="interactive-tactile btn-action full-width">
+                <span>Upload &amp; Append</span>
+                <input id="input-file-append" type="file" accept=".csv,text/csv" class="visually-hidden">
+              </label>
+            </div>
+          </article>
+
+          <!-- Mode Card 2: Create Blank -->
+          <article class="paper-card mode-card mode-card--highlight">
+            <div class="mode-card__badge-row">
+              <span class="status-pill status-pill--sage">Recommended</span>
+            </div>
+            <div class="paper-card__body">
+              <h2 class="paper-card__title">Create Fresh Dataset</h2>
+              <p class="paper-card__description">
+                Initiate a clean, unblemished catalog. The editor establishes all 8 required column invariants automatically.
+              </p>
+            </div>
+            <div class="mode-card__action">
+              <button id="btn-start-fresh" class="interactive-tactile btn-action btn-action--primary full-width" type="button">
+                Start Blank Suite
+              </button>
+            </div>
+          </article>
+
+          <!-- Mode Card 3: Review Archive -->
+          <article class="paper-card mode-card">
+            <div class="mode-card__badge-row">
+              <span class="status-pill status-pill--ochre">Audit &amp; Repair</span>
+            </div>
+            <div class="paper-card__body">
+              <h2 class="paper-card__title">Review Archive CSV</h2>
+              <p class="paper-card__description">
+                Inspect an existing puzzle database to correct typos, rectify word duplicate conflicts, or prune retired entries.
+              </p>
+            </div>
+            <div class="mode-card__action">
+              <label class="interactive-tactile btn-action full-width">
+                <span>Inspect Archive</span>
+                <input id="input-file-review" type="file" accept=".csv,text/csv" class="visually-hidden">
+              </label>
+            </div>
+          </article>
+        </div>
+
+        <!-- Utility Paper Tray -->
+        <div class="paper-card quick-tools-tray">
+          <div class="quick-tools-tray__content">
+            <div class="quick-tools-tray__text">
+              <h3 class="quick-tools-title">Reference Datasets &amp; Templates</h3>
+              <p class="quick-tools-desc">Hydrate the workspace with artisanal mixology blueprints or download an empty schema.</p>
+            </div>
+            <div class="quick-tools-tray__buttons">
+              <button id="btn-load-sample" class="interactive-tactile btn-secondary btn-sm" type="button">
+                Load Curated Samples
+              </button>
+              <button id="btn-download-template" class="interactive-tactile btn-secondary btn-sm" type="button">
+                Download Blank CSV
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           VIEW 2: WORKSPACE & TABBED SUITE
+           =============================================================== -->
+      <section id="view-workspace" class="view view-workspace hidden" aria-label="Studio Production Workspace">
+        
+        <!-- Desktop Workspace Navigation Bar (Mirrored in Bottom Dock on Mobile) -->
+        <nav class="workspace-desktop-nav" aria-label="Workspace Sections">
+          <div class="nav-tab-group">
+            <button id="nav-btn-editor" class="tab-chip tab-chip--active" type="button" data-tab="tab-editor">
+              <span class="tab-chip__icon" aria-hidden="true">✎</span>
+              <span id="tab-editor-label">Editor</span>
+            </button>
+            <button id="nav-btn-inventory" class="tab-chip" type="button" data-tab="tab-inventory">
+              <span class="tab-chip__icon" aria-hidden="true">🗂</span>
+              <span>Catalog (<span id="inventory-count">0</span>)</span>
+            </button>
+            <button id="nav-btn-preview" class="tab-chip" type="button" data-tab="tab-preview">
+              <span class="tab-chip__icon" aria-hidden="true">👁</span>
+              <span>CSV Ledger</span>
+            </button>
+          </div>
+          <div class="workspace-desktop-nav__actions">
+            <button id="btn-open-export-modal" class="interactive-tactile btn-action btn-action--primary btn-sm" type="button">
+              Export CSV Dataset
+            </button>
+          </div>
+        </nav>
+
+        <!-- ===============================================================
+             TAB A: GUIDED PUZZLE EDITOR & TACTILE BOARD SIMULATOR
+             =============================================================== -->
+        <div id="tab-editor" class="tab-content tab-content--active" role="tabpanel" aria-labelledby="nav-btn-editor">
+          
+          <!-- Validation Status Horizon -->
+          <div id="validation-meter" class="validation-meter" aria-live="polite">
+            <div class="validation-meter__item">
+              <span class="meter-pill" id="ind-words">0 / 16 Words</span>
+            </div>
+            <div class="validation-meter__item">
+              <span class="meter-pill" id="ind-dupes">No Duplicates</span>
+            </div>
+            <div class="validation-meter__item">
+              <span class="meter-pill" id="ind-categories">0 / 4 Titles</span>
+            </div>
+            <div class="validation-meter__controls">
+              <button id="btn-random-sample" class="interactive-tactile btn-pill-action" type="button" title="Populate with artisanal ideas">
+                ✨ Auto-Suggest
+              </button>
+              <button id="btn-clear-form" class="interactive-tactile btn-pill-action" type="button" title="Clear current inputs">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="editor-stage-grid">
+            <!-- Left Panel: 4 Category Quad Columns -->
+            <form id="puzzle-form" class="categories-column" autocomplete="off">
+              
+              <!-- Tier 1: Ochre (Straightforward) -->
+              <div class="paper-card category-card category-card--ochre">
+                <div class="category-card__header">
+                  <div class="category-card__identity">
+                    <span class="category-indicator-swatch swatch-ochre" aria-hidden="true"></span>
+                    <span class="category-card__tier-label">Level 1 &mdash; Straightforward</span>
+                  </div>
+                  <span class="category-card__schema-tag">Columns: <code>cat1</code> &amp; <code>words1</code></span>
+                </div>
+
+                <div class="paper-input-group">
+                  <label for="input-cat1-name" class="paper-label">Category Classification <span class="required" aria-hidden="true">*</span></label>
+                  <input id="input-cat1-name" type="text" class="paper-input" placeholder="e.g. BAR STRAINERS" required>
+                </div>
+
+                <div class="words-quad-grid">
+                  <div class="word-input-field">
+                    <label for="input-cat1-w1" class="word-index-label">Word 1</label>
+                    <input id="input-cat1-w1" type="text" class="paper-input word-input" placeholder="CHINOIS" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat1-w2" class="word-index-label">Word 2</label>
+                    <input id="input-cat1-w2" type="text" class="paper-input word-input" placeholder="FINE" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat1-w3" class="word-index-label">Word 3</label>
+                    <input id="input-cat1-w3" type="text" class="paper-input word-input" placeholder="HAWTHORNE" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat1-w4" class="word-index-label">Word 4</label>
+                    <input id="input-cat1-w4" type="text" class="paper-input word-input" placeholder="JULEP" required>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tier 2: Sage (Moderate) -->
+              <div class="paper-card category-card category-card--sage">
+                <div class="category-card__header">
+                  <div class="category-card__identity">
+                    <span class="category-indicator-swatch swatch-sage" aria-hidden="true"></span>
+                    <span class="category-card__tier-label">Level 2 &mdash; Moderate</span>
+                  </div>
+                  <span class="category-card__schema-tag">Columns: <code>cat2</code> &amp; <code>words2</code></span>
+                </div>
+
+                <div class="paper-input-group">
+                  <label for="input-cat2-name" class="paper-label">Category Classification <span class="required" aria-hidden="true">*</span></label>
+                  <input id="input-cat2-name" type="text" class="paper-input" placeholder="e.g. CARBONATED COCKTAIL FAMILIES" required>
+                </div>
+
+                <div class="words-quad-grid">
+                  <div class="word-input-field">
+                    <label for="input-cat2-w1" class="word-index-label">Word 1</label>
+                    <input id="input-cat2-w1" type="text" class="paper-input word-input" placeholder="BUCK" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat2-w2" class="word-index-label">Word 2</label>
+                    <input id="input-cat2-w2" type="text" class="paper-input word-input" placeholder="COLLINS" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat2-w3" class="word-index-label">Word 3</label>
+                    <input id="input-cat2-w3" type="text" class="paper-input word-input" placeholder="FIZZ" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat2-w4" class="word-index-label">Word 4</label>
+                    <input id="input-cat2-w4" type="text" class="paper-input word-input" placeholder="RICKEY" required>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tier 3: Slate/Blue (Subtle / Tricky) -->
+              <div class="paper-card category-card category-card--slate">
+                <div class="category-card__header">
+                  <div class="category-card__identity">
+                    <span class="category-indicator-swatch swatch-slate" aria-hidden="true"></span>
+                    <span class="category-card__tier-label">Level 3 &mdash; Tricky</span>
+                  </div>
+                  <span class="category-card__schema-tag">Columns: <code>cat3</code> &amp; <code>words3</code></span>
+                </div>
+
+                <div class="paper-input-group">
+                  <label for="input-cat3-name" class="paper-label">Category Classification <span class="required" aria-hidden="true">*</span></label>
+                  <input id="input-cat3-name" type="text" class="paper-input" placeholder="e.g. ORANGE LIQUEURS" required>
+                </div>
+
+                <div class="words-quad-grid">
+                  <div class="word-input-field">
+                    <label for="input-cat3-w1" class="word-index-label">Word 1</label>
+                    <input id="input-cat3-w1" type="text" class="paper-input word-input" placeholder="COINTREAU" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat3-w2" class="word-index-label">Word 2</label>
+                    <input id="input-cat3-w2" type="text" class="paper-input word-input" placeholder="CURACAO" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat3-w3" class="word-index-label">Word 3</label>
+                    <input id="input-cat3-w3" type="text" class="paper-input word-input" placeholder="GRAND MARNIER" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat3-w4" class="word-index-label">Word 4</label>
+                    <input id="input-cat3-w4" type="text" class="paper-input word-input" placeholder="TRIPLE SEC" required>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tier 4: Terracotta (Abstract / Wordplay) -->
+              <div class="paper-card category-card category-card--terracotta">
+                <div class="category-card__header">
+                  <div class="category-card__identity">
+                    <span class="category-indicator-swatch swatch-terracotta" aria-hidden="true"></span>
+                    <span class="category-card__tier-label">Level 4 &mdash; Wordplay / Abstract</span>
+                  </div>
+                  <span class="category-card__schema-tag">Columns: <code>cat4</code> &amp; <code>words4</code></span>
+                </div>
+
+                <div class="paper-input-group">
+                  <label for="input-cat4-name" class="paper-label">Category Classification <span class="required" aria-hidden="true">*</span></label>
+                  <input id="input-cat4-name" type="text" class="paper-input" placeholder="e.g. MARTINI MODIFIERS" required>
+                </div>
+
+                <div class="words-quad-grid">
+                  <div class="word-input-field">
+                    <label for="input-cat4-w1" class="word-index-label">Word 1</label>
+                    <input id="input-cat4-w1" type="text" class="paper-input word-input" placeholder="DIRTY" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat4-w2" class="word-index-label">Word 2</label>
+                    <input id="input-cat4-w2" type="text" class="paper-input word-input" placeholder="DRY" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat4-w3" class="word-index-label">Word 3</label>
+                    <input id="input-cat4-w3" type="text" class="paper-input word-input" placeholder="PERFECT" required>
+                  </div>
+                  <div class="word-input-field">
+                    <label for="input-cat4-w4" class="word-index-label">Word 4</label>
+                    <input id="input-cat4-w4" type="text" class="paper-input word-input" placeholder="WET" required>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Action Ribbon -->
+              <div class="paper-card form-action-ribbon">
+                <label class="checkbox-container">
+                  <input id="check-uppercase" type="checkbox" checked>
+                  <span class="checkbox-custom" aria-hidden="true"></span>
+                  <span class="checkbox-text">Auto-Format In Uppercase</span>
+                </label>
+                <div class="form-action-ribbon__btns">
+                  <button id="btn-cancel-edit" class="interactive-tactile btn-secondary hidden" type="button">Discard Edits</button>
+                  <button id="btn-save-puzzle" class="interactive-tactile btn-action btn-action--primary" type="submit">
+                    <span id="save-btn-text">Save Puzzle to Catalog</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Right Panel: Physical Stationary Game Preview -->
+            <aside class="board-simulator-pane">
+              <div class="paper-card simulator-sticky-box">
+                <div class="simulator-header">
+                  <div class="simulator-header__title-wrap">
+                    <span class="simulator-eyebrow">PHYSICAL SIMULATION</span>
+                    <h2 class="simulator-heading">Player Board Canvas</h2>
+                  </div>
+                  <button id="btn-shuffle-sim" class="interactive-tactile btn-secondary btn-xs" type="button" title="Shuffle tile ordering">
+                    Shuffle
+                  </button>
+                </div>
+                <p class="simulator-caption">Exact 16-tile physical distribution as presented to players.</p>
+
+                <!-- 4x4 Tactile Tile Matrix -->
+                <div id="sim-grid" class="sim-grid" aria-label="16-tile live game grid">
+                  <!-- 16 tiles dynamically populated -->
+                </div>
+
+                <!-- Solved Groups Drawer Preview -->
+                <div class="sim-solved-preview">
+                  <span class="sim-sub-title">Committed Solution Banners</span>
+                  <div id="sim-solved-stack" class="sim-solved-stack">
+                    <div class="sim-empty-state">Complete categories to inspect physical solved cardstock banners.</div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             TAB B: DATASET INVENTORY / CATALOG
+             =============================================================== -->
+        <div id="tab-inventory" class="tab-content" role="tabpanel" aria-labelledby="nav-btn-inventory">
+          <div class="inventory-controls-bar">
+            <div class="paper-input-group inventory-search-field">
+              <label for="inventory-search" class="visually-hidden">Search Catalog</label>
+              <input id="inventory-search" type="search" class="paper-input" placeholder="Search entries by word or category name...">
+            </div>
+            <button id="btn-new-from-catalog" class="interactive-tactile btn-action btn-action--primary btn-sm" type="button">
+              + Compose New Entry
+            </button>
+          </div>
+
+          <!-- Catalog List Container -->
+          <div id="catalog-card-list" class="catalog-card-list" role="list">
+            <!-- Puzzles dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             TAB C: RAW CSV PREVIEW & INSPECTOR
+             =============================================================== -->
+        <div id="tab-preview" class="tab-content" role="tabpanel" aria-labelledby="nav-btn-preview">
+          <div class="csv-inspector-toolbar">
+            <div class="csv-inspector-toolbar__left">
+              <span class="csv-badge">RFC-4180 Invariant</span>
+              <span class="csv-col-count">8 Standard Columns</span>
+            </div>
+            <div class="csv-inspector-toolbar__right">
+              <div class="segmented-control" role="tablist">
+                <button id="btn-view-table" class="segmented-control__item segmented-control__item--active" type="button" role="tab" aria-selected="true">Data Table</button>
+                <button id="btn-view-raw" class="segmented-control__item" type="button" role="tab" aria-selected="false">Raw Source</button>
+              </div>
+              <button id="btn-copy-csv" class="interactive-tactile btn-secondary btn-sm" type="button">
+                Copy CSV to Clipboard
+              </button>
+            </div>
+          </div>
+
+          <!-- Table View Container -->
+          <div id="csv-table-wrapper" class="paper-card csv-table-container">
+            <table class="csv-data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>cat1</th>
+                  <th>words1</th>
+                  <th>cat2</th>
+                  <th>words2</th>
+                  <th>cat3</th>
+                  <th>words3</th>
+                  <th>cat4</th>
+                  <th>words4</th>
+                </tr>
+              </thead>
+              <tbody id="csv-table-body">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Raw Code Container -->
+          <div id="csv-raw-wrapper" class="paper-card csv-raw-container hidden">
+            <pre><code id="csv-raw-code"></code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- UNIFORM BOTTOM THUMB-ZONE NAVIGATION DOCK -->
+    <nav class="app-bottom-dock" aria-label="Ergonomic Navigation Dock">
+      <div class="app-bottom-dock__container" id="bottomDockNavItems">
+        <button type="button" class="nav-tab-item nav-tab-item--active" data-route="editor" aria-label="Editor View">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+          <span>Editor</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item" data-route="inventory" aria-label="Catalog Inventory">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <span>Catalog</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item" data-route="preview" aria-label="CSV Preview">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>Ledger</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" class="nav-tab-item" data-route="export" aria-label="Export Data Dialog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>Export</span>
+          <span class="nav-tab-item__indicator" aria-hidden="true"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ===============================================================
+         TACTILE DIALOGS & SHEET MODALS
+         =============================================================== -->
+    
+    <!-- Export Modal -->
+    <div id="modal-export" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="export-heading" tabindex="-1">
+      <div class="paper-card modal-card">
+        <div class="modal-header">
+          <h2 id="export-heading" class="modal-title">Export Verified CSV</h2>
+          <button class="interactive-tactile modal-close-btn" data-close="modal-export" type="button" aria-label="Close export dialog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-description">
+            Your catalog is formatted according to standard 8-column RFC-4180 specifications, ready for immediate runtime ingestion.
+          </p>
+
+          <div class="export-stats-row">
+            <div class="paper-card stat-tile">
+              <span id="export-total-count" class="stat-value">0</span>
+              <span class="stat-label">Total Puzzles</span>
+            </div>
+            <div class="paper-card stat-tile">
+              <span id="export-new-count" class="stat-value">0</span>
+              <span class="stat-label">Session Entries</span>
+            </div>
+          </div>
+
+          <div class="paper-input-group">
+            <label for="export-filename" class="paper-label">Target File Name</label>
+            <input id="export-filename" type="text" class="paper-input" value="puzzles.csv">
+          </div>
+
+          <div class="modal-actions-stack">
+            <button id="btn-download-all" class="interactive-tactile btn-action btn-action--primary full-width" type="button">
+              Download Complete CSV (All Records)
+            </button>
+            <button id="btn-download-session-only" class="interactive-tactile btn-action btn-secondary full-width" type="button">
+              Download Newly Added Records Only
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="modal-confirm" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-heading" tabindex="-1">
+      <div class="paper-card modal-card modal-card--compact">
+        <div class="modal-header">
+          <h2 id="confirm-heading" class="modal-title">Confirm Operation</h2>
+          <button class="interactive-tactile modal-close-btn" data-close="modal-confirm" type="button" aria-label="Close confirmation dialog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-msg" class="confirm-message">Are you certain you wish to proceed?</p>
+          <div class="modal-actions-row">
+            <button id="btn-confirm-yes" class="interactive-tactile btn-action btn-action--danger full-width" type="button">Confirm</button>
+            <button id="btn-confirm-no" class="interactive-tactile btn-secondary full-width" type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
