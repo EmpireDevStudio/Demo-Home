@@ -520,6 +520,15 @@ body.is-drawer-locked {
   color: var(--color-text-secondary);
 }
 
+.header-reset-btn {
+  color: var(--color-terracotta-text);
+}
+
+.header-reset-btn:hover {
+  background-color: var(--color-terracotta-soft);
+  border-color: var(--color-terracotta-accent);
+}
+
 .icon-action-btn svg {
   width: 18px;
   height: 18px;

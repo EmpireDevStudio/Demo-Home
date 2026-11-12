@@ -1357,12 +1357,14 @@ function setupEventListeners() {
 
   // Reset Modal Triggers
   const resetBtn = document.getElementById("resetChecklistBtn");
+  const headerResetBtn = document.getElementById("headerResetChecklistBtn");
   const cancelResetBtn = document.getElementById("cancelResetBtn");
   const confirmResetBtn = document.getElementById("confirmResetBtn");
   const closeResetModalBtn = document.getElementById("closeResetModalBtn");
   const resetModal = document.getElementById("resetModal");
 
   if (resetBtn) resetBtn.addEventListener("click", openResetModal);
+  if (headerResetBtn) headerResetBtn.addEventListener("click", openResetModal);
   if (cancelResetBtn) cancelResetBtn.addEventListener("click", closeResetModal);
   if (confirmResetBtn) confirmResetBtn.addEventListener("click", executeResetChecklist);
   if (closeResetModalBtn) closeResetModalBtn.addEventListener("click", closeResetModal);
