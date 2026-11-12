@@ -1,6 +1,5 @@
-/* START OF FILE style.css */
 /* ==========================================================================
-   MASTER SENSORY DESIGN SYSTEM: TACTILE WARM PAPER & ERGONOMIC DOCK
+   MASTER SENSORY DESIGN SYSTEM: TACTILE WARM PAPER & EDITORIAL LEDGER
    Universal Physical Lighting, Specular Highlights & WCAG 2.2 AA Compliance
    ========================================================================== */
 
@@ -67,26 +66,26 @@
   --duration-slow: 320ms;
 
   /* The Paper Shadow Matrix (Warm Umber: rgba(42, 45, 39, ...)) */
-  --shadow-sm: 
+  --shadow-sm:
     0 1px 2px rgba(42, 45, 39, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    
-  --shadow-paper: 
+
+  --shadow-paper:
     0 1px 3px rgba(42, 45, 39, 0.03),
     0 6px 16px rgba(42, 45, 39, 0.045),
     inset 0 1px 0 rgba(255, 255, 255, 0.85);
 
-  --shadow-elevated: 
+  --shadow-elevated:
     0 2px 6px rgba(42, 45, 39, 0.04),
     0 12px 28px rgba(42, 45, 39, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
-  --shadow-overlay: 
+  --shadow-overlay:
     0 4px 12px rgba(42, 45, 39, 0.06),
     0 24px 48px rgba(42, 45, 39, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
 
-  --shadow-sunken: 
+  --shadow-sunken:
     inset 0 1px 3px rgba(42, 45, 39, 0.07),
     0 1px 0 rgba(255, 255, 255, 0.8);
 
@@ -147,7 +146,7 @@ body {
   cursor: pointer;
   user-select: none;
   touch-action: manipulation;
-  transition: 
+  transition:
     transform var(--duration-fast) var(--ease-tactile),
     box-shadow var(--duration-fast) var(--ease-tactile),
     background-color var(--duration-fast) var(--ease-tactile),
@@ -224,7 +223,7 @@ body {
   flex-direction: column;
   gap: var(--space-2);
   padding: calc(var(--space-3) + var(--safe-top)) var(--space-4) var(--space-3);
-  background-color: var(--color-canvas);
+  background-color: rgba(245, 243, 237, 0.88);
   border-bottom: 1px solid var(--color-border-subtle);
   position: sticky;
   top: 0;
@@ -251,16 +250,26 @@ body {
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-pill);
   color: var(--color-text-primary);
+  font-family: var(--font-stack);
   font-size: 0.875rem;
   font-weight: 600;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   touch-action: manipulation;
-  transition: transform var(--duration-fast) var(--ease-tactile), border-color var(--duration-fast);
+  transition: transform var(--duration-fast) var(--ease-tactile), border-color var(--duration-fast), box-shadow var(--duration-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-back-nav:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-paper);
+    transform: translateY(-1px);
+  }
 }
 
 .btn-back-nav:active {
   transform: translateY(1px) scale(0.98);
+  box-shadow: var(--shadow-sunken);
 }
 
 .app-page-header__actions {
@@ -280,6 +289,7 @@ body {
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-1) var(--space-3);
+  min-height: 36px;
   background-color: var(--color-paper);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-pill);
@@ -363,13 +373,15 @@ body {
   box-shadow: var(--shadow-paper);
   isolation: isolate;
   transition: transform var(--duration-fast) var(--ease-tactile),
-              box-shadow var(--duration-fast) var(--ease-tactile);
+              box-shadow var(--duration-fast) var(--ease-tactile),
+              border-color var(--duration-fast) var(--ease-tactile);
 }
 
 .paper-card__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-2);
 }
 
 .paper-card__title {
@@ -459,6 +471,14 @@ body {
   border-color: var(--color-text-primary);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .tier-pill-btn--active:hover {
+    background-color: #3f423b;
+    border-color: #3f423b;
+    color: #ffffff;
+  }
+}
+
 .btn-cta-block {
   width: 100%;
   justify-content: space-between;
@@ -533,6 +553,24 @@ body {
   line-height: 1.4;
 }
 
+/* Quick Utility Strip */
+.utility-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.btn-utility-pill {
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  gap: var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
 /* ==========================================================================
    GAMEPLAY SCREEN, BOARD & CELLS
    ========================================================================== */
@@ -549,7 +587,20 @@ body {
 
 .gameplay-tier-bar {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.gameplay-active-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .game-tier-pills {
@@ -572,10 +623,19 @@ body {
   border-color: var(--color-text-primary);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .tier-tab-pill--active:hover {
+    background-color: #3f423b;
+    border-color: #3f423b;
+    color: #ffffff;
+  }
+}
+
 /* Active Clue Inset Bar */
 .active-clue-bar {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
   min-height: 52px;
@@ -593,7 +653,7 @@ body {
   background-color: var(--color-paper-sunken);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-xs);
-  padding: var(--space-05) var(--space-1);
+  padding: var(--space-05) var(--space-2);
   font-size: 0.75rem;
   font-weight: 800;
   color: var(--color-text-primary);
@@ -609,6 +669,7 @@ body {
   font-weight: 600;
   line-height: 1.35;
   color: var(--color-text-primary);
+  text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -694,6 +755,7 @@ body {
 .crossword-grid[data-tier="midi"] .cell-letter {
   font-size: clamp(0.85rem, 3vw, 1.15rem);
 }
+
 .crossword-grid[data-tier="midi"] .cell-num {
   font-size: clamp(0.42rem, 1.3vw, 0.55rem);
 }
@@ -702,8 +764,11 @@ body {
   font-size: clamp(0.68rem, 2.3vw, 0.9rem);
   margin-top: 1px;
 }
+
 .crossword-grid[data-tier="main"] .cell-num {
   font-size: clamp(0.35rem, 1vw, 0.45rem);
+  top: 1px;
+  left: 2px;
 }
 
 .cell-word {
@@ -871,13 +936,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
   background-color: var(--color-paper);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: transform var(--duration-fast), border-color var(--duration-fast);
+  transition: transform var(--duration-fast), border-color var(--duration-fast), box-shadow var(--duration-fast);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -892,11 +958,21 @@ body {
   transform: translateY(1px);
 }
 
+.vault-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
 .vault-date {
   font-family: var(--font-serif);
   font-size: 1rem;
   font-weight: 700;
   color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .vault-card-meta {
@@ -908,6 +984,7 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
+  flex-shrink: 0;
 }
 
 .vault-tier-badge {
@@ -918,6 +995,21 @@ body {
   background-color: var(--color-paper-sunken);
   color: var(--color-text-secondary);
   text-transform: capitalize;
+}
+
+.vault-tier-badge.tier-mini {
+  background-color: var(--color-ochre-soft);
+  color: var(--color-ochre-text);
+}
+
+.vault-tier-badge.tier-midi {
+  background-color: var(--color-sage-soft);
+  color: var(--color-sage-text);
+}
+
+.vault-tier-badge.tier-main {
+  background-color: var(--color-terracotta-soft);
+  color: var(--color-terracotta-text);
 }
 
 .vault-tier-badge.completed {
@@ -983,6 +1075,10 @@ body {
   text-transform: capitalize;
 }
 
+.stats-tier-records strong {
+  font-variant-numeric: tabular-nums;
+}
+
 /* ==========================================================================
    THUMB-ZONE BOTTOM DOCK
    ========================================================================== */
@@ -1022,6 +1118,7 @@ body {
   border: none;
   border-radius: var(--radius-md);
   color: var(--color-text-secondary);
+  font-family: var(--font-stack);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -1053,7 +1150,7 @@ body {
 }
 
 /* ==========================================================================
-   MODALS & SIDE PANELS
+   MODALS, SETTINGS & SIDE PANELS
    ========================================================================== */
 
 .panel-side-overlay {
@@ -1071,6 +1168,8 @@ body {
   background-color: rgba(42, 45, 39, 0.4);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-tactile);
 }
 
 .panel-side-sheet {
@@ -1084,6 +1183,16 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transform: translate3d(100%, 0, 0);
+  transition: transform var(--duration-slow) var(--ease-tactile);
+}
+
+.panel-side-overlay.active .panel-side-backdrop {
+  opacity: 1;
+}
+
+.panel-side-overlay.active .panel-side-sheet {
+  transform: translate3d(0, 0, 0);
 }
 
 .panel-side-header {
@@ -1148,7 +1257,7 @@ body {
   color: var(--color-text-secondary);
 }
 
-/* Victory Modal */
+/* Modals */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -1172,6 +1281,85 @@ body {
   padding: var(--space-5);
   display: flex;
   flex-direction: column;
+  gap: var(--space-4);
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.settings-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.settings-subtext {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.segmented-control {
+  display: flex;
+  background: var(--color-paper-sunken);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.seg-btn {
+  border: none;
+  background: transparent;
+  padding: 5px 12px;
+  font-family: var(--font-stack);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  border-radius: calc(var(--radius-sm) - 2px);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--duration-fast), color var(--duration-fast), box-shadow var(--duration-fast);
+}
+
+.seg-btn.active {
+  background-color: var(--color-paper);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Victory Modal */
+.victory-card {
   gap: var(--space-3);
   text-align: center;
   align-items: center;
@@ -1228,6 +1416,16 @@ body {
   transition: opacity var(--duration-fast);
 }
 
+/* Compact Mobile Heights */
+@media (max-height: 720px) and (max-width: 767px) {
+  .board-frame {
+    max-width: min(76vw, 310px);
+  }
+  .kb-key {
+    height: 38px;
+  }
+}
+
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1236,5 +1434,7 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .panel-side-sheet {
+    transform: none !important;
+  }
 }
-/* END OF FILE style.css */

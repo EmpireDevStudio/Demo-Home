@@ -1,4 +1,3 @@
-<!-- START OF FILE index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,7 @@
   <meta name="description" content="Editorial Ledger Crossword: Artisanal daily word challenges, vocabulary puzzles, and physical paper-feel archives.">
   <meta name="theme-color" content="#F5F3ED">
   <title>Editorial Ledger — Daily Crossword</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,14 +14,14 @@
 </head>
 <body>
   <div class="app-viewport">
-    <!-- STANDARDIZED PAGE HEADER -->
+    <!-- STANDARDIZED STICKY PAGE HEADER -->
     <header class="app-page-header" id="appHeader">
       <div class="app-page-header__controls">
         <button type="button" class="btn-back-nav" id="btnGlobalBack" aria-label="Navigate Back">
           <svg class="icon-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <span class="btn-back-nav__label" id="btnBackNavLabel">Back</span>
+          <span class="btn-back-nav__label" id="btnBackNavLabel">Portal</span>
         </button>
 
         <div class="app-page-header__actions" id="headerActionsSlot">
@@ -33,6 +32,13 @@
             </svg>
             <span id="gameTimerDisplay" class="game-timer-badge" aria-label="Elapsed Time">00:00</span>
           </div>
+
+          <button type="button" class="interactive-tactile btn-header-utility" id="btnSettingsTrigger" aria-label="Open Settings" title="Settings">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
 
           <button type="button" class="interactive-tactile btn-header-utility" id="btnHelpTrigger" aria-label="Open House Rules & Guide" title="Rules & Guide">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -45,10 +51,10 @@
       </div>
 
       <div class="app-page-header__title-block">
-        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">OVERVIEW</span>
-        <h1 class="app-page-header__title" id="pageTitleSlot">Editorial Ledger</h1>
+        <span class="app-page-header__eyebrow" id="pageEyebrowSlot">DAILY WORKSPACE</span>
+        <h1 class="app-page-header__title" id="pageTitleSlot">Daily Crossword</h1>
         <p class="app-page-header__subtitle" id="pageSubtitleSlot">
-          Artisanal word management, daily vocabulary records, and spatial crossword solve tiers.
+          Solve the daily word riddles arranged by size, vocabulary depth, and cadence.
         </p>
       </div>
     </header>
@@ -56,7 +62,7 @@
     <!-- MAIN APP VIEWS CONTAINER -->
     <main class="app-main-content">
       <!-- 1. OVERVIEW / HOME VIEW -->
-      <section id="view-overview" class="app-view app-view--active" aria-label="Daily Overview">
+      <section id="view-overview" class="app-view" aria-label="Daily Overview">
         <div class="view-container">
           <article class="paper-card daily-hero-card">
             <div class="paper-card__header">
@@ -69,13 +75,13 @@
             <div class="paper-card__body">
               <h2 class="paper-card__title">Choose Today's Edition</h2>
               <p class="paper-card__description">
-                Solve the daily crossword puzzles structured by grid density, theme complexity, and cadence.
+                Select a daily crossword tier below to begin or resume your current ledger solve.
               </p>
-              <div class="tier-selection-strip" id="dailyTierSelector" role="group" aria-label="Crossword Tier Selection"></div>
+              <div class="tier-selection-strip" id="dailyTierSelector" role="group" aria-label="Select Daily Tier"></div>
             </div>
             <div class="paper-card__footer">
               <button type="button" class="interactive-tactile btn-primary btn-cta-block" id="btnPlayDaily">
-                <span class="btn-text" id="btnPlayDailyLabel">Commence Solve</span>
+                <span class="btn-text" id="btnPlayDailyLabel">Play Crossword</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <polyline points="9 18 15 12 9 6"/>
                 </svg>
@@ -84,7 +90,7 @@
           </article>
 
           <div class="quick-nav-grid">
-            <article class="paper-card interactive-hover-card" id="cardQuickVault">
+            <article class="paper-card interactive-hover-card" id="cardQuickVault" role="button" tabindex="0">
               <div class="quick-card-inner">
                 <div class="quick-card-icon quick-card-icon--terracotta">
                   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -94,12 +100,12 @@
                 </div>
                 <div>
                   <h3 class="quick-card-title">Vault Archive</h3>
-                  <p class="quick-card-desc">Review prior daily records, completed ledgers, and past publications.</p>
+                  <p class="quick-card-desc">Browse prior daily records, completed ledgers, and past editions.</p>
                 </div>
               </div>
             </article>
 
-            <article class="paper-card interactive-hover-card" id="cardQuickStats">
+            <article class="paper-card interactive-hover-card" id="cardQuickStats" role="button" tabindex="0">
               <div class="quick-card-inner">
                 <div class="quick-card-icon quick-card-icon--ochre">
                   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -110,10 +116,46 @@
                 </div>
                 <div>
                   <h3 class="quick-card-title">Solve Statistics</h3>
-                  <p class="quick-card-desc">Track streaks, solve speeds, and analytical accuracy metrics.</p>
+                  <p class="quick-card-desc">Track solver streaks, total completions, and median solve times.</p>
                 </div>
               </div>
             </article>
+          </div>
+
+          <div class="utility-pill-row" aria-label="Quick Utilities">
+            <button type="button" class="interactive-tactile btn-utility-pill" id="btnUtilSound" aria-label="Toggle Sound Effects">
+              <svg id="soundIconOn" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+              <svg id="soundIconOff" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <line x1="23" y1="9" x2="17" y2="15"/>
+                <line x1="17" y1="9" x2="23" y2="15"/>
+              </svg>
+              <span id="soundLabelText">Sound On</span>
+            </button>
+
+            <button type="button" class="interactive-tactile btn-utility-pill" id="btnUtilShare" aria-label="Share Crossword">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              <span>Share</span>
+            </button>
+
+            <button type="button" class="interactive-tactile btn-utility-pill" id="btnUtilPortal" aria-label="More Games">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+              <span>Portal</span>
+            </button>
           </div>
         </div>
       </section>
@@ -122,10 +164,11 @@
       <section id="view-game" class="app-view hidden" aria-label="Crossword Grid Play">
         <div class="gameplay-container">
           <div class="gameplay-tier-bar">
+            <span id="gameActiveTitle" class="gameplay-active-title">Daily Puzzle</span>
             <div class="game-tier-pills" id="gameplayTierTabs" role="tablist" aria-label="Tier Selection"></div>
           </div>
 
-          <div class="active-clue-bar interactive-tactile" id="activeClueTrigger" role="button" tabindex="0" aria-label="Active Clue. Press to toggle Across and Down tracks.">
+          <div class="active-clue-bar interactive-tactile" id="activeClueTrigger" role="button" tabindex="0" aria-label="Active Clue. Tap to toggle Across and Down direction.">
             <div class="clue-badge-wrap">
               <span id="activeClueBadge" class="clue-badge">--</span>
               <span class="clue-dir-indicator" aria-hidden="true">&#x21C4;</span>
@@ -231,14 +274,14 @@
                 </div>
               </div>
 
-              <h3 class="stats-subheading">Median Completion Times</h3>
+              <h3 class="stats-subheading">Median Solve Times</h3>
               <ul class="stats-tier-records" id="statsTierTimesList"></ul>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- ERROR / RETRY VIEW -->
+      <!-- 5. ERROR / RETRY VIEW -->
       <section id="view-error" class="app-view hidden" aria-label="Connection Status">
         <div class="view-container">
           <article class="paper-card error-card">
@@ -246,9 +289,9 @@
               <span class="status-dot"></span>
               <span class="status-label">Offline / Error</span>
             </div>
-            <h2 class="paper-card__title" id="errorCardHeading">Puzzle Library Unavailable</h2>
+            <h2 class="paper-card__title" id="errorCardHeading">Puzzle Unavailable</h2>
             <p class="paper-card__description" id="errorCardMessage">
-              Unable to load external puzzle records. Local embedded emergency archives are ready.
+              Unable to load crossword puzzle records. Please verify your connection.
             </p>
             <div class="paper-card__footer">
               <button type="button" class="interactive-tactile btn-primary" id="btnRetryLoad">
@@ -265,16 +308,16 @@
       <div class="app-bottom-dock__container" id="bottomDockNavItems"></div>
     </nav>
 
-    <!-- HOW TO PLAY SIDE SHEET MODAL -->
+    <!-- HOW TO PLAY SIDE SHEET -->
     <div id="panelHowToPlayOverlay" class="panel-side-overlay hidden" aria-hidden="true">
       <div class="panel-side-backdrop" id="panelHelpBackdrop"></div>
       <aside class="panel-side-sheet" id="panelHowToPlay" role="dialog" aria-modal="true" aria-labelledby="htpTitle">
         <header class="panel-side-header">
           <div class="panel-title-group">
-            <span class="app-page-header__eyebrow">HOUSE RULES</span>
+            <span class="app-page-header__eyebrow">HOUSE RULES & GUIDE</span>
             <h2 id="htpTitle" class="panel-title">How to Play</h2>
           </div>
-          <button type="button" class="interactive-tactile btn-panel-close" id="btnCloseHelp" aria-label="Close Rules & Guide">
+          <button type="button" class="interactive-tactile btn-panel-close" id="btnCloseHelp" aria-label="Close How to Play">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18"/>
               <line x1="6" y1="6" x2="18" y2="18"/>
@@ -286,39 +329,81 @@
           <section class="htp-section">
             <div class="htp-section-head">
               <span class="htp-num">01</span>
-              <h3>Ledger Objective</h3>
+              <h3>Objective</h3>
             </div>
-            <p>Fill every vacant cardstock cell by solving the curated vocabulary and thematic cues. Sunken dark cells mark terminal boundaries.</p>
+            <p>Fill every open cardstock cell of the ledger grid by solving the curated clues provided. Dark cells mark word boundaries.</p>
           </section>
 
           <section class="htp-section">
             <div class="htp-section-head">
               <span class="htp-num">02</span>
-              <h3>Orientation & Track Focus</h3>
+              <h3>Navigation & Orientation</h3>
             </div>
-            <p>Select any cell to inspect its active clue. Tap the active cell again or click the <strong>DIR</strong> button to toggle between <strong>Across</strong> and <strong>Down</strong> word tracks.</p>
+            <p>Select any cell to inspect its active clue. Tap the active cell again or press the <strong>DIR</strong> button to toggle between <strong>Across</strong> and <strong>Down</strong> word tracks.</p>
           </section>
 
           <section class="htp-section">
             <div class="htp-section-head">
               <span class="htp-num">03</span>
-              <h3>Tactile Input</h3>
+              <h3>Typing & Corrections</h3>
             </div>
-            <p>Use your physical keyboard or the onscreen virtual keys. The input cursor advances automatically to the next letter. Press <strong>Backspace</strong> to erase and step back.</p>
+            <p>Type on your physical keyboard or use the tactile screen keys. The cursor advances automatically to the next letter. Press <strong>Backspace</strong> to erase and step back.</p>
           </section>
 
           <section class="htp-section">
             <div class="htp-section-head">
               <span class="htp-num">04</span>
-              <h3>Three Daily Tiers</h3>
+              <h3>Daily Releases & Tiers</h3>
             </div>
-            <p>Each release features <strong>Mini</strong> (5×5 swift solve), <strong>Midi</strong> (patterned mid-tier), and <strong>Main</strong> (full challenge). All solves are recorded in the Vault.</p>
+            <p>Each day, a new release rotates across three tiers: <strong>Mini</strong> (5×5 fast solve), <strong>Midi</strong> (shaped grid), and <strong>Main</strong> (full edition). Past puzzles remain accessible in the <strong>Vault</strong>.</p>
           </section>
         </div>
       </aside>
     </div>
 
-    <!-- VICTORY MODAL DIALOG -->
+    <!-- SETTINGS MODAL -->
+    <div id="modalSettings" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-card">
+        <header class="modal-head">
+          <div class="modal-title-wrap">
+            <span class="app-page-header__eyebrow">PREFERENCES</span>
+            <h2 id="settingsTitle" class="modal-title">Settings</h2>
+          </div>
+          <button type="button" class="interactive-tactile btn-panel-close" data-close="modalSettings" aria-label="Close Settings">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+
+        <div class="modal-content">
+          <div class="settings-row">
+            <div class="settings-info">
+              <span class="settings-label">Acoustic Feedback</span>
+              <span class="settings-subtext">Subtle tactile paper clicks and chimes</span>
+            </div>
+            <div class="segmented-control" role="radiogroup" aria-label="Acoustic Feedback">
+              <button type="button" class="seg-btn active" id="optSoundOn" role="radio" aria-checked="true">On</button>
+              <button type="button" class="seg-btn" id="optSoundOff" role="radio" aria-checked="false">Off</button>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-info">
+              <span class="settings-label">Haptic Feedback</span>
+              <span class="settings-subtext">Gentle vibration on touch devices</span>
+            </div>
+            <div class="segmented-control" role="radiogroup" aria-label="Haptic Feedback">
+              <button type="button" class="seg-btn active" id="optHapticOn" role="radio" aria-checked="true">On</button>
+              <button type="button" class="seg-btn" id="optHapticOff" role="radio" aria-checked="false">Off</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VICTORY MODAL -->
     <div id="modalVictory" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="victoryTitle">
       <div class="modal-card victory-card">
         <div class="victory-seal">
@@ -328,23 +413,22 @@
         </div>
         <span class="app-page-header__eyebrow">EDITION COMPLETED</span>
         <h2 id="victoryTitle" class="victory-title">Ledger Solved</h2>
-        <p id="victorySummaryText" class="victory-msg">Recorded in 00:00</p>
+        <p id="victorySummaryText" class="victory-msg">Solved in 00:00</p>
         <div class="victory-btn-group">
           <button type="button" class="interactive-tactile btn-primary" id="btnVictoryNextAction">
-            Proceed to Next Tier
+            Next Tier
           </button>
-          <button type="button" class="interactive-tactile btn-secondary" id="btnVictoryReviewAction">
-            Review Ledger Grid
+          <button type="button" class="interactive-tactile btn-secondary" data-close="modalVictory" id="btnVictoryReviewAction">
+            Review Ledger
           </button>
         </div>
       </div>
     </div>
 
-    <!-- TOAST NOTIFICATION CONTAINER -->
+    <!-- TOAST NOTIFICATION -->
     <div id="toastMessage" class="toast-bubble hidden" role="status" aria-live="polite"></div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-<!-- END OF FILE index.html -->

@@ -148,7 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const introDismissBtn = document.getElementById("introDismissBtn");
   const introTitle = document.getElementById("introTitle");
   const introSubtitle = document.getElementById("introSubtitle");
-  const mastheadBackBtn = document.getElementById("mastheadBackBtn");
   const pageEyebrowSlot = document.getElementById("pageEyebrowSlot");
   const pageTitleSlot = document.getElementById("pageTitleSlot");
   const pageSubtitleSlot = document.getElementById("pageSubtitleSlot");
@@ -278,19 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { once: true });
   }
 
-  /* --- 4. BACK NAVIGATION CONTROLLER --- */
-  if (mastheadBackBtn) {
-    mastheadBackBtn.addEventListener("click", () => {
-      triggerHapticPulse();
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        window.location.href = APP_CONFIG.navigation.defaultFallbackRoute;
-      }
-    });
-  }
-
-  /* --- 5. RESPONSIVE VINYL SIZING --- */
+  /* --- 4. RESPONSIVE VINYL SIZING --- */
   function getDimensions() {
     const isMobile = window.innerWidth <= APP_CONFIG.physics.mobileBreakpointPx;
     return isMobile ? APP_CONFIG.physics.mobile : APP_CONFIG.physics.desktop;
