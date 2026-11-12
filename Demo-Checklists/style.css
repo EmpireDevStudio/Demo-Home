@@ -1551,7 +1551,57 @@ body.is-drawer-locked {
 /* --- 17. RESPONSIVE BREAKPOINTS (MOBILE-FIRST) --- */
 @media (max-width: 899px) {
   :root {
-    --header-height: 64px;
+    --header-height: 112px;
+  }
+
+  .app-page-header {
+    height: auto;
+    min-height: calc(var(--header-height) + var(--safe-top));
+  }
+
+  .app-page-header__inner {
+    height: auto;
+    min-height: var(--header-height);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .app-page-header__controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "navigation brand"
+      "actions actions";
+    gap: var(--space-2) var(--space-3);
+    min-width: 0;
+  }
+
+  .header-nav-cluster {
+    grid-area: navigation;
+    min-width: 0;
+  }
+
+  .brand-signature {
+    grid-area: brand;
+    justify-self: end;
+    gap: var(--space-2);
+    max-width: 100%;
+  }
+
+  .brand-text-block,
+  .brand-heading {
+    min-width: 0;
+  }
+
+  .brand-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .header-context-tray {
+    grid-area: actions;
+    justify-content: flex-end;
+    min-width: 0;
   }
 
   .desktop-only-btn {
@@ -1657,6 +1707,10 @@ body.is-drawer-locked {
 
 @media (max-width: 480px) {
   .brand-motto {
+    display: none;
+  }
+
+  .brand-stamp-pill {
     display: none;
   }
 
