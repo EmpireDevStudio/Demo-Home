@@ -33,7 +33,7 @@ const APP_CONFIG = Object.freeze({
     defaultFallbackRoute: "../",
     backNavLabel: "Parlor",
     items: [
-      { id: "home", label: "Home", icon: "home", route: "./Demo-Home/", enabled: true, showInBottomBar: true },
+      { id: "home", label: "Home", icon: "home", route: "../", enabled: true, showInBottomBar: true },
       { id: "puzzles", label: "Games", icon: "grid", route: "#mainContentArea", enabled: true, showInBottomBar: true, isActive: true },
       { id: "settings", label: "Preferences", icon: "settings", route: "#settings-modal", enabled: true, showInBottomBar: true },
       { id: "patronage", label: "Patronage", icon: "heart", route: "#donate-modal", enabled: true, showInBottomBar: true },
@@ -412,6 +412,9 @@ const APP_CONFIG = Object.freeze({
         link.href = item.url;
         link.setAttribute("aria-label", `Play ${item.name}: ${item.desc}`);
         link.setAttribute("data-id", item.id);
+        if (item.id === "specs") {
+          link.classList.add("tile-featured");
+        }
 
         if (completed.includes(item.id)) {
           const badge = document.createElement("span");

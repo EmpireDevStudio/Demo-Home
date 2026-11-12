@@ -51,10 +51,6 @@ const APP_CONFIG = Object.freeze({
       defaultTitle: "The Video Archive",
       defaultSubtitle: "An artisanal catalog of recorded knowledge, lectures, and cultural works.",
     },
-    emptyStates: {
-      noDataHeading: "No Matching Records Found",
-      noDataDescription: "No video entries match your current search parameters. Clear your filters or explore other subjects.",
-    },
     actions: {
       confirm: "Confirm & Proceed",
       cancel: "Discard Changes",
@@ -285,7 +281,6 @@ function saveMetadataCache(cache) {
    ========================================================================== */
 function processCSVContent(csvText) {
   const loadingEl = document.getElementById("loadingSkeleton");
-  const errorEl = document.getElementById("errorBanner");
   const counterEl = document.getElementById("totalCountDisplay");
   const apiStatus = document.getElementById("apiStatusBadge");
 
@@ -339,7 +334,6 @@ function processCSVContent(csvText) {
     counterEl.textContent = totalCount.toLocaleString();
   }
 
-  if (errorEl) errorEl.hidden = true;
   if (loadingEl) {
     loadingEl.hidden = true;
     loadingEl.remove();
@@ -393,22 +387,16 @@ async function fetchCSVWithFallbacks() {
 
 async function initLibrary() {
   const loadingEl = document.getElementById("loadingSkeleton");
-  const errorEl = document.getElementById("errorBanner");
-  const errorMessageText = document.getElementById("errorMessageText");
 
   try {
     const csvData = await fetchCSVWithFallbacks();
     processCSVContent(csvData);
   } catch (err) {
-    if (loadingEl) loadingEl.hidden = true;
-    if (errorEl) {
-      errorEl.hidden = false;
-      if (window.location.protocol === "file:") {
-        errorMessageText.innerHTML = "Web browsers restrict automatic file requests over <code>file:///</code> protocols. Please select <code>data.csv</code> directly using the button below:";
-      } else {
-        errorMessageText.innerHTML = `Could not load dataset file (<code>${escapeHTML(err.message)}</code>). Please verify that <code>data.csv</code> is deployed at the web root.`;
-      }
+    if (loadingEl) {
+      loadingEl.hidden = true;
+      loadingEl.remove();
     }
+    console.error("Unable to load the video archive dataset:", err);
   }
 }
 
@@ -588,7 +576,6 @@ function handleCategoryChange(categoryName) {
 
 function renderGallery() {
   const gridEl = document.getElementById("videoGrid");
-  const emptyStateEl = document.getElementById("emptyState");
   const activeBadgeText = document.getElementById("activeCategoryText");
   const statusNotice = document.getElementById("resultsCountNotice");
 
@@ -626,11 +613,8 @@ function renderGallery() {
 
   if (list.length === 0) {
     gridEl.innerHTML = "";
-    if (emptyStateEl) emptyStateEl.hidden = false;
     return;
   }
-
-  if (emptyStateEl) emptyStateEl.hidden = true;
 
   gridEl.innerHTML = "";
   const fragment = document.createDocumentFragment();
@@ -882,12 +866,6 @@ function hydrateFromConfig() {
   const subtitle = document.getElementById("pageSubtitleSlot");
   if (subtitle) subtitle.textContent = APP_CONFIG.content.headers.defaultSubtitle;
 
-  const emptyHeading = document.getElementById("emptyStateHeading");
-  if (emptyHeading) emptyHeading.textContent = APP_CONFIG.content.emptyStates.noDataHeading;
-
-  const emptyDesc = document.getElementById("emptyStateDescription");
-  if (emptyDesc) emptyDesc.textContent = APP_CONFIG.content.emptyStates.noDataDescription;
-
   const footerBrand = document.getElementById("footerBrandTitle");
   if (footerBrand) footerBrand.textContent = APP_CONFIG.identity.appName.toUpperCase();
 
@@ -950,8 +928,6 @@ function setupEventListeners() {
   const searchInput = document.getElementById("librarySearch");
   const clearBtn = document.getElementById("searchClearBtn");
   const sortSelect = document.getElementById("sortSelector");
-  const resetBtn = document.getElementById("resetFiltersBtn");
-  const fileInput = document.getElementById("csvFileInput");
 
   let debounceTimer = null;
   if (searchInput) {
@@ -983,35 +959,6 @@ function setupEventListeners() {
       triggerHapticPulse();
       AppState.sortMode = e.target.value;
       renderGallery();
-    });
-  }
-
-  if (resetBtn && searchInput) {
-    resetBtn.addEventListener("click", () => {
-      triggerHapticPulse();
-      searchInput.value = "";
-      if (clearBtn) clearBtn.hidden = true;
-      AppState.searchQuery = "";
-      AppState.activeCategory = "ALL";
-      renderCategoryTabs();
-      renderGallery();
-    });
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          processCSVContent(event.target.result);
-        } catch (err) {
-          alert(`Error reading selected file: ${err.message}`);
-        }
-      };
-      reader.readAsText(file);
     });
   }
 

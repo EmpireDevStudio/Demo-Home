@@ -147,42 +147,6 @@
           </div>
         </div>
 
-        <!-- System Message: Error / Manual CSV Fallback -->
-        <div id="errorBanner" class="system-message error-message paper-card" hidden>
-          <div class="message-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-          </div>
-          <div class="message-content">
-            <h2 class="message-title">Catalogue Access Interrupted</h2>
-            <p id="errorMessageText">Unable to retrieve <code>data.csv</code> automatically. If browsing locally via <code>file:///</code>, browser security policies restrict automatic file reading.</p>
-            <div class="local-file-prompt">
-              <label for="csvFileInput" class="interactive-tactile btn-primary">
-                Select data.csv Manually
-                <input type="file" id="csvFileInput" accept=".csv,text/csv" class="visually-hidden">
-              </label>
-              <p class="file-hint">Or deploy this project to a local web server or static hosting platform.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- System Message: Empty State -->
-        <div id="emptyState" class="system-message empty-message paper-card" hidden>
-          <div class="message-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="3" ry="3"></rect>
-              <path d="M7 10h10M7 14h6"></path>
-            </svg>
-          </div>
-          <div class="message-content">
-            <h2 class="message-title" id="emptyStateHeading">No Matching Records Found</h2>
-            <p id="emptyStateDescription">No curated video records match your current criteria. Adjust your terms or reset filters to display entries.</p>
-            <button type="button" id="resetFiltersBtn" class="interactive-tactile btn-secondary">Reset All Filters</button>
-          </div>
-        </div>
       </div>
 
       <!-- Live Video Grid Collection -->

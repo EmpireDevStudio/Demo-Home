@@ -49,8 +49,8 @@ const APP_CONFIG = Object.freeze({
   content: {
     headers: {
       eyebrow: "SYSTEM ARCHITECTURE",
-      title: "Operational Directory",
-      subtitle: "Curated records, visual broadcasts, simulation chambers, and operational workflows.",
+      title: "Directory",
+      subtitle: "",
     },
     intro: {
       title: "SYSTEM DIRECTORY",
@@ -91,29 +91,32 @@ const APP_CONFIG = Object.freeze({
     mobileBreakpointPx: 640,
     desktop: {
       normalDiscSize: 116,
-      expandedDiscSize: 196,
       cutoutClearance: 19,
     },
     mobile: {
       normalDiscSize: 84,
-      expandedDiscSize: 148,
       cutoutClearance: 13,
     },
-    springForce: 0.14,
-    springDamping: 0.74,
     parallaxStrength: 3.5,
     orbParallaxFactor: 0.28,
   },
 
-  // 6. FEATURE SWITCHES & UX BEHAVIOURAL CONTROLS
+  // 6. CONTACT LINK (set recipient, subject, and body for the email app)
+  contact: {
+    recipient: "EmpireDevStudio@gmail.com", // Set this to the destination email address.
+    subject: "System Directory inquiry",
+    body: "Hello,\n\nI would like to get in touch.",
+    transitionDurationMs: 900,
+  },
+
+  // 7. FEATURE SWITCHES & UX BEHAVIOURAL CONTROLS
   features: {
     enableHapticFeedback: true,
     enableParallax: true,
-    autoCollapseVinylMs: 2800,
     navigationDelayMs: 340,
   },
 
-  // 7. STORAGE KEYS
+  // 8. STORAGE KEYS
   storage: {
     visitedIntroKey: "system_directory_intro_dismissed_v2",
   },
@@ -287,19 +290,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* --- 5. VINYL SPRING EXPANSION PHYSICS --- */
+  /* --- 5. RESPONSIVE VINYL SIZING --- */
   function getDimensions() {
     const isMobile = window.innerWidth <= APP_CONFIG.physics.mobileBreakpointPx;
     return isMobile ? APP_CONFIG.physics.mobile : APP_CONFIG.physics.desktop;
   }
 
   let dims = getDimensions();
-  let currentDiscSize = dims.normalDiscSize;
-  let targetDiscSize = dims.normalDiscSize;
-  let discVelocity = 0;
-  let isSpringRunning = false;
-  let isExpanded = false;
-  let collapseTimer = null;
+  let isContacting = false;
 
   function applySizes(size) {
     const cutoutRadius = (size / 2) + dims.cutoutClearance;
@@ -307,64 +305,44 @@ document.addEventListener("DOMContentLoaded", () => {
     document.documentElement.style.setProperty("--cutout-r", `${cutoutRadius.toFixed(2)}px`);
   }
 
-  applySizes(currentDiscSize);
+  applySizes(dims.normalDiscSize);
 
   window.addEventListener("resize", () => {
     dims = getDimensions();
-    if (!isExpanded) {
-      currentDiscSize = dims.normalDiscSize;
-      targetDiscSize = dims.normalDiscSize;
-      applySizes(currentDiscSize);
-    }
+    if (!isContacting) applySizes(dims.normalDiscSize);
   }, { passive: true });
 
-  function springStep() {
-    const force = (targetDiscSize - currentDiscSize) * APP_CONFIG.physics.springForce;
-    discVelocity = (discVelocity + force) * APP_CONFIG.physics.springDamping;
-    currentDiscSize += discVelocity;
-
-    applySizes(currentDiscSize);
-
-    if (Math.abs(targetDiscSize - currentDiscSize) > 0.08 || Math.abs(discVelocity) > 0.08) {
-      requestAnimationFrame(springStep);
-    } else {
-      currentDiscSize = targetDiscSize;
-      discVelocity = 0;
-      applySizes(currentDiscSize);
-      isSpringRunning = false;
-    }
-  }
-
-  function triggerSpring() {
-    if (!isSpringRunning) {
-      isSpringRunning = true;
-      requestAnimationFrame(springStep);
-    }
-  }
-
-  function expandRecord() {
+  function launchContact() {
+    if (isContacting) return;
+    isContacting = true;
     triggerHapticPulse();
-    isExpanded = true;
-    if (recordWrap) recordWrap.classList.add("is-expanded");
-    targetDiscSize = dims.expandedDiscSize;
-    triggerSpring();
+    recordDisc.disabled = true;
+    recordDisc.setAttribute("aria-busy", "true");
 
-    clearTimeout(collapseTimer);
-    collapseTimer = setTimeout(shrinkRecord, APP_CONFIG.features.autoCollapseVinylMs);
-  }
+    const discDiameter = recordDisc.getBoundingClientRect().width;
+    const coverScale = (Math.hypot(window.innerWidth, window.innerHeight) * 1.08) / discDiameter;
+    recordDisc.style.setProperty("--launch-scale", coverScale.toString());
+    document.documentElement.style.setProperty(
+      "--contact-transition-duration",
+      `${APP_CONFIG.contact.transitionDurationMs}ms`,
+    );
+    if (recordWrap) recordWrap.classList.add("is-launching");
 
-  function shrinkRecord() {
-    isExpanded = false;
-    if (recordWrap) recordWrap.classList.remove("is-expanded");
-    targetDiscSize = dims.normalDiscSize;
-    triggerSpring();
+    const recipient = encodeURIComponent(APP_CONFIG.contact.recipient.trim());
+    const subject = encodeURIComponent(APP_CONFIG.contact.subject);
+    const body = encodeURIComponent(APP_CONFIG.contact.body);
+    const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    const transitionDelay = prefersReduced ? 80 : APP_CONFIG.contact.transitionDurationMs;
+
+    window.setTimeout(() => {
+      window.location.href = mailtoUrl;
+    }, transitionDelay);
   }
 
   if (recordDisc) {
     recordDisc.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (!isExpanded) expandRecord();
-      else shrinkRecord();
+      launchContact();
     });
   }
 
@@ -502,7 +480,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.persisted) {
       isNavigating = false;
       document.body.classList.remove("is-leaving");
-      shrinkRecord();
       tiles.forEach((t) => t.classList.remove("is-selected"));
       updateNetworkStatus();
     }
