@@ -106,7 +106,7 @@ const APP_CONFIG = Object.freeze({
     recipient: "EmpireDevStudio@gmail.com", // Set this to the destination email address.
     subject: "System Directory inquiry",
     body: "Hello,\n\nI would like to get in touch.",
-    transitionDurationMs: 900,
+    transitionDurationMs: 300,
   },
 
   // 7. FEATURE SWITCHES & UX BEHAVIOURAL CONTROLS
