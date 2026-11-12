@@ -243,19 +243,30 @@ async function startAssetDiscovery() {
     return;
   }
 
-  // Attempt 1: Server directory crawl
-  try {
-    discovered = await crawlServerDirectory(APP_CONFIG.paths.assetsRoot);
-  } catch (_) {
-    discovered = [];
+  // Attempt 1: Server directory crawl (try configured relative path, then root /assets/)
+  const candidateRoots = [APP_CONFIG.paths.assetsRoot, "/assets/"];
+  for (const rootCandidate of candidateRoots) {
+    try {
+      discovered = await crawlServerDirectory(rootCandidate);
+      if (discovered.length > 0) break;
+    } catch (_) {
+      discovered = [];
+    }
   }
 
   // Attempt 2: Manifest JSON fallback
   if (!discovered || discovered.length === 0) {
-    try {
-      const res = await fetch(`${APP_CONFIG.paths.manifestJson}?t=${Date.now()}`);
-      if (res.ok) discovered = await res.json();
-    } catch (_) {}
+    const manifestCandidates = [APP_CONFIG.paths.manifestJson, "/assets.json"];
+    for (const manifestUrl of manifestCandidates) {
+      try {
+        const res = await fetch(`${manifestUrl}?t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          discovered = normalizeManifestData(data);
+          if (discovered.length > 0) break;
+        }
+      } catch (_) {}
+    }
   }
 
   // Attempt 3: GitHub Pages API Crawl
@@ -280,49 +291,172 @@ async function startAssetDiscovery() {
   refreshBtn.classList.remove("syncing");
 }
 
+function normalizeManifestData(data) {
+  if (Array.isArray(data)) return data;
+  if (data && Array.isArray(data.files)) return data.files;
+  if (data && typeof data === "object") {
+    const results = [];
+    for (const [category, files] of Object.entries(data)) {
+      if (!Array.isArray(files)) continue;
+      for (const entry of files) {
+        const filename = typeof entry === "string" ? entry : entry.filename;
+        if (!filename) continue;
+        const path = `assets/${category}/${filename}`;
+        results.push({
+          category,
+          filename,
+          path,
+          url: entry.url || `./${encodeURI(path)}`,
+          size: entry.size || 0
+        });
+      }
+    }
+    return results;
+  }
+  return [];
+}
+
+function isDirectoryLink(anchor, resolvedUrl) {
+  if (resolvedUrl.pathname.endsWith("/")) return true;
+  const label = (anchor.textContent || "").trim();
+  if (label.endsWith("/")) return true;
+  const cls = anchor.className || "";
+  if (/\b(dir|directory|folder|icon-directory)\b/i.test(cls)) return true;
+  if (anchor.getAttribute("data-type") === "directory") return true;
+  return false;
+}
+
+function isIgnoredAssetName(name) {
+  const lower = name.toLowerCase();
+  return (
+    !name ||
+    name.startsWith(".") ||
+    lower === ".gitkeep" ||
+    lower === ".ds_store" ||
+    lower === "thumbs.db" ||
+    lower === "desktop.ini"
+  );
+}
+
+async function fetchDirectoryListing(dirUrl) {
+  const res = await fetch(dirUrl);
+  if (!res.ok) return null;
+  const contentType = (res.headers.get("content-type") || "").toLowerCase();
+  if (contentType && !contentType.includes("text/html") && !contentType.includes("application/xhtml")) {
+    return null;
+  }
+  const html = await res.text();
+  // Prevent SPA fallback index.html from being treated as a directory listing
+  if (html.includes('id="documentGrid"') || html.includes('class="app-page-header"')) {
+    return null;
+  }
+  return new DOMParser().parseFromString(html, "text/html");
+}
+
 async function crawlServerDirectory(rootUrl) {
-  const rootRes = await fetch(rootUrl);
-  if (!rootRes.ok) return [];
+  const normalizedRoot = rootUrl.endsWith("/") ? rootUrl : `${rootUrl}/`;
+  const baseAssetsUrl = new URL(normalizedRoot, window.location.href);
 
-  const html = await rootRes.text();
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  const links = Array.from(doc.querySelectorAll("a"));
+  const rootDoc = await fetchDirectoryListing(baseAssetsUrl.href);
+  if (!rootDoc) return [];
 
-  const results = [];
-  const categoryFolders = [];
+  const categoryFolders = new Map();
+  const links = Array.from(rootDoc.querySelectorAll("a[href]"));
 
   for (const a of links) {
-    const href = a.getAttribute("href");
-    if (!href || href.startsWith("?") || href.startsWith("/")) continue;
-    if (href.endsWith("/") && href !== "../" && href !== "./") {
-      categoryFolders.push(decodeURIComponent(href.replace(/\/$/, "")));
+    const rawHref = (a.getAttribute("href") || "").trim();
+    if (!rawHref || rawHref.startsWith("?") || rawHref.startsWith("#") || rawHref.startsWith("javascript:")) {
+      continue;
+    }
+
+    let resolved;
+    try {
+      resolved = new URL(rawHref, baseAssetsUrl);
+    } catch (_) {
+      continue;
+    }
+
+    // Must remain on same origin, no query params, and strictly inside baseAssetsUrl
+    if (resolved.origin !== baseAssetsUrl.origin || resolved.search) continue;
+    if (!resolved.pathname.startsWith(baseAssetsUrl.pathname) || resolved.pathname === baseAssetsUrl.pathname) {
+      continue;
+    }
+
+    if (!isDirectoryLink(a, resolved)) continue;
+
+    const dirHref = resolved.href.endsWith("/") ? resolved.href : `${resolved.href}/`;
+    const dirUrl = new URL(dirHref);
+    const relSegments = dirUrl.pathname
+      .slice(baseAssetsUrl.pathname.length)
+      .replace(/\/+$/, "")
+      .split("/")
+      .filter(Boolean);
+
+    if (relSegments.length === 0) continue;
+    const catName = decodeURIComponent(relSegments[0]);
+    if (isIgnoredAssetName(catName)) continue;
+
+    if (!categoryFolders.has(dirUrl.href)) {
+      categoryFolders.set(dirUrl.href, catName);
     }
   }
 
-  for (const cat of categoryFolders) {
-    try {
-      const catRes = await fetch(`${rootUrl}${encodeURIComponent(cat)}/`);
-      if (!catRes.ok) continue;
-      const catHtml = await catRes.text();
-      const catDoc = parser.parseFromString(catHtml, "text/html");
-      const fileLinks = Array.from(catDoc.querySelectorAll("a"));
+  const results = [];
+  const visitedDirs = new Set();
 
-      for (const fa of fileLinks) {
-        const fHref = fa.getAttribute("href");
-        if (!fHref || fHref.endsWith("/") || fHref.startsWith("?") || fHref.startsWith(".")) continue;
+  async function crawlCategorySubtree(currentDirUrl, rootCatUrl, catName) {
+    if (visitedDirs.has(currentDirUrl.href)) return;
+    visitedDirs.add(currentDirUrl.href);
 
-        const fName = decodeURIComponent(fHref.split("/").pop());
-        const fPath = `${rootUrl}${cat}/${fName}`;
+    const dirDoc = await fetchDirectoryListing(currentDirUrl.href);
+    if (!dirDoc) return;
 
+    const fileLinks = Array.from(dirDoc.querySelectorAll("a[href]"));
+    for (const fa of fileLinks) {
+      const fHref = (fa.getAttribute("href") || "").trim();
+      if (!fHref || fHref.startsWith("?") || fHref.startsWith("#") || fHref.startsWith("javascript:")) {
+        continue;
+      }
+
+      let resolved;
+      try {
+        resolved = new URL(fHref, currentDirUrl);
+      } catch (_) {
+        continue;
+      }
+
+      if (resolved.origin !== currentDirUrl.origin || resolved.search) continue;
+      if (!resolved.pathname.startsWith(currentDirUrl.pathname) || resolved.pathname === currentDirUrl.pathname) {
+        continue;
+      }
+
+      if (isDirectoryLink(fa, resolved)) {
+        const subDirUrl = new URL(resolved.href.endsWith("/") ? resolved.href : `${resolved.href}/`);
+        await crawlCategorySubtree(subDirUrl, rootCatUrl, catName);
+      } else {
+        const relEncoded = resolved.pathname.slice(rootCatUrl.pathname.length);
+        const relParts = relEncoded.split("/").filter(Boolean).map(decodeURIComponent);
+        if (relParts.length === 0) continue;
+
+        const baseFileName = relParts[relParts.length - 1];
+        if (isIgnoredAssetName(baseFileName)) continue;
+
+        const filename = relParts.join("/");
         results.push({
-          category: cat,
-          filename: fName,
-          path: fPath,
-          url: fPath,
+          category: catName,
+          filename: filename,
+          path: `assets/${catName}/${filename}`,
+          url: resolved.href,
           size: 0
         });
       }
+    }
+  }
+
+  for (const [catHref, catName] of categoryFolders.entries()) {
+    try {
+      const catUrl = new URL(catHref);
+      await crawlCategorySubtree(catUrl, catUrl, catName);
     } catch (_) {}
   }
 
@@ -331,49 +465,52 @@ async function crawlServerDirectory(rootUrl) {
 
 async function crawlGitHubRepo() {
   const host = window.location.hostname;
-  const segments = window.location.pathname.replace(/^\/|\/$/g, "").split("/");
-  const owner = host.endsWith(".github.io") ? host.split(".")[0] : "";
-  const repo = segments[0] || "";
+  if (!host.endsWith(".github.io")) return [];
 
-  if (!owner || !repo) return [];
+  const owner = host.split(".")[0];
+  const segments = window.location.pathname.replace(/^\/|\/$/g, "").split("/").filter(Boolean);
+  const candidateRepos = segments.length > 0 ? [segments[0], `${owner}.github.io`] : [`${owner}.github.io`];
 
-  try {
-    const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
-    if (!repoRes.ok) return [];
-    const info = await repoRes.json();
-    const branch = info.default_branch || "main";
+  for (const repo of candidateRepos) {
+    try {
+      const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+      if (!repoRes.ok) continue;
+      const info = await repoRes.json();
+      const branch = info.default_branch || "main";
 
-    const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`);
-    if (!treeRes.ok) return [];
-    const treeData = await treeRes.json();
+      const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`);
+      if (!treeRes.ok) continue;
+      const treeData = await treeRes.json();
 
-    const results = [];
-    (treeData.tree || []).forEach(node => {
-      if (node.type !== "blob") return;
-      const p = node.path.replace(/\\/g, "/");
-      if (!p.toLowerCase().startsWith("assets/")) return;
+      const results = [];
+      (treeData.tree || []).forEach(node => {
+        if (node.type !== "blob") return;
+        const p = node.path.replace(/\\/g, "/");
+        if (!p.toLowerCase().startsWith("assets/")) return;
 
-      const parts = p.split("/");
-      if (parts.length < 3) return;
+        const parts = p.split("/");
+        if (parts.length < 3) return;
 
-      const cat = parts[1];
-      const filename = parts.slice(2).join("/");
+        const cat = parts[1];
+        const filename = parts.slice(2).join("/");
+        const baseName = parts[parts.length - 1];
 
-      if (filename.startsWith(".") || filename.toLowerCase().endsWith(".gitkeep")) return;
+        if (isIgnoredAssetName(cat) || isIgnoredAssetName(baseName)) return;
 
-      results.push({
-        category: cat,
-        filename: filename,
-        path: p,
-        size: node.size || 0,
-        url: `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodeURI(p)}`
+        results.push({
+          category: cat,
+          filename: filename,
+          path: p,
+          size: node.size || 0,
+          url: `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodeURI(p)}`
+        });
       });
-    });
 
-    return results;
-  } catch (_) {
-    return [];
+      if (results.length > 0) return results;
+    } catch (_) {}
   }
+
+  return [];
 }
 
 function handleLocalFolderPicker(e) {
@@ -384,17 +521,28 @@ function handleLocalFolderPicker(e) {
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     const path = file.webkitRelativePath.replace(/\\/g, "/");
-    const parts = path.split("/");
+    const parts = path.split("/").filter(Boolean);
 
-    if (parts.length >= 3) {
-      const category = parts[1];
-      const filename = parts.slice(2).join("/");
+    // Support selecting either the `assets` folder directly or a root folder containing `assets/`
+    const assetsIndex = parts.findIndex(part => part.toLowerCase() === "assets");
+    let category = "";
+    let filename = "";
 
-      if (!filename.startsWith(".") && !filename.toLowerCase().endsWith(".gitkeep")) {
+    if (assetsIndex !== -1 && parts.length >= assetsIndex + 3) {
+      category = parts[assetsIndex + 1];
+      filename = parts.slice(assetsIndex + 2).join("/");
+    } else if (assetsIndex === -1 && parts.length >= 3) {
+      category = parts[1];
+      filename = parts.slice(2).join("/");
+    }
+
+    if (category && filename) {
+      const baseName = filename.split("/").pop();
+      if (!isIgnoredAssetName(category) && !isIgnoredAssetName(baseName)) {
         results.push({
           category: category,
           filename: filename,
-          path: path,
+          path: `assets/${category}/${filename}`,
           size: file.size,
           url: URL.createObjectURL(file)
         });
@@ -410,7 +558,7 @@ function handleLocalFolderPicker(e) {
     hideBanner();
     triggerHapticPulse();
   } else {
-    alert("Please select an assets directory that contains category subfolders.");
+    alert("Please select an assets directory that contains category subfolders with files.");
   }
 }
 
@@ -421,8 +569,10 @@ function hydrateDocuments(rawList) {
   AppState.categories.clear();
   AppState.documents = rawList.map(item => {
     AppState.categories.add(item.category);
-    const ext = (item.filename.split(".").pop() || "").toLowerCase();
-    const cleanTitle = item.filename.substring(0, item.filename.lastIndexOf(".")) || item.filename;
+    const baseName = item.filename.split("/").pop() || item.filename;
+    const dotIdx = baseName.lastIndexOf(".");
+    const ext = dotIdx > 0 ? baseName.slice(dotIdx + 1).toLowerCase() : "";
+    const cleanTitle = dotIdx > 0 ? baseName.slice(0, dotIdx) : baseName;
 
     return {
       category: item.category,
@@ -531,10 +681,11 @@ function renderCatalogDOM(docs) {
     const card = document.createElement("article");
     card.className = "paper-card";
     card.setAttribute("data-component", "archival-card");
+    const downloadName = doc.filename.split("/").pop() || doc.filename;
 
     card.innerHTML = `
       <div class="paper-card__top">
-        <div class="paper-card__glyph">${escapeHTML(doc.ext.toUpperCase())}</div>
+        <div class="paper-card__glyph">${escapeHTML((doc.ext || "FILE").toUpperCase())}</div>
         <div class="paper-card__meta-group">
           <span class="paper-card__category">${escapeHTML(doc.category)}</span>
           <h3 class="paper-card__title">${escapeHTML(doc.title)}</h3>
@@ -544,7 +695,7 @@ function renderCatalogDOM(docs) {
         <span class="paper-card__size">${formatBytes(doc.size)}</span>
         <div class="paper-card__actions">
           <button type="button" class="btn-paper-secondary interactive-tactile inspect-btn">${escapeHTML(APP_CONFIG.content.actions.inspect)}</button>
-          <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="btn-paper-primary interactive-tactile">${escapeHTML(APP_CONFIG.content.actions.download)}</a>
+          <a href="${doc.url}" download="${escapeHTML(downloadName)}" class="btn-paper-primary interactive-tactile">${escapeHTML(APP_CONFIG.content.actions.download)}</a>
         </div>
       </div>
     `;
@@ -572,6 +723,7 @@ function renderInspectedHistory() {
 function openInspector(doc) {
   const modal = document.getElementById("readerModal");
   const stage = document.getElementById("modalStage");
+  const downloadName = doc.filename.split("/").pop() || doc.filename;
 
   // Track inspected history
   if (!AppState.inspectedHistory.includes(doc.path)) {
@@ -579,18 +731,21 @@ function openInspector(doc) {
   }
 
   document.getElementById("modalCategory").textContent = doc.category;
-  document.getElementById("modalExtBadge").textContent = doc.ext.toUpperCase();
-  document.getElementById("modalTitle").textContent = doc.filename;
+  document.getElementById("modalExtBadge").textContent = (doc.ext || "FILE").toUpperCase();
+  document.getElementById("modalTitle").textContent = downloadName;
   document.getElementById("modalMetaSize").textContent = `Size: ${formatBytes(doc.size)}`;
   document.getElementById("modalMetaPath").textContent = doc.path;
 
   const dl = document.getElementById("modalDownload");
   dl.href = doc.url;
-  dl.setAttribute("download", doc.filename);
+  dl.setAttribute("download", downloadName);
 
   document.getElementById("modalCopyLink").onclick = () => {
     triggerHapticPulse();
-    navigator.clipboard.writeText(window.location.origin + "/" + doc.path);
+    const copyTarget = doc.url.startsWith("blob:")
+      ? doc.path
+      : new URL(doc.url, window.location.href).href;
+    navigator.clipboard.writeText(copyTarget);
     alert(APP_CONFIG.content.notifications.linkCopied);
   };
 
@@ -626,7 +781,7 @@ function openInspector(doc) {
       stage.innerHTML = `
         <div style="text-align: center; padding: var(--space-6);">
           <p style="color: var(--color-text-secondary); margin-bottom: var(--space-3);">Remote Office Web Viewer requires active public web hosting.</p>
-          <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="btn-paper-primary interactive-tactile">Download File</a>
+          <a href="${doc.url}" download="${escapeHTML(downloadName)}" class="btn-paper-primary interactive-tactile">Download File</a>
         </div>`;
     }
   }
@@ -641,8 +796,8 @@ function openInspector(doc) {
   else {
     stage.innerHTML = `
       <div style="text-align: center; padding: var(--space-8);">
-        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4);">No direct inline preview engine available for <strong>.${escapeHTML(doc.ext)}</strong> documents.</p>
-        <a href="${doc.url}" download="${escapeHTML(doc.filename)}" class="btn-paper-primary interactive-tactile">Download ${escapeHTML(doc.filename)}</a>
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4);">No direct inline preview engine available for <strong>.${escapeHTML(doc.ext || "unknown")}</strong> documents.</p>
+        <a href="${doc.url}" download="${escapeHTML(downloadName)}" class="btn-paper-primary interactive-tactile">Download ${escapeHTML(downloadName)}</a>
       </div>`;
   }
 
