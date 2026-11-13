@@ -104,8 +104,8 @@ const APP_CONFIG = Object.freeze({
   // 6. CONTACT LINK (set recipient, subject, and body for the email app)
   contact: {
     recipient: "EmpireDevStudio@gmail.com", // Set this to the destination email address.
-    subject: "System Directory inquiry",
-    body: "Hello,\n\nI would like to get in touch.",
+    subject: "This App Will Save Me Hours Of Time!",
+    body: "To Christian, Mighty founder of Empire Dev Studio,\n\nI have to say, your demonstration has completely changed my perspective on how easy providing quality training resources for my staff could be.\n\nI particularly enjoyed the ability to upload our own documents, and the checklist section looks like a brilliant way to make sure routine jobs are completed properly.\n\nI don't want to inflate your ego, but you might genuinely be the greatest software developer to have ever walked this earth.\n\nI'd love to continue the conversation and arrange a call to discuss bringing this magnificent piece of technology to my team.\n\nPlease try to remain humble.\n\nKind regards,\n\nA thoroughly impressed prospect",
     transitionDurationMs: 300,
   },
 
