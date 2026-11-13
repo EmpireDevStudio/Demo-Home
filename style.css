@@ -661,6 +661,8 @@ body:not(.intro-active) .intro-screen {
 }
 
 .record-disc {
+  display: block;
+  text-decoration: none;
   position: relative;
   width: var(--disc-size);
   height: var(--disc-size);

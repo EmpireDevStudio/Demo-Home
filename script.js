@@ -162,6 +162,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let isNavigating = false;
 
+  /* --- MAILTO URL BUILDER (Apple Mail, Gmail & Outlook Compatible) --- */
+  function buildMailtoUrl() {
+    const rawRecipient = APP_CONFIG.contact.recipient.trim();
+    // Preserve '@' in the email address for strict parsers (notably Apple Mail)
+    const recipient = rawRecipient
+      .split(",")
+      .map((addr) => encodeURI(addr.trim()))
+      .filter(Boolean)
+      .join(",");
+
+    const params = [];
+    if (APP_CONFIG.contact.subject) {
+      params.push(`subject=${encodeURIComponent(APP_CONFIG.contact.subject)}`);
+    }
+    if (APP_CONFIG.contact.body) {
+      // RFC 6068 CRLF line breaks for Apple Mail & Outlook consistency
+      const normalizedBody = APP_CONFIG.contact.body.replace(/\r?\n/g, "\r\n");
+      params.push(`body=${encodeURIComponent(normalizedBody)}`);
+    }
+
+    return params.length > 0
+      ? `mailto:${recipient}?${params.join("&")}`
+      : `mailto:${recipient}`;
+  }
+
   /* --- 1. CONFIGURATION HYDRATION --- */
   function hydrateAppFromConfig() {
     document.title = APP_CONFIG.identity.appName;
@@ -173,6 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (pageEyebrowSlot) pageEyebrowSlot.textContent = APP_CONFIG.content.headers.eyebrow;
     if (pageTitleSlot) pageTitleSlot.textContent = APP_CONFIG.content.headers.title;
     if (pageSubtitleSlot) pageSubtitleSlot.textContent = APP_CONFIG.content.headers.subtitle;
+
+    if (recordDisc) {
+      recordDisc.href = buildMailtoUrl();
+    }
 
     // Sector labels hydration
     const s = APP_CONFIG.content.sectors;
@@ -285,6 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let dims = getDimensions();
   let isContacting = false;
+  let contactResetTimer = null;
 
   function applySizes(size) {
     const cutoutRadius = (size / 2) + dims.cutoutClearance;
@@ -299,39 +329,71 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!isContacting) applySizes(dims.normalDiscSize);
   }, { passive: true });
 
-  function launchContact() {
-    if (isContacting) return;
+  /* --- 5. CONTACT VINYL LAUNCH (APPLE / GMAIL / OUTLOOK) --- */
+  function resetContactState() {
+    isContacting = false;
+    if (contactResetTimer) {
+      window.clearTimeout(contactResetTimer);
+      contactResetTimer = null;
+    }
+    if (recordDisc) {
+      recordDisc.removeAttribute("aria-busy");
+      recordDisc.style.removeProperty("--launch-scale");
+    }
+    if (recordWrap) {
+      recordWrap.classList.remove("is-launching");
+    }
+  }
+
+  function launchContact(event) {
+    if (isContacting) {
+      if (event) event.preventDefault();
+      return;
+    }
+
     isContacting = true;
     triggerHapticPulse();
-    recordDisc.disabled = true;
-    recordDisc.setAttribute("aria-busy", "true");
 
-    const discDiameter = recordDisc.getBoundingClientRect().width;
-    const coverScale = (Math.hypot(window.innerWidth, window.innerHeight) * 1.08) / discDiameter;
-    recordDisc.style.setProperty("--launch-scale", coverScale.toString());
-    document.documentElement.style.setProperty(
-      "--contact-transition-duration",
-      `${APP_CONFIG.contact.transitionDurationMs}ms`,
-    );
-    if (recordWrap) recordWrap.classList.add("is-launching");
+    if (recordDisc) {
+      recordDisc.href = buildMailtoUrl();
+      recordDisc.setAttribute("aria-busy", "true");
 
-    const recipient = encodeURIComponent(APP_CONFIG.contact.recipient.trim());
-    const subject = encodeURIComponent(APP_CONFIG.contact.subject);
-    const body = encodeURIComponent(APP_CONFIG.contact.body);
-    const mailtoUrl = `mailto:${recipient}?subject=${subject}&body=${body}`;
-    const transitionDelay = prefersReduced ? 80 : APP_CONFIG.contact.transitionDurationMs;
+      if (!prefersReduced) {
+        const discDiameter = recordDisc.getBoundingClientRect().width;
+        const coverScale = (Math.hypot(window.innerWidth, window.innerHeight) * 1.08) / discDiameter;
+        recordDisc.style.setProperty("--launch-scale", coverScale.toString());
+        document.documentElement.style.setProperty(
+          "--contact-transition-duration",
+          `${APP_CONFIG.contact.transitionDurationMs}ms`,
+        );
+        if (recordWrap) recordWrap.classList.add("is-launching");
+      }
+    }
 
-    window.setTimeout(() => {
-      window.location.href = mailtoUrl;
-    }, transitionDelay);
+    // Native <a href="mailto:..."> handles navigation synchronously on click
+    // so iOS/iPadOS/macOS Safari and PWA mode do not block Apple Mail.
+    const resetDelay = Math.max(APP_CONFIG.contact.transitionDurationMs + 700, 1000);
+    contactResetTimer = window.setTimeout(resetContactState, resetDelay);
   }
 
   if (recordDisc) {
     recordDisc.addEventListener("click", (e) => {
       e.stopPropagation();
-      launchContact();
+      launchContact(e);
+    });
+
+    recordDisc.addEventListener("keydown", (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+        recordDisc.click();
+      }
     });
   }
+
+  window.addEventListener("focus", resetContactState);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) resetContactState();
+  });
 
   /* --- 6. SPOTLIGHT & TACTILE PARALLAX --- */
   if (!prefersReduced && APP_CONFIG.features.enableParallax) {
@@ -464,6 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* --- 10. PAGESHOW CACHE RESTORATION --- */
   window.addEventListener("pageshow", (e) => {
+    resetContactState();
     if (e.persisted) {
       isNavigating = false;
       document.body.classList.remove("is-leaving");
