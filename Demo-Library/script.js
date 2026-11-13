@@ -12,7 +12,7 @@ const APP_CONFIG = Object.freeze({
     appName: "Editorial Archive & Document Index",
     appTagline: "Curated Archival Management & Operational Document Library",
     eyebrowText: "FOLIO VOL. IV",
-    version: "4.2.0",
+    version: "4.2.1",
     environment: "production",
     canonicalUrl: "../",
     language: "en-US",
@@ -50,7 +50,7 @@ const APP_CONFIG = Object.freeze({
     },
     emptyStates: {
       noDataHeading: "No Archival Records Discovered",
-      noDataDescription: "No catalog files were located inside the assets/ directory path. Verify your folder structure or mount an operational folder using the action above.",
+      noDataDescription: "No catalog files were automatically detected inside <code>assets/</code>. If directory indexing is disabled on your server or you are opening this locally, click <strong>Mount Assets Folder</strong> below.",
       noSearchResultsHeading: "No Matching Records Discovered",
       noSearchResultsDescription: "Review your filter parameters or search terms and attempt the query again.",
     },
@@ -67,7 +67,7 @@ const APP_CONFIG = Object.freeze({
       synced: "Catalog synchronized successfully.",
       linkCopied: "Resource URL successfully copied to clipboard.",
       localMounted: "Local folder assets mounted successfully.",
-      localPrompt: "Local Protocol Active: Click 'Mount Assets' to choose your directory.",
+      localPrompt: "Local Protocol Active: Click 'Mount Assets' to choose your assets folder.",
     },
     legal: {
       copyrightHolder: "Editorial Ledger Archival Systems",
@@ -114,7 +114,8 @@ const AppState = {
   searchQuery: "",
   activeSort: APP_CONFIG.features.defaultSortCriteria,
   activeView: APP_CONFIG.features.defaultViewLayout,
-  inspectedHistory: []
+  inspectedHistory: [],
+  isLocalMount: false
 };
 
 // MIME / Format Extension Definitions
@@ -163,7 +164,6 @@ function hydrateAppConfig() {
   document.getElementById("pageSubtitleSlot").textContent = APP_CONFIG.content.headers.defaultSubtitle;
   document.getElementById("backNavLabel").textContent = APP_CONFIG.navigation.backLabel;
 
-  // Restore saved view and sort preferences if available
   try {
     const savedView = localStorage.getItem(APP_CONFIG.storageKeys.viewPreference);
     if (savedView === "grid" || savedView === "list") {
@@ -227,55 +227,88 @@ async function startAssetDiscovery() {
   const badge = document.getElementById("docCountBadge");
   const refreshBtn = document.getElementById("refreshBtn");
   const emptyView = document.getElementById("emptyView");
+  const diagEl = document.getElementById("emptyDiagnostics");
 
   refreshBtn.classList.add("syncing");
   badge.textContent = APP_CONFIG.content.notifications.scanning;
   hideBanner();
+  if (diagEl) diagEl.classList.add("hidden");
 
   let discovered = [];
+  const diagnostics = [];
 
   // Local file:// protocol fallback
   if (window.location.protocol === "file:") {
     document.getElementById("localPickerBtn").classList.remove("hidden");
     showBanner(APP_CONFIG.content.notifications.localPrompt);
     refreshBtn.classList.remove("syncing");
+    badge.textContent = "0 records available";
     emptyView.classList.remove("hidden");
+    document.getElementById("emptyHeading").textContent = APP_CONFIG.content.emptyStates.noDataHeading;
+    document.getElementById("emptyMsg").innerHTML = APP_CONFIG.content.emptyStates.noDataDescription;
+    if (diagEl) {
+      diagEl.textContent = "Protocol: file:// (browsers block automatic folder scanning on local file URLs). Use 'Mount Assets Folder' or serve this folder via a local server (e.g. python3 -m http.server).";
+      diagEl.classList.remove("hidden");
+    }
     return;
   }
 
-  // Attempt 1: Server directory crawl (try configured relative path, then root /assets/)
-  const candidateRoots = [APP_CONFIG.paths.assetsRoot, "/assets/"];
-  for (const rootCandidate of candidateRoots) {
+  // Build candidate roots (handles subpath hosting without trailing slash too)
+  const candidateRoots = [APP_CONFIG.paths.assetsRoot, "./Assets/"];
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  if (!window.location.pathname.endsWith("/") && pathParts.length > 0 && !pathParts[pathParts.length - 1].includes(".")) {
+    candidateRoots.push(`${window.location.pathname}/assets/`);
+  }
+  candidateRoots.push("/assets/");
+
+  const uniqueRoots = Array.from(new Set(candidateRoots));
+
+  // Attempt 1: Server directory crawl
+  for (const rootCandidate of uniqueRoots) {
     try {
-      discovered = await crawlServerDirectory(rootCandidate);
-      if (discovered.length > 0) break;
-    } catch (_) {
+      const attempt = await crawlServerDirectory(rootCandidate);
+      diagnostics.push(`Directory scan (${rootCandidate}): ${attempt.note}`);
+      if (attempt.files.length > 0) {
+        discovered = attempt.files;
+        break;
+      }
+    } catch (err) {
+      diagnostics.push(`Directory scan (${rootCandidate}): error (${err.message})`);
       discovered = [];
     }
   }
 
   // Attempt 2: Manifest JSON fallback
   if (!discovered || discovered.length === 0) {
-    const manifestCandidates = [APP_CONFIG.paths.manifestJson, "/assets.json"];
-    for (const manifestUrl of manifestCandidates) {
+    const manifestCandidates = [APP_CONFIG.paths.manifestJson, "./assets/assets.json", "/assets.json"];
+    for (const manifestUrl of Array.from(new Set(manifestCandidates))) {
       try {
         const res = await fetch(`${manifestUrl}?t=${Date.now()}`);
         if (res.ok) {
           const data = await res.json();
           discovered = normalizeManifestData(data);
+          diagnostics.push(`Manifest (${manifestUrl}): ${discovered.length} file(s)`);
           if (discovered.length > 0) break;
+        } else {
+          diagnostics.push(`Manifest (${manifestUrl}): HTTP ${res.status}`);
         }
-      } catch (_) {}
+      } catch (_) {
+        diagnostics.push(`Manifest (${manifestUrl}): unavailable`);
+      }
     }
   }
 
   // Attempt 3: GitHub Pages API Crawl
   if (!discovered || discovered.length === 0) {
-    discovered = await crawlGitHubRepo();
+    const ghAttempt = await crawlGitHubRepo();
+    diagnostics.push(`GitHub API: ${ghAttempt.note}`);
+    discovered = ghAttempt.files;
   }
 
   // Hydration evaluation
   if (discovered && discovered.length > 0) {
+    AppState.isLocalMount = false;
+    document.getElementById("exportManifestBtn").classList.add("hidden");
     hydrateDocuments(discovered);
     renderCategoryTrack();
     applyCatalogFilters();
@@ -286,14 +319,43 @@ async function startAssetDiscovery() {
     document.getElementById("emptyHeading").textContent = APP_CONFIG.content.emptyStates.noDataHeading;
     document.getElementById("emptyMsg").innerHTML = APP_CONFIG.content.emptyStates.noDataDescription;
     document.getElementById("localPickerBtn").classList.remove("hidden");
+    if (diagEl) {
+      diagEl.innerHTML = `<strong>Discovery Diagnostics:</strong><br>${diagnostics.map(d => escapeHTML(d)).join("<br>")}<br><br>Tip: If your server has directory listing turned off, mount your folder locally and click <strong>Export assets.json</strong>, then place <code>assets.json</code> next to <code>index.html</code>.`;
+      diagEl.classList.remove("hidden");
+    }
   }
 
   refreshBtn.classList.remove("syncing");
 }
 
+function encodePathSegments(path) {
+  return path
+    .split("/")
+    .map(seg => encodeURIComponent(seg))
+    .join("/");
+}
+
 function normalizeManifestData(data) {
-  if (Array.isArray(data)) return data;
-  if (data && Array.isArray(data.files)) return data.files;
+  if (Array.isArray(data)) {
+    return data.map(entry => {
+      if (typeof entry === "string") {
+        const clean = entry.replace(/^\/+/, "");
+        const parts = clean.split("/").filter(Boolean);
+        if (parts.length >= 3 && parts[0].toLowerCase() === "assets") {
+          return {
+            category: parts[1],
+            filename: parts.slice(2).join("/"),
+            path: clean,
+            url: `./${encodePathSegments(clean)}`,
+            size: 0
+          };
+        }
+        return null;
+      }
+      return entry;
+    }).filter(Boolean);
+  }
+  if (data && Array.isArray(data.files)) return normalizeManifestData(data.files);
   if (data && typeof data === "object") {
     const results = [];
     for (const [category, files] of Object.entries(data)) {
@@ -306,7 +368,7 @@ function normalizeManifestData(data) {
           category,
           filename,
           path,
-          url: entry.url || `./${encodeURI(path)}`,
+          url: entry.url || `./${encodePathSegments(path)}`,
           size: entry.size || 0
         });
       }
@@ -320,10 +382,26 @@ function isDirectoryLink(anchor, resolvedUrl) {
   if (resolvedUrl.pathname.endsWith("/")) return true;
   const label = (anchor.textContent || "").trim();
   if (label.endsWith("/")) return true;
-  const cls = anchor.className || "";
-  if (/\b(dir|directory|folder|icon-directory)\b/i.test(cls)) return true;
-  if (anchor.getAttribute("data-type") === "directory") return true;
+
+  const dirPattern = /\b(dir|directory|folder|icon-directory|icon-folder)\b/i;
+  if (dirPattern.test(anchor.className || "")) return true;
+
+  const container = anchor.closest("li, tr, div");
+  if (container && dirPattern.test(container.className || "")) return true;
+
+  const childIcon = anchor.querySelector("[class]");
+  if (childIcon && dirPattern.test(childIcon.className || "")) return true;
+
+  const dataType = (anchor.getAttribute("data-type") || "").toLowerCase();
+  if (dataType === "directory" || dataType === "folder") return true;
+
   return false;
+}
+
+function looksExtensionlessSegment(pathname) {
+  const clean = pathname.replace(/\/+$/, "");
+  const lastSeg = clean.split("/").pop() || "";
+  return lastSeg.length > 0 && !lastSeg.includes(".");
 }
 
 function isIgnoredAssetName(name) {
@@ -340,28 +418,42 @@ function isIgnoredAssetName(name) {
 
 async function fetchDirectoryListing(dirUrl) {
   const res = await fetch(dirUrl);
-  if (!res.ok) return null;
+  if (!res.ok) {
+    return { doc: null, finalUrl: dirUrl, reason: `HTTP ${res.status}` };
+  }
   const contentType = (res.headers.get("content-type") || "").toLowerCase();
   if (contentType && !contentType.includes("text/html") && !contentType.includes("application/xhtml")) {
-    return null;
+    return { doc: null, finalUrl: res.url || dirUrl, reason: `non-HTML (${contentType})` };
   }
   const html = await res.text();
   // Prevent SPA fallback index.html from being treated as a directory listing
   if (html.includes('id="documentGrid"') || html.includes('class="app-page-header"')) {
-    return null;
+    return { doc: null, finalUrl: res.url || dirUrl, reason: "returned SPA index.html (directory listing disabled)" };
   }
-  return new DOMParser().parseFromString(html, "text/html");
+  return {
+    doc: new DOMParser().parseFromString(html, "text/html"),
+    finalUrl: res.url || dirUrl,
+    reason: "200 OK"
+  };
+}
+
+function ensureTrailingSlash(pathname) {
+  return pathname.endsWith("/") ? pathname : `${pathname}/`;
 }
 
 async function crawlServerDirectory(rootUrl) {
   const normalizedRoot = rootUrl.endsWith("/") ? rootUrl : `${rootUrl}/`;
   const baseAssetsUrl = new URL(normalizedRoot, window.location.href);
 
-  const rootDoc = await fetchDirectoryListing(baseAssetsUrl.href);
-  if (!rootDoc) return [];
+  const rootRes = await fetchDirectoryListing(baseAssetsUrl.href);
+  if (!rootRes.doc) {
+    return { files: [], note: rootRes.reason };
+  }
 
+  const resolvedBaseUrl = new URL(ensureTrailingSlash(new URL(rootRes.finalUrl).pathname), baseAssetsUrl.origin);
   const categoryFolders = new Map();
-  const links = Array.from(rootDoc.querySelectorAll("a[href]"));
+  const candidateFolders = new Map();
+  const links = Array.from(rootRes.doc.querySelectorAll("a[href]"));
 
   for (const a of links) {
     const rawHref = (a.getAttribute("href") || "").trim();
@@ -371,23 +463,20 @@ async function crawlServerDirectory(rootUrl) {
 
     let resolved;
     try {
-      resolved = new URL(rawHref, baseAssetsUrl);
+      resolved = new URL(rawHref, rootRes.finalUrl);
     } catch (_) {
       continue;
     }
 
-    // Must remain on same origin, no query params, and strictly inside baseAssetsUrl
-    if (resolved.origin !== baseAssetsUrl.origin || resolved.search) continue;
-    if (!resolved.pathname.startsWith(baseAssetsUrl.pathname) || resolved.pathname === baseAssetsUrl.pathname) {
+    if (resolved.origin !== resolvedBaseUrl.origin || resolved.search) continue;
+
+    const basePrefix = ensureTrailingSlash(resolvedBaseUrl.pathname);
+    if (!resolved.pathname.startsWith(basePrefix) || ensureTrailingSlash(resolved.pathname) === basePrefix) {
       continue;
     }
 
-    if (!isDirectoryLink(a, resolved)) continue;
-
-    const dirHref = resolved.href.endsWith("/") ? resolved.href : `${resolved.href}/`;
-    const dirUrl = new URL(dirHref);
-    const relSegments = dirUrl.pathname
-      .slice(baseAssetsUrl.pathname.length)
+    const relSegments = resolved.pathname
+      .slice(basePrefix.length)
       .replace(/\/+$/, "")
       .split("/")
       .filter(Boolean);
@@ -396,22 +485,45 @@ async function crawlServerDirectory(rootUrl) {
     const catName = decodeURIComponent(relSegments[0]);
     if (isIgnoredAssetName(catName)) continue;
 
-    if (!categoryFolders.has(dirUrl.href)) {
-      categoryFolders.set(dirUrl.href, catName);
+    const dirHref = resolved.href.endsWith("/") ? resolved.href : `${resolved.href}/`;
+    if (isDirectoryLink(a, resolved)) {
+      if (!categoryFolders.has(dirHref)) {
+        categoryFolders.set(dirHref, { catName, fallbackNoSlashUrl: resolved.href });
+      }
+    } else if (looksExtensionlessSegment(resolved.pathname)) {
+      if (!candidateFolders.has(dirHref)) {
+        candidateFolders.set(dirHref, { catName, fallbackNoSlashUrl: resolved.href });
+      }
     }
+  }
+
+  for (const [href, info] of candidateFolders.entries()) {
+    if (!categoryFolders.has(href)) {
+      categoryFolders.set(href, info);
+    }
+  }
+
+  if (categoryFolders.size === 0) {
+    return { files: [], note: "HTML fetched, but 0 category folders found inside assets/" };
   }
 
   const results = [];
   const visitedDirs = new Set();
 
-  async function crawlCategorySubtree(currentDirUrl, rootCatUrl, catName) {
+  async function crawlCategorySubtree(currentDirUrl, rootCatUrl, catName, fallbackNoSlashUrl = null) {
     if (visitedDirs.has(currentDirUrl.href)) return;
     visitedDirs.add(currentDirUrl.href);
 
-    const dirDoc = await fetchDirectoryListing(currentDirUrl.href);
-    if (!dirDoc) return;
+    let dirRes = await fetchDirectoryListing(currentDirUrl.href);
+    if (!dirRes.doc && fallbackNoSlashUrl && fallbackNoSlashUrl !== currentDirUrl.href) {
+      dirRes = await fetchDirectoryListing(fallbackNoSlashUrl);
+    }
+    if (!dirRes.doc) return;
 
-    const fileLinks = Array.from(dirDoc.querySelectorAll("a[href]"));
+    const currentPrefix = ensureTrailingSlash(currentDirUrl.pathname);
+    const rootCatPrefix = ensureTrailingSlash(rootCatUrl.pathname);
+    const fileLinks = Array.from(dirRes.doc.querySelectorAll("a[href]"));
+
     for (const fa of fileLinks) {
       const fHref = (fa.getAttribute("href") || "").trim();
       if (!fHref || fHref.startsWith("?") || fHref.startsWith("#") || fHref.startsWith("javascript:")) {
@@ -420,21 +532,21 @@ async function crawlServerDirectory(rootUrl) {
 
       let resolved;
       try {
-        resolved = new URL(fHref, currentDirUrl);
+        resolved = new URL(fHref, dirRes.finalUrl);
       } catch (_) {
         continue;
       }
 
       if (resolved.origin !== currentDirUrl.origin || resolved.search) continue;
-      if (!resolved.pathname.startsWith(currentDirUrl.pathname) || resolved.pathname === currentDirUrl.pathname) {
+      if (!resolved.pathname.startsWith(currentPrefix) || ensureTrailingSlash(resolved.pathname) === currentPrefix) {
         continue;
       }
 
       if (isDirectoryLink(fa, resolved)) {
         const subDirUrl = new URL(resolved.href.endsWith("/") ? resolved.href : `${resolved.href}/`);
-        await crawlCategorySubtree(subDirUrl, rootCatUrl, catName);
+        await crawlCategorySubtree(subDirUrl, rootCatUrl, catName, resolved.href);
       } else {
-        const relEncoded = resolved.pathname.slice(rootCatUrl.pathname.length);
+        const relEncoded = resolved.pathname.slice(rootCatPrefix.length);
         const relParts = relEncoded.split("/").filter(Boolean).map(decodeURIComponent);
         if (relParts.length === 0) continue;
 
@@ -453,25 +565,30 @@ async function crawlServerDirectory(rootUrl) {
     }
   }
 
-  for (const [catHref, catName] of categoryFolders.entries()) {
+  for (const [catHref, info] of categoryFolders.entries()) {
     try {
       const catUrl = new URL(catHref);
-      await crawlCategorySubtree(catUrl, catUrl, catName);
+      await crawlCategorySubtree(catUrl, catUrl, info.catName, info.fallbackNoSlashUrl);
     } catch (_) {}
   }
 
-  return results;
+  return {
+    files: results,
+    note: `${results.length} file(s) across ${categoryFolders.size} folder(s)`
+  };
 }
 
 async function crawlGitHubRepo() {
   const host = window.location.hostname;
-  if (!host.endsWith(".github.io")) return [];
+  if (!host.endsWith(".github.io")) {
+    return { files: [], note: "not hosted on *.github.io" };
+  }
 
   const owner = host.split(".")[0];
   const segments = window.location.pathname.replace(/^\/|\/$/g, "").split("/").filter(Boolean);
   const candidateRepos = segments.length > 0 ? [segments[0], `${owner}.github.io`] : [`${owner}.github.io`];
 
-  for (const repo of candidateRepos) {
+  for (const repo of Array.from(new Set(candidateRepos))) {
     try {
       const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
       if (!repoRes.ok) continue;
@@ -482,17 +599,30 @@ async function crawlGitHubRepo() {
       if (!treeRes.ok) continue;
       const treeData = await treeRes.json();
 
+      let repoSubdir = "";
+      if (repo === segments[0] && segments.length > 1) {
+        const last = segments[segments.length - 1];
+        const dirSegs = last.includes(".") ? segments.slice(1, -1) : segments.slice(1);
+        repoSubdir = dirSegs.join("/");
+      } else if (repo === `${owner}.github.io` && segments.length > 0) {
+        const last = segments[segments.length - 1];
+        const dirSegs = last.includes(".") ? segments.slice(0, -1) : segments;
+        repoSubdir = dirSegs.join("/");
+      }
+      const expectedPrefix = repoSubdir ? `${repoSubdir}/assets/` : "assets/";
+
       const results = [];
       (treeData.tree || []).forEach(node => {
         if (node.type !== "blob") return;
         const p = node.path.replace(/\\/g, "/");
-        if (!p.toLowerCase().startsWith("assets/")) return;
+        if (!p.toLowerCase().startsWith(expectedPrefix.toLowerCase())) return;
 
-        const parts = p.split("/");
-        if (parts.length < 3) return;
+        const relAfterAssets = p.slice(expectedPrefix.length);
+        const parts = relAfterAssets.split("/").filter(Boolean);
+        if (parts.length < 2) return;
 
-        const cat = parts[1];
-        const filename = parts.slice(2).join("/");
+        const cat = parts[0];
+        const filename = parts.slice(1).join("/");
         const baseName = parts[parts.length - 1];
 
         if (isIgnoredAssetName(cat) || isIgnoredAssetName(baseName)) return;
@@ -500,17 +630,19 @@ async function crawlGitHubRepo() {
         results.push({
           category: cat,
           filename: filename,
-          path: p,
+          path: `assets/${cat}/${filename}`,
           size: node.size || 0,
-          url: `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodeURI(p)}`
+          url: `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${encodePathSegments(p)}`
         });
       });
 
-      if (results.length > 0) return results;
+      if (results.length > 0) {
+        return { files: results, note: `${results.length} file(s) from ${owner}/${repo}` };
+      }
     } catch (_) {}
   }
 
-  return [];
+  return { files: [], note: "0 matching files in repository tree" };
 }
 
 function handleLocalFolderPicker(e) {
@@ -523,8 +655,7 @@ function handleLocalFolderPicker(e) {
     const path = file.webkitRelativePath.replace(/\\/g, "/");
     const parts = path.split("/").filter(Boolean);
 
-    // Support selecting either the `assets` folder directly or a root folder containing `assets/`
-    const assetsIndex = parts.findIndex(part => part.toLowerCase() === "assets");
+    const assetsIndex = parts.findIndex(part => part.toLowerCase() === "assets" || part.toLowerCase() === "asset");
     let category = "";
     let filename = "";
 
@@ -551,6 +682,9 @@ function handleLocalFolderPicker(e) {
   }
 
   if (results.length > 0) {
+    AppState.isLocalMount = true;
+    document.getElementById("exportManifestBtn").classList.remove("hidden");
+    document.getElementById("localPickerBtn").classList.remove("hidden");
     hydrateDocuments(results);
     renderCategoryTrack();
     applyCatalogFilters();
@@ -558,8 +692,29 @@ function handleLocalFolderPicker(e) {
     hideBanner();
     triggerHapticPulse();
   } else {
-    alert("Please select an assets directory that contains category subfolders with files.");
+    alert("Please select your 'assets' folder (or parent folder containing 'assets/') with category subfolders and files inside.");
   }
+}
+
+function exportManifestJson() {
+  if (!AppState.documents.length) return;
+  const manifest = {};
+  for (const doc of AppState.documents) {
+    if (!manifest[doc.category]) manifest[doc.category] = [];
+    manifest[doc.category].push({
+      filename: doc.filename,
+      size: doc.size || 0
+    });
+  }
+  const blob = new Blob([JSON.stringify(manifest, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "assets.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 // ==============================================================
@@ -725,7 +880,6 @@ function openInspector(doc) {
   const stage = document.getElementById("modalStage");
   const downloadName = doc.filename.split("/").pop() || doc.filename;
 
-  // Track inspected history
   if (!AppState.inspectedHistory.includes(doc.path)) {
     AppState.inspectedHistory.unshift(doc.path);
   }
@@ -912,6 +1066,22 @@ function setupUIEventListeners() {
     triggerHapticPulse();
     startAssetDiscovery();
   };
+
+  const emptyRescanBtn = document.getElementById("emptyRescanBtn");
+  if (emptyRescanBtn) {
+    emptyRescanBtn.onclick = () => {
+      triggerHapticPulse();
+      startAssetDiscovery();
+    };
+  }
+
+  const exportManifestBtn = document.getElementById("exportManifestBtn");
+  if (exportManifestBtn) {
+    exportManifestBtn.onclick = () => {
+      triggerHapticPulse();
+      exportManifestJson();
+    };
+  }
 
   const folderInput = document.getElementById("folderInput");
   if (folderInput) {

@@ -28,7 +28,12 @@
 
       <!-- Contextual Action Tray -->
       <div class="app-page-header__actions" id="headerActionsSlot">
-        <!-- Local Directory Picker Fallback for file:// environments -->
+        <!-- Export Manifest Button (shown after local folder mount) -->
+        <button type="button" id="exportManifestBtn" class="action-pill-btn action-pill-btn--sage interactive-tactile hidden" title="Download assets.json manifest for static hosting">
+          <span class="btn-text">Export assets.json</span>
+        </button>
+
+        <!-- Local Directory Picker Fallback -->
         <label id="localPickerBtn" class="action-pill-btn interactive-tactile hidden" title="Select asset root folder">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
@@ -155,8 +160,13 @@
       <div class="empty-state-card__seal">✧</div>
       <h3 id="emptyHeading" class="empty-state-card__title">No Records Documented</h3>
       <p id="emptyMsg" class="empty-state-card__description">
-        No catalog files were located inside the <code>assets/</code> directory path. Verify your folder structure or mount an operational folder using the actions above.
+        No catalog files were located inside the <code>assets/</code> directory path. Verify your folder structure or mount your local folder below.
       </p>
+      <div class="empty-state-card__actions">
+        <label for="folderInput" class="btn-paper-primary interactive-tactile">Mount Assets Folder</label>
+        <button type="button" id="emptyRescanBtn" class="btn-paper-secondary interactive-tactile">Rescan</button>
+      </div>
+      <div id="emptyDiagnostics" class="empty-state-card__diagnostics hidden"></div>
     </div>
   </main>
 

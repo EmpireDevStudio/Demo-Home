@@ -75,7 +75,7 @@
   --shadow-paper: 
     0 1px 3px rgba(42, 45, 39, 0.03),
     0 6px 16px rgba(42, 45, 39, 0.045),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    inset 0 1px 0 rgba(255, 254, 255, 0.85);
 
   --shadow-elevated: 
     0 2px 6px rgba(42, 45, 39, 0.04),
@@ -267,6 +267,12 @@ body {
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   white-space: nowrap;
+}
+
+.action-pill-btn--sage {
+  background-color: var(--color-sage-soft);
+  border-color: var(--color-sage-accent);
+  color: var(--color-sage-text);
 }
 
 .action-icon-btn {
@@ -818,6 +824,29 @@ body {
   padding: 2px 6px;
   border-radius: var(--radius-xs);
   border: 1px solid var(--color-border-subtle);
+}
+
+.empty-state-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.empty-state-card__diagnostics {
+  margin-top: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-paper-sunken);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  text-align: left;
+  word-break: break-word;
 }
 
 /* Status Pill Tokens */
