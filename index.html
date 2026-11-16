@@ -21,6 +21,9 @@
     <div class="canvas-grain"></div>
   </div>
 
+  <!-- Floating Training Motif Background Stage -->
+  <div id="training-motif-stage" class="training-motif-stage" aria-hidden="true"></div>
+
   <!-- Intro Screen Overlay -->
   <aside class="intro-screen" id="introScreen" aria-label="Welcome Portal" role="dialog" aria-modal="true">
     <div class="intro-wrap paper-surface-elevated">
@@ -47,6 +50,16 @@
         <span class="status-pulse-dot" aria-hidden="true"></span>
         <span class="masthead-label" id="systemStatus">ONLINE</span>
       </div>
+
+      <button
+        type="button"
+        id="toggle-animations"
+        class="btn-motion-toggle interactive-tactile"
+        aria-pressed="true"
+        aria-label="Toggle floating background training motifs">
+        <span class="motion-toggle-dot" aria-hidden="true"></span>
+        <span class="motion-toggle-label" id="motionToggleLabel">MOTIFS: ON</span>
+      </button>
     </div>
 
     <div class="app-page-header__title-block">
@@ -215,11 +228,11 @@
         <div class="cutout-ambient-glow" aria-hidden="true"></div>
         <div class="record-contour-rim" aria-hidden="true"></div>
 
-        <a href="mailto:EmpireDevStudio@gmail.com"
+        <a href="https://example.com"
            class="record-disc interactive-tactile" 
            id="recordDisc" 
-           aria-label="Contact us by email"
-           title="Contact by email">
+           aria-label="Visit the website"
+           title="Visit website">
           <div class="vinyl-body">
             <div class="groove groove-1" aria-hidden="true"></div>
             <div class="groove groove-2" aria-hidden="true"></div>

@@ -9,7 +9,7 @@ const APP_CONFIG = Object.freeze({
   // 1. APPLICATION IDENTITY & METADATA
   identity: {
     appId: "editorial-video-archive",
-    appName: "The Editorial Video Archive",
+    appName: "Video Archive",
     appTagline: "A curated repository of recorded knowledge, lectures, and cultural works.",
     version: "2.4.0",
     environment: "production",
@@ -47,9 +47,9 @@ const APP_CONFIG = Object.freeze({
   // 4. APPLICATION COPY & CONTENT MATRIX (ZERO-PLACEHOLDER PRODUCTION DATA)
   content: {
     headers: {
-      defaultEyebrow: "CURATED REPOSITORY",
-      defaultTitle: "The Video Archive",
-      defaultSubtitle: "An artisanal catalog of recorded knowledge, lectures, and cultural works.",
+      defaultEyebrow: "",
+      defaultTitle: "Video Archive",
+      defaultSubtitle: "",
     },
     actions: {
       confirm: "Confirm & Proceed",
@@ -871,23 +871,6 @@ function hydrateFromConfig() {
 
   const footerLegal = document.getElementById("footerLegal");
   if (footerLegal) footerLegal.textContent = `© ${APP_CONFIG.content.legal.establishedYear} ${APP_CONFIG.content.legal.copyrightHolder}`;
-
-  const backBtn = document.getElementById("globalBackButton");
-  if (backBtn) {
-    backBtn.addEventListener("click", () => {
-      triggerHapticPulse();
-      if (AppState.activeCategory !== "ALL" || AppState.searchQuery.length > 0) {
-        AppState.activeCategory = "ALL";
-        AppState.searchQuery = "";
-        const searchInput = document.getElementById("librarySearch");
-        if (searchInput) searchInput.value = "";
-        renderCategoryTabs();
-        renderGallery();
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    });
-  }
 
   renderBottomDock();
 }

@@ -36,7 +36,7 @@ const APP_CONFIG = Object.freeze({
       { id: "home", label: "Home", icon: "home", route: "../", enabled: true, showInBottomBar: true },
       { id: "puzzles", label: "Games", icon: "grid", route: "#mainContentArea", enabled: true, showInBottomBar: true, isActive: true },
       { id: "settings", label: "Preferences", icon: "settings", route: "#settings-modal", enabled: true, showInBottomBar: true },
-      { id: "patronage", label: "Patronage", icon: "heart", route: "#donate-modal", enabled: true, showInBottomBar: true },
+      { id: "patronage", label: "Patronage", icon: "heart", route: "#donate-modal", enabled: false, showInBottomBar: true },
     ],
   },
 
@@ -500,7 +500,7 @@ const APP_CONFIG = Object.freeze({
     if (!dockContainer) return;
 
     dockContainer.innerHTML = "";
-    APP_CONFIG.navigation.items.filter(item => item.showInBottomBar).forEach((item) => {
+    APP_CONFIG.navigation.items.filter(item => item.enabled && item.showInBottomBar).forEach((item) => {
       const button = document.createElement("a");
       button.className = `nav-tab-item interactive-tactile ${item.isActive ? "nav-tab-item--active" : ""}`;
       button.href = item.route;
