@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F7F3EB">
+  <meta name="description" content="Ongoing Training Hub helps general managers organise employee training resources into one central place, saving management time while helping teams grow with confidence.">
+  <title>Ongoing Training Hub: Better Training, Stronger Teams</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- Top Scroll Growth Line -->
+  <div class="growth-progress-track" aria-hidden="true">
+    <div class="growth-progress-fill" id="growth-progress-fill"></div>
+  </div>
+
+  <!-- Warm Ivory & Paper Texture Backdrop -->
+  <div class="atmosphere-layer" aria-hidden="true"></div>
+
+  <!-- Compact Fixed Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a class="brand-mark" href="#hero" aria-label="Ongoing Training Hub, back to top">
+        <span class="brand-emblem" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="26" height="26" fill="none">
+            <circle cx="16" cy="16" r="14.5" stroke="currentColor" stroke-width="1"/>
+            <path d="M16 25V12M16 18C13.5 16 11.5 14 10.5 11.5M16 15.5C18.5 14 20.2 12.2 21.5 9.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="16" cy="9" r="2" fill="currentColor"/>
+            <circle cx="10.2" cy="11.2" r="1.4" fill="currentColor"/>
+            <circle cx="21.8" cy="9.6" r="1.4" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">Ongoing Training Hub</span>
+          <span class="brand-sub">by Empire Dev Studio</span>
+        </span>
+      </a>
+
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#comparison" data-section="comparison">Before &amp; After</a></li>
+          <li><a class="nav-link" href="#hub" data-section="hub">The Hub</a></li>
+          <li><a class="nav-link" href="#staff" data-section="staff">In Action</a></li>
+          <li><a class="nav-link" href="#industries" data-section="industries">Workplaces</a></li>
+          <li><a class="nav-link nav-link--cta" href="#closing" data-section="closing">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="sound-toggle" id="sound-toggle" aria-pressed="false" aria-label="Enable gentle ambient sound">
+          <span class="sound-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+              <path d="M11 5L6 9H3V15H6L11 19V5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path class="sound-wave" d="M15.5 8.5C16.5 9.5 17 10.7 17 12C17 13.3 16.5 14.5 15.5 15.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line class="sound-mute-slash" x1="3.5" y1="3.5" x2="20.5" y2="20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="sound-label">Sound Off</span>
+        </button>
+
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
+          <span class="menu-toggle-lines" aria-hidden="true">
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <nav aria-label="Mobile navigation">
+        <ul class="mobile-nav-list">
+          <li><a class="mobile-nav-link" href="#comparison">Before &amp; After</a></li>
+          <li><a class="mobile-nav-link" href="#hub">The Hub</a></li>
+          <li><a class="mobile-nav-link" href="#staff">In Action</a></li>
+          <li><a class="mobile-nav-link" href="#industries">Workplaces</a></li>
+          <li><a class="mobile-nav-link" href="#closing">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- LEFT-AND-RIGHT SPLIT SHELL: ~30% Left Tree Stage / ~70% Right Content Column -->
+  <div class="page-shell">
+    <!-- PERSISTENT LEFT TREE STAGE (Always visible; ~65% of tree framed inside the left edge) -->
+    <aside class="tree-stage" id="tree-stage" aria-hidden="true">
+      <div class="tree-gold-aura" id="tree-gold-aura"></div>
+      <canvas id="tree-canvas"></canvas>
+
+      <!-- Graceful SVG Fallback if WebGL is unavailable -->
+      <svg id="tree-fallback-svg" class="tree-fallback-svg" viewBox="0 0 800 960" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">
+        <defs>
+          <linearGradient id="rg-trunk" x1="250" y1="880" x2="560" y2="180" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#96614E"/>
+            <stop offset="35%" stop-color="#C9977F"/>
+            <stop offset="68%" stop-color="#E5C2AE"/>
+            <stop offset="100%" stop-color="#AD745E"/>
+          </linearGradient>
+          <linearGradient id="rg-branch" x1="160" y1="620" x2="640" y2="140" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#AD745E"/>
+            <stop offset="50%" stop-color="#D9BD98"/>
+            <stop offset="100%" stop-color="#C9977F"/>
+          </linearGradient>
+          <radialGradient id="rg-blossom" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#FFFDF7"/>
+            <stop offset="45%" stop-color="#F2D1B3"/>
+            <stop offset="100%" stop-color="#C9977F"/>
+          </radialGradient>
+          <linearGradient id="rg-leaf" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#D9BD98"/>
+            <stop offset="55%" stop-color="#B1B6A0"/>
+            <stop offset="100%" stop-color="#87927A"/>
+          </linearGradient>
+        </defs>
+
+        <ellipse cx="420" cy="836" rx="220" ry="26" fill="#E5C2AE" fill-opacity="0.22"/>
+
+        <g class="svg-tree-roots">
+          <path class="svg-grow-path" data-start="0.00" data-end="0.28" d="M412 810 C390 835, 345 848, 275 860 C235 866, 200 876, 174 888" stroke="url(#rg-trunk)" stroke-width="7" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.02" data-end="0.30" d="M424 810 C448 836, 498 852, 568 864 C606 870, 642 878, 666 892" stroke="url(#rg-trunk)" stroke-width="6.5" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.04" data-end="0.34" d="M402 814 C368 846, 330 874, 294 904" stroke="url(#rg-trunk)" stroke-width="5" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.06" data-end="0.36" d="M432 814 C462 848, 502 876, 534 906" stroke="url(#rg-trunk)" stroke-width="5" stroke-linecap="round"/>
+        </g>
+
+        <g class="svg-tree-trunk">
+          <path class="svg-grow-path" data-start="0.00" data-end="0.44" d="M418 818 C406 720, 444 630, 426 530 C412 455, 388 405, 412 310" stroke="url(#rg-trunk)" stroke-width="18" stroke-linecap="round"/>
+        </g>
+
+        <g class="svg-tree-primary">
+          <path class="svg-grow-path" data-start="0.24" data-end="0.54" d="M422 516 C362 478, 296 446, 224 398 C194 378, 168 358, 146 338" stroke="url(#rg-branch)" stroke-width="10" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.28" data-end="0.58" d="M418 470 C478 432, 548 398, 616 352 C642 334, 668 314, 690 294" stroke="url(#rg-branch)" stroke-width="9.5" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.32" data-end="0.62" d="M406 406 C352 352, 304 298, 266 232 C250 205, 236 184, 220 164" stroke="url(#rg-branch)" stroke-width="8" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.36" data-end="0.64" d="M412 360 C456 306, 506 254, 548 194 C564 172, 578 152, 592 132" stroke="url(#rg-branch)" stroke-width="7.5" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.38" data-end="0.66" d="M412 314 C406 256, 412 198, 428 134 C434 108, 442 88, 448 68" stroke="url(#rg-branch)" stroke-width="6.5" stroke-linecap="round"/>
+        </g>
+
+        <g class="svg-tree-secondary">
+          <path class="svg-grow-path" data-start="0.48" data-end="0.76" d="M538 400 C570 364, 598 332, 616 292" stroke="url(#rg-branch)" stroke-width="4.2" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.52" data-end="0.78" d="M582 374 C624 384, 662 384, 696 368" stroke="url(#rg-branch)" stroke-width="3.6" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.56" data-end="0.80" d="M342 294 C358 244, 366 196, 362 126" stroke="url(#rg-branch)" stroke-width="3.5" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.58" data-end="0.82" d="M482 276 C524 252, 574 238, 622 232" stroke="url(#rg-branch)" stroke-width="3.8" stroke-linecap="round"/>
+          <path class="svg-grow-path" data-start="0.60" data-end="0.82" d="M420 218 C462 184, 492 142, 518 94" stroke="url(#rg-branch)" stroke-width="3.2" stroke-linecap="round"/>
+        </g>
+
+        <g class="svg-tree-leaves">
+          <path class="svg-bloom-node" data-start="0.56" data-end="0.78" d="M362 128 C346 112, 352 92, 372 94 C376 110, 372 120, 362 128Z" fill="url(#rg-leaf)"/>
+          <path class="svg-bloom-node" data-start="0.60" data-end="0.82" d="M518 98 C524 78, 542 74, 548 92 C536 100, 526 102, 518 98Z" fill="url(#rg-leaf)"/>
+          <path class="svg-bloom-node" data-start="0.62" data-end="0.84" d="M618 232 C636 218, 654 224, 650 242 C636 244, 626 240, 618 232Z" fill="url(#rg-leaf)"/>
+          <path class="svg-bloom-node" data-start="0.64" data-end="0.86" d="M616 294 C634 278, 652 284, 646 302 C632 304, 624 300, 616 294Z" fill="url(#rg-leaf)"/>
+        </g>
+
+        <g class="svg-tree-blossoms">
+          <g class="svg-bloom-node" data-start="0.74" data-end="0.94" transform="translate(448 68) scale(1.22)">
+            <circle cx="0" cy="-11" r="8" fill="url(#rg-blossom)"/><circle cx="10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="0" cy="0" r="4" fill="#96614E"/>
+          </g>
+          <g class="svg-bloom-node" data-start="0.76" data-end="0.95" transform="translate(592 132) scale(1.12)">
+            <circle cx="0" cy="-11" r="8" fill="url(#rg-blossom)"/><circle cx="10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="0" cy="0" r="4" fill="#96614E"/>
+          </g>
+          <g class="svg-bloom-node" data-start="0.78" data-end="0.96" transform="translate(690 294) scale(1.08)">
+            <circle cx="0" cy="-11" r="8" fill="url(#rg-blossom)"/><circle cx="10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="0" cy="0" r="4" fill="#96614E"/>
+          </g>
+          <g class="svg-bloom-node" data-start="0.82" data-end="1.00" transform="translate(518 94) scale(1.05)">
+            <circle cx="0" cy="-11" r="8" fill="url(#rg-blossom)"/><circle cx="10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-6" cy="9" r="8" fill="url(#rg-blossom)"/><circle cx="-10" cy="-3" r="8" fill="url(#rg-blossom)"/><circle cx="0" cy="0" r="4" fill="#96614E"/>
+          </g>
+        </g>
+      </svg>
+
+      <!-- Live Stage Indicator -->
+      <div class="tree-stage-badge" id="tree-stage-badge">
+        <span class="badge-dot"></span>
+        <span id="tree-stage-label">Roots: Manager Foundation</span>
+      </div>
+    </aside>
+
+    <!-- RIGHT EDITORIAL COLUMN (~70% Width) -->
+    <main id="main-content" class="editorial-column">
+      <div class="editorial-inner">
+        <!-- ==============================================================
+             BAND 01: HERO
+        ============================================================== -->
+        <section class="band band--hero" id="hero">
+          <p class="eyebrow">
+            <span class="eyebrow-line" aria-hidden="true"></span>
+            Ongoing Employee Training Platform
+          </p>
+          <h1 class="hero-title">
+            Better training.<br>
+            Stronger teams.<br>
+            <em>Less time spent managing it.</em>
+          </h1>
+          <p class="hero-lead">
+            Give your people the knowledge and resources they need to grow, while giving managers more time to focus on running the business.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="#comparison">
+              <span>See how it works</span>
+              <svg class="btn-arrow" viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true">
+                <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a class="btn btn--ghost" href="#closing">Register interest</a>
+          </div>
+
+          <div class="metaphor-legend" aria-label="How the growing tree reflects your training hub">
+            <span><strong>Roots:</strong> Manager Foundation</span>
+            <span><strong>Trunk:</strong> Central Hub</span>
+            <span><strong>Branches:</strong> Team Access</span>
+            <span><strong>Blossoms:</strong> Team Growth</span>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+             BAND 02: BEFORE AND AFTER
+        ============================================================== -->
+        <section class="band" id="comparison">
+          <p class="section-index">01 / Before and After</p>
+          <h2 class="section-title">Stop repeating yourself. Put knowledge in one place.</h2>
+          <p class="section-lead">
+            Good training fails when notes and rules are hard to find. Compare a scattered setup with one central hub.
+          </p>
+
+          <div class="comparison-grid" id="comparison-grid">
+            <div class="segmented-switch" role="tablist" aria-label="Compare before and after training setup">
+              <button type="button" class="seg-btn is-active" role="tab" id="comp-tab-before" aria-selected="true" data-comp-view="before">Before</button>
+              <button type="button" class="seg-btn" role="tab" id="comp-tab-after" aria-selected="false" data-comp-view="after">After</button>
+            </div>
+
+            <article class="surface-card comp-card comp-card--before" id="comp-view-before">
+              <span class="comp-tag comp-tag--before">Before: The Problem</span>
+              <ul class="check-list check-list--before">
+                <li>Files spread across folders, chats, and paper notes</li>
+                <li>Staff often asking managers for basic answers</li>
+                <li>Different versions of training instructions</li>
+                <li>Rules and steps that are hard to find during a shift</li>
+                <li>Managers losing time repeating the same advice</li>
+              </ul>
+            </article>
+
+            <article class="surface-card comp-card comp-card--after" id="comp-view-after">
+              <span class="comp-tag comp-tag--after">After: Central Training Hub</span>
+              <ul class="check-list check-list--after">
+                <li>One central place for every training guide</li>
+                <li>Staff open what they need on their own devices</li>
+                <li>Clear, matching guides, checklists, and procedures</li>
+                <li>Daily learning prompts to keep knowledge fresh</li>
+                <li>Less need for managers to repeat the basics</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+             BAND 03: INSIDE THE HUB (5 CONNECTED RESOURCES)
+        ============================================================== -->
+        <section class="band" id="hub">
+          <p class="section-index">02 / Inside the Hub</p>
+          <h2 class="section-title">Five simple tools that build lasting team skill.</h2>
+          <p class="section-lead">
+            Managers set up clear guides once, and staff can check them whenever they need help. Learning continues long after week one.
+          </p>
+
+          <div class="surface-card hub-explorer">
+            <div class="hub-pills" role="tablist" aria-label="Explore the five hub resources">
+              <button type="button" class="hub-pill is-selected" role="tab" aria-selected="true" data-resource="library">Training Library</button>
+              <button type="button" class="hub-pill" role="tab" aria-selected="false" data-resource="videos">Training Videos</button>
+              <button type="button" class="hub-pill" role="tab" aria-selected="false" data-resource="games">Daily Knowledge Games</button>
+              <button type="button" class="hub-pill" role="tab" aria-selected="false" data-resource="checklists">Checklists</button>
+              <button type="button" class="hub-pill" role="tab" aria-selected="false" data-resource="sops">Standard Procedures</button>
+            </div>
+
+            <div class="hub-detail" id="hub-detail" role="tabpanel">
+              <div class="hub-detail-icon" id="hub-detail-icon" aria-hidden="true">
+                <svg viewBox="0 0 80 80" width="56" height="56" fill="none">
+                  <rect x="12" y="18" width="44" height="48" rx="3" fill="#F0E9DD" stroke="#C9977F" stroke-width="1.2"/>
+                  <rect x="22" y="12" width="44" height="48" rx="3" fill="#FCFAF6" stroke="#96614E" stroke-width="1.4"/>
+                  <line x1="30" y1="26" x2="54" y2="26" stroke="#96614E" stroke-width="1.6" stroke-linecap="round"/>
+                  <line x1="30" y1="36" x2="56" y2="36" stroke="#C9977F" stroke-width="1.3" stroke-linecap="round"/>
+                  <line x1="30" y1="45" x2="48" y2="45" stroke="#D9BD98" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <span class="hub-detail-kicker" id="hub-detail-kicker">Resource 01: Clear Reference</span>
+                <h3 class="hub-detail-title" id="hub-detail-title">Training Library</h3>
+                <p class="hub-detail-desc" id="hub-detail-desc">
+                  A central place for key training documents, product guides, and reference sheets that stay current and easy to browse.
+                </p>
+                <p class="hub-detail-benefit" id="hub-detail-benefit">
+                  <strong>Staff benefit:</strong> Employees find clear answers on their own without pulling a manager off the floor.
+                </p>
+              </div>
+            </div>
+
+            <ol class="workflow-strip">
+              <li><span>01</span> Gather team knowledge</li>
+              <li><span>02</span> Build clear guides</li>
+              <li><span>03</span> Share with every shift</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+             BAND 04: STAFF EXPERIENCE IN ACTION
+        ============================================================== -->
+        <section class="band" id="staff">
+          <p class="section-index">03 / Staff Experience in Action</p>
+          <h2 class="section-title">Practical help at the moment it is needed.</h2>
+
+          <div class="scenarios-compact">
+            <article class="surface-card scenario-compact">
+              <span class="scenario-tag">Example A: Busy Service</span>
+              <h3>A bartender checking a drink recipe</h3>
+              <p>
+                Instead of guessing or interrupting a manager during a rush, a bartender opens the drink guide or recalls it from a daily knowledge game.
+              </p>
+              <p class="scenario-outcome">Consistent drinks. Confident service. Fewer interruptions.</p>
+            </article>
+
+            <article class="surface-card scenario-compact">
+              <span class="scenario-tag">Example B: Closing Shift</span>
+              <h3>A new team member closing up</h3>
+              <p>
+                Near the end of a shift, a new employee opens the closing checklist and finishes each task in the right order.
+              </p>
+              <p class="scenario-outcome">Clear tasks. Fewer missed steps. Consistent standards.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+             BAND 05: INTERACTIVE INDUSTRY SELECTOR (6 WORKPLACES)
+        ============================================================== -->
+        <section class="band" id="industries">
+          <p class="section-index">04 / Built for Any Workplace</p>
+          <h2 class="section-title">One simple structure that fits different businesses.</h2>
+
+          <div class="surface-card industry-compact">
+            <div class="industry-tabs" role="tablist" aria-label="Select a workplace example">
+              <button type="button" class="industry-tab is-selected" role="tab" id="tab-default" aria-selected="true" aria-controls="industry-panel" data-industry="default">Default</button>
+              <button type="button" class="industry-tab" role="tab" id="tab-hospitality" aria-selected="false" aria-controls="industry-panel" data-industry="hospitality">Hospitality</button>
+              <button type="button" class="industry-tab" role="tab" id="tab-sales" aria-selected="false" aria-controls="industry-panel" data-industry="sales">Sales</button>
+              <button type="button" class="industry-tab" role="tab" id="tab-car-mechanics" aria-selected="false" aria-controls="industry-panel" data-industry="carMechanics">Car Mechanics</button>
+              <button type="button" class="industry-tab" role="tab" id="tab-ice-cream" aria-selected="false" aria-controls="industry-panel" data-industry="iceCream">Ice Cream Store</button>
+              <button type="button" class="industry-tab" role="tab" id="tab-clothing" aria-selected="false" aria-controls="industry-panel" data-industry="clothing">Clothing Store</button>
+            </div>
+
+            <div class="industry-panel" id="industry-panel" role="tabpanel" aria-labelledby="tab-default" tabindex="0">
+              <span class="industry-kicker" id="industry-kicker">Everyday Workplace Example</span>
+              <h3 class="industry-heading" id="industry-title">Default: Everyday Workplace Training</h3>
+              <dl class="industry-dl">
+                <div>
+                  <dt>Scenario</dt>
+                  <dd id="industry-scenario">A new employee needs to understand a workplace procedure.</dd>
+                </div>
+                <div>
+                  <dt>Resources</dt>
+                  <dd id="industry-resources">Training documents, videos, checklists, and standard operating procedures.</dd>
+                </div>
+                <div>
+                  <dt>Benefit</dt>
+                  <dd id="industry-benefit">Easier access to consistent knowledge and less repetitive explaining.</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================================
+             BAND 06: OUTCOMES, EMPIRE DEV STUDIO & CONTACT CTA
+        ============================================================== -->
+        <section class="band band--closing" id="closing">
+          <p class="section-index">05 / The Outcome</p>
+          <h2 class="closing-headline">Strong teams grow from strong foundations.</h2>
+          <p class="section-lead">
+            Give your people the knowledge, guides, and confidence to grow, and give your managers more time for what matters.
+          </p>
+
+          <ul class="outcomes-strip" aria-label="Key manager and team benefits">
+            <li>More time for managers</li>
+            <li>Better training guides</li>
+            <li>Consistent team knowledge</li>
+            <li>More confident staff</li>
+            <li>An ongoing learning habit</li>
+          </ul>
+
+          <div class="surface-card cta-box">
+            <div class="cta-row">
+              <div>
+                <p class="cta-invitation">Let's grow something better.</p>
+                <p class="studio-note">
+                  Built by <strong>Empire Dev Studio</strong>. Email:
+                  <a href="mailto:empiredevstudio@gmail.com">empiredevstudio@gmail.com</a>
+                </p>
+              </div>
+              <a
+                id="contact-cta"
+                class="btn btn--cta"
+                href="mailto:empiredevstudio@gmail.com?subject=I'm%20interested%20in%20the%20Ongoing%20Training%20Hub&body=Hi%20Empire%20Dev%20Studio%2C%0A%0AI've%20explored%20the%20Ongoing%20Training%20Hub%20and%20would%20love%20to%20register%20my%20interest%20and%20discuss%20how%20it%20could%20work%20for%20our%20business.%0A%0ALooking%20forward%20to%20growing%20something%20better!"
+              >
+                <svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M4 7L12 13L20 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Register Interest by Email</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>

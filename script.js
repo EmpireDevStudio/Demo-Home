@@ -103,7 +103,7 @@ const APP_CONFIG = Object.freeze({
 
   // 6. WEBSITE LINK
   website: {
-    url: "https://example.com", // Replace with the destination website URL.
+    url: "./Engage", // Replace with the destination website URL.
     transitionDurationMs: 300,
   },
 
