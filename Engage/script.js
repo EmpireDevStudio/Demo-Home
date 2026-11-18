@@ -19,7 +19,7 @@ const STAGE_TUNING = {
   stackBelowPx: 0,
 
   // How much of the tree is visible inside the left column (65 = ~65% visible, ~35% off-screen left)
-  visibleTreePercent: 65,
+  visibleTreePercent: 85,
   // Fine position nudges inside the 3D scene
   cameraOffsetXAdjust: 0.0,
   treeOffsetY: -1.9,
