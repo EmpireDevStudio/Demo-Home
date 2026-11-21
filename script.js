@@ -8,7 +8,7 @@
 const APP_CONFIG = Object.freeze({
   // 1. APPLICATION IDENTITY & METADATA
   identity: {
-    appId: "sDemo Portal",
+    appId: "Demo Portal",
     appName: "Training Workspace",
     appTagline: "Ongoing Training Hub",
     version: "1.0.0",
@@ -20,7 +20,7 @@ const APP_CONFIG = Object.freeze({
 
   // 2. BRANDING & VISUAL PALETTE
   branding: {
-    logoUrl: "logo.jpg",
+    logoUrl: "logo.png",
     logoAlt: "System Core Artwork",
     accentColor: "#3E5B42",     // Sage Green (Passes AAA)
     accentCinema: "#963E35",    // Terracotta (Passes AA)
@@ -112,6 +112,8 @@ const APP_CONFIG = Object.freeze({
     enableHapticFeedback: true,
     enableParallax: true,
     enableFloatingMotifs: true,
+    enableServiceWorker: true,
+    serviceWorkerPath: "./sw.js",
     navigationDelayMs: 340,
   },
 
@@ -432,6 +434,47 @@ function triggerHapticPulse() {
     }
   }
 }
+
+/* --------------------------------------------------------------------------
+   SERVICE WORKER REGISTRATION (OFFLINE & INSTALLABLE PWA)
+   -------------------------------------------------------------------------- */
+function registerServiceWorker() {
+  if (
+    !APP_CONFIG.features.enableServiceWorker ||
+    typeof navigator === "undefined" ||
+    !("serviceWorker" in navigator)
+  ) {
+    return;
+  }
+
+  window.addEventListener("load", async () => {
+    try {
+      const registration = await navigator.serviceWorker.register(
+        APP_CONFIG.features.serviceWorkerPath,
+        { scope: "./" }
+      );
+
+      registration.addEventListener("updatefound", () => {
+        const newWorker = registration.installing;
+        if (!newWorker) return;
+
+        newWorker.addEventListener("statechange", () => {
+          if (
+            newWorker.state === "installed" &&
+            navigator.serviceWorker.controller
+          ) {
+            // New version is ready; activate immediately
+            newWorker.postMessage({ type: "SKIP_WAITING" });
+          }
+        });
+      });
+    } catch (err) {
+      console.warn("Service Worker registration failed:", err);
+    }
+  });
+}
+
+registerServiceWorker();
 
 /* --------------------------------------------------------------------------
    APPLICATION RUNTIME CONTROLLER
