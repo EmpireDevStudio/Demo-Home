@@ -15,7 +15,7 @@ const CORE_ASSETS = [
   "./index.html",
   "./style.css",
   "./script.js",
-  "./manifest.webmanifest",
+  "./manifest.json",
   "./logo.png",
 ];
 
@@ -37,12 +37,17 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CORE_CACHE);
-      await cache.addAll(CORE_ASSETS);
-      await Promise.allSettled(
-        ICON_ASSETS.map((url) =>
+      const allAssets = [...CORE_ASSETS, ...ICON_ASSETS];
+      const results = await Promise.allSettled(
+        allAssets.map((url) =>
           cache.add(new Request(url, { cache: "reload" }))
         )
       );
+      results.forEach((result, index) => {
+        if (result.status === "rejected") {
+          console.warn("SW precache failed for:", allAssets[index], result.reason);
+        }
+      });
       await self.skipWaiting();
     })()
   );

@@ -424,6 +424,24 @@ body:not(.intro-active) .intro-screen {
   color: var(--color-text-secondary);
 }
 
+.masthead-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-install-app[hidden] {
+  display: none;
+}
+
+.install-btn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-sage-text);
+  box-shadow: 0 0 5px var(--color-sage-accent);
+}
+
 .btn-motion-toggle {
   display: inline-flex;
   align-items: center;

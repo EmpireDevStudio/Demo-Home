@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#F5F3ED">
 
   <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="manifest.json">
 
   <!-- Browser & Desktop Icons -->
   <link rel="icon" href="favicon.ico" sizes="any">
@@ -65,15 +65,27 @@
         <span class="masthead-label" id="systemStatus">ONLINE</span>
       </div>
 
-      <button
-        type="button"
-        id="toggle-animations"
-        class="btn-motion-toggle interactive-tactile"
-        aria-pressed="true"
-        aria-label="Toggle floating background training motifs">
-        <span class="motion-toggle-dot" aria-hidden="true"></span>
-        <span class="motion-toggle-label" id="motionToggleLabel">MOTIFS: ON</span>
-      </button>
+      <div class="masthead-actions">
+        <button
+          type="button"
+          id="installAppBtn"
+          class="btn-motion-toggle btn-install-app interactive-tactile"
+          hidden
+          aria-label="Install application to device">
+          <span class="install-btn-dot" aria-hidden="true"></span>
+          <span>INSTALL APP</span>
+        </button>
+
+        <button
+          type="button"
+          id="toggle-animations"
+          class="btn-motion-toggle interactive-tactile"
+          aria-pressed="true"
+          aria-label="Toggle floating background training motifs">
+          <span class="motion-toggle-dot" aria-hidden="true"></span>
+          <span class="motion-toggle-label" id="motionToggleLabel">MOTIFS: ON</span>
+        </button>
+      </div>
     </div>
 
     <div class="app-page-header__title-block">

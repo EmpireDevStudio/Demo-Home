@@ -447,7 +447,7 @@ function registerServiceWorker() {
     return;
   }
 
-  window.addEventListener("load", async () => {
+  const register = async () => {
     try {
       const registration = await navigator.serviceWorker.register(
         APP_CONFIG.features.serviceWorkerPath,
@@ -471,10 +471,58 @@ function registerServiceWorker() {
     } catch (err) {
       console.warn("Service Worker registration failed:", err);
     }
-  });
+  };
+
+  if (document.readyState === "complete") {
+    register();
+  } else {
+    window.addEventListener("load", register);
+  }
 }
 
 registerServiceWorker();
+
+/* --------------------------------------------------------------------------
+   PWA INSTALL PROMPT CONTROLLER (beforeinstallprompt)
+   -------------------------------------------------------------------------- */
+let deferredInstallPrompt = null;
+
+function initInstallPrompt() {
+  const installBtn = document.getElementById("installAppBtn");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    if (installBtn) {
+      installBtn.hidden = false;
+    }
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener("click", async () => {
+      if (!deferredInstallPrompt) return;
+      triggerHapticPulse();
+      installBtn.disabled = true;
+      try {
+        await deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+      } catch (err) {
+        console.warn("Install prompt failed:", err);
+      } finally {
+        deferredInstallPrompt = null;
+        installBtn.hidden = true;
+        installBtn.disabled = false;
+      }
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    if (installBtn) {
+      installBtn.hidden = true;
+    }
+  });
+}
 
 /* --------------------------------------------------------------------------
    APPLICATION RUNTIME CONTROLLER
@@ -482,6 +530,7 @@ registerServiceWorker();
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize Background Training Motifs
   TrainingMotifSystem.init();
+  initInstallPrompt();
 
   // DOM References
   const introScreen = document.getElementById("introScreen");
