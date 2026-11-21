@@ -11,7 +11,7 @@ const APP_CONFIG = Object.freeze({
     appId: "Demo Portal",
     appName: "Training Workspace",
     appTagline: "Ongoing Training Hub",
-    version: "1.0.0",
+    version: "1.1.0",
     environment: "production",
     canonicalUrl: "../",
     language: "en-US",
