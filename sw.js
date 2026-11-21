@@ -16,7 +16,7 @@ const CORE_ASSETS = [
   "./style.css",
   "./script.js",
   "./manifest.webmanifest",
-  "./logo.jpg",
+  "./logo.png",
 ];
 
 // Icon assets cached opportunistically so missing sizes won't block SW install
