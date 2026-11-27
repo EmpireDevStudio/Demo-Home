@@ -38,28 +38,55 @@
   <!-- Floating Training Motif Background Stage -->
   <div id="training-motif-stage" class="training-motif-stage" aria-hidden="true"></div>
 
-  <!-- Intro Screen Overlay -->
-  <aside class="intro-screen" id="introScreen" aria-label="Welcome Portal" role="dialog" aria-modal="true">
+  <!-- =====================================================================
+       STAGE ONE: IMMERSIVE WELCOME EXPERIENCE (PRESERVES #introScreen)
+       ===================================================================== -->
+  <aside
+    class="intro-screen"
+    id="introScreen"
+    aria-label="Welcome to Online Training Workspace"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="introTitle"
+    aria-describedby="introSubtitle">
     <div class="intro-wrap paper-surface-elevated">
-      <div class="intro-monogram" aria-hidden="true">
-        <svg viewBox="0 0 44 44" fill="none">
-          <circle cx="22" cy="22" r="20" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3.5"/>
-          <circle cx="22" cy="22" r="10" stroke="currentColor" stroke-width="1" stroke-opacity="0.4"/>
-          <circle cx="22" cy="22" r="4.5" fill="currentColor"/>
+      <!-- Animated Visual Companion Emblem -->
+      <div class="intro-monogram tour-companion-emblem" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle class="companion-ring-outer" cx="32" cy="32" r="28" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <circle class="companion-ring-mid" cx="32" cy="32" r="20" stroke="#3E5B42" stroke-width="1.5" stroke-opacity="0.55"/>
+          <path class="companion-needle" d="M39.5 24.5L34.5 34.5L24.5 39.5L29.5 29.5L39.5 24.5Z" fill="#3E5B42" fill-opacity="0.22" stroke="#3E5B42" stroke-width="1.6" stroke-linejoin="round"/>
+          <circle class="companion-core" cx="32" cy="32" r="4" fill="currentColor"/>
         </svg>
       </div>
-      <h1 class="intro-title" id="introTitle">SYSTEM DIRECTORY</h1>
+
+      <span class="intro-eyebrow" id="introEyebrow">ONGOING TRAINING HUB</span>
+      <h1 class="intro-title" id="introTitle">Your Team's Training Hub, Ready in Minutes</h1>
       <div class="intro-hairline" aria-hidden="true"></div>
-      <p class="intro-subtitle" id="introSubtitle">Archives &bull; Broadcasts &bull; Simulations &bull; Protocols</p>
-      <button type="button" class="intro-hint-button interactive-tactile" id="introDismissBtn">
-        Enter Workspace &rarr;
-      </button>
+      <p class="intro-subtitle" id="introSubtitle">
+        Save hours creating and organizing staff training materials—then give every team member instant, reliable access to manuals, videos, interactive practice, and daily checklists from one central workspace.
+      </p>
+
+      <ul class="intro-value-pills" aria-label="Key workspace benefits">
+        <li>Create &amp; Store Once</li>
+        <li>24/7 Staff Access</li>
+        <li>4 Core Formats</li>
+      </ul>
+
+      <div class="intro-actions">
+        <button type="button" class="intro-hint-button interactive-tactile" id="introStartTourBtn">
+          Take the Tour &rarr;
+        </button>
+        <button type="button" class="intro-skip-button interactive-tactile" id="introDismissBtn">
+          Skip to Workspace
+        </button>
+      </div>
     </div>
   </aside>
 
   <!-- Standardized Universal Top Masthead -->
   <header class="app-page-header" role="banner">
-    <div class="app-page-header__controls">
+    <div class="app-page-header__controls" data-tour="masthead-controls">
       <div class="masthead-status-badge" id="mastheadStatusBadge">
         <span class="status-pulse-dot" aria-hidden="true"></span>
         <span class="masthead-label" id="systemStatus">ONLINE</span>
@@ -85,6 +112,16 @@
           <span class="motion-toggle-dot" aria-hidden="true"></span>
           <span class="motion-toggle-label" id="motionToggleLabel">MOTIFS: ON</span>
         </button>
+
+        <button
+          type="button"
+          id="replayTourBtn"
+          class="btn-motion-toggle btn-replay-tour interactive-tactile"
+          aria-label="Replay interactive workspace tutorial"
+          title="Replay Guided Tour">
+          <span class="tour-btn-icon" aria-hidden="true">?</span>
+          <span>TOUR</span>
+        </button>
       </div>
     </div>
 
@@ -99,18 +136,19 @@
 
   <!-- Centered Interactive Stage Container -->
   <div class="stage-container">
-    <main class="square-stage" id="squareStage" role="navigation" aria-label="Sector Directory Navigation">
+    <main class="square-stage" id="squareStage" data-tour="workspace-stage" role="navigation" aria-label="Sector Directory Navigation">
 
       <!-- Sector 01: Top-Left (Library) -->
-      <a href="./Demo-Library/" 
-         class="square-tile tile-tl tile-library interactive-tactile" 
+      <a href="./Demo-Library/"
+         class="square-tile tile-tl tile-library interactive-tactile"
          data-target="library"
+         data-tour="library"
          role="button"
          aria-label="Sector 01: Library — Curated records and system documentation"
          tabindex="0">
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
-        
+
         <div class="tile-inner">
           <div class="tile-header-group">
             <div class="tile-meta-line">
@@ -138,15 +176,16 @@
       </a>
 
       <!-- Sector 02: Top-Right (Videos) -->
-      <a href="./Demo-Videos/" 
-         class="square-tile tile-tr tile-videos interactive-tactile" 
+      <a href="./Demo-Videos/"
+         class="square-tile tile-tr tile-videos interactive-tactile"
          data-target="videos"
+         data-tour="videos"
          role="button"
          aria-label="Sector 02: Videos — Visual broadcasts and cinematic releases"
          tabindex="0">
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
-        
+
         <div class="tile-inner">
           <div class="tile-header-group">
             <div class="tile-meta-line">
@@ -174,15 +213,16 @@
       </a>
 
       <!-- Sector 03: Bottom-Left (Games) -->
-      <a href="./Demo-Games/" 
-         class="square-tile tile-bl tile-games interactive-tactile" 
+      <a href="./Demo-Games/"
+         class="square-tile tile-bl tile-games interactive-tactile"
          data-target="games"
+         data-tour="games"
          role="button"
          aria-label="Sector 03: Games — Interactive chambers and combat sandboxes"
          tabindex="0">
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
-        
+
         <div class="tile-inner">
           <div class="tile-content-group">
             <div class="tile-emblem" aria-hidden="true">
@@ -212,15 +252,16 @@
       </a>
 
       <!-- Sector 04: Bottom-Right (Checklists) -->
-      <a href="./Demo-Checklists/" 
-         class="square-tile tile-br tile-checklists interactive-tactile" 
+      <a href="./Demo-Checklists/"
+         class="square-tile tile-br tile-checklists interactive-tactile"
          data-target="checklists"
+         data-tour="checklists"
          role="button"
          aria-label="Sector 04: Checklists — Operational protocols and readiness workflows"
          tabindex="0">
         <div class="tile-shine-border" aria-hidden="true"></div>
         <div class="tile-spotlight" aria-hidden="true"></div>
-        
+
         <div class="tile-inner">
           <div class="tile-content-group">
             <div class="tile-emblem" aria-hidden="true">
@@ -255,8 +296,9 @@
         <div class="record-contour-rim" aria-hidden="true"></div>
 
         <a href="https://example.com"
-           class="record-disc interactive-tactile" 
-           id="recordDisc" 
+           class="record-disc interactive-tactile"
+           id="recordDisc"
+           data-tour="center-core"
            aria-label="Visit the website"
            title="Visit website">
           <div class="vinyl-body">
@@ -267,9 +309,9 @@
 
             <!-- Root Logo Image Artwork Layer -->
             <div class="vinyl-art-layer">
-              <img src="logo.png" 
-                   alt="System Core Artwork" 
-                   class="record-art-image" 
+              <img src="logo.png"
+                   alt="System Core Artwork"
+                   class="record-art-image"
                    id="vinylCoreImg"
                    loading="eager"
                    decoding="async">
@@ -286,6 +328,164 @@
       <!-- Populated dynamically through APP_CONFIG.navigation.items -->
     </div>
   </nav>
+
+  <!-- =====================================================================
+       STAGE TWO: GUIDED APPLICATION TOUR (SPOTLIGHT + INFORMATION PANEL)
+       ===================================================================== -->
+  <div class="tour-overlay" id="tourOverlay" hidden aria-hidden="true">
+    <!-- Dynamic SVG Cutout Spotlight Backdrop -->
+    <svg class="tour-backdrop-svg" id="tourBackdropSvg" aria-hidden="true">
+      <defs>
+        <mask id="tourSpotlightMask">
+          <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+          <rect id="tourMaskCutout" x="0" y="0" width="0" height="0" rx="16" ry="16" fill="black"/>
+        </mask>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="rgba(26, 28, 24, 0.62)" mask="url(#tourSpotlightMask)"/>
+    </svg>
+
+    <!-- Illuminated Target Ring -->
+    <div class="tour-spotlight-ring" id="tourSpotlightRing" aria-hidden="true"></div>
+
+    <!-- Guided Information Panel -->
+    <section
+      class="tour-panel paper-surface-elevated"
+      id="tourPanel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tourStepTitle"
+      aria-describedby="tourStepBody">
+      <div class="tour-panel__header">
+        <div class="tour-panel__companion-wrap">
+          <div class="tour-panel__companion" id="tourCompanion" aria-hidden="true">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/>
+              <path class="tour-companion-needle" d="M22.5 13.5L19.5 19.5L13.5 22.5L16.5 16.5L22.5 13.5Z" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              <circle cx="18" cy="18" r="2.2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="tour-panel__meta">
+            <span class="tour-step-counter" id="tourStepCounter" aria-live="polite">01 / 07</span>
+            <span class="tour-step-badge" id="tourStepBadge">OVERVIEW</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="tour-close-btn interactive-tactile"
+          id="tourCloseBtn"
+          aria-label="Close tutorial">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="tour-progress-track" aria-hidden="true">
+        <div class="tour-progress-fill" id="tourProgressFill"></div>
+      </div>
+
+      <div class="tour-panel__content">
+        <h2 class="tour-panel__title" id="tourStepTitle">Workspace Overview</h2>
+        <p class="tour-panel__body" id="tourStepBody"></p>
+        <p class="tour-panel__benefit" id="tourStepBenefit"></p>
+      </div>
+
+      <div class="tour-panel__footer">
+        <button type="button" class="tour-btn-skip interactive-tactile" id="tourSkipBtn">
+          Skip Tour
+        </button>
+
+        <div class="tour-panel__nav-group">
+          <button type="button" class="tour-btn-secondary interactive-tactile" id="tourBackBtn">
+            &larr; Back
+          </button>
+          <button type="button" class="tour-btn-primary interactive-tactile" id="tourNextBtn">
+            Next &rarr;
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- =====================================================================
+       STAGE THREE: TOUR COMPLETION EXPERIENCE
+       ===================================================================== -->
+  <aside
+    class="tour-completion-overlay"
+    id="tourCompletionOverlay"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tourCompletionTitle"
+    aria-describedby="tourCompletionDesc">
+    <div class="tour-completion-card paper-surface-elevated">
+      <div class="tour-confetti-stage" id="tourConfettiStage" aria-hidden="true"></div>
+
+      <div class="tour-completion-emblem" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="28" fill="#D6E3D2" fill-opacity="0.45" stroke="#3E5B42" stroke-width="1.8"/>
+          <path class="completion-check-path" d="M21 32.5L28.5 40L43 24.5" stroke="#3E5B42" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <span class="tour-completion-badge">07 / 07 &bull; TOUR COMPLETE</span>
+      <h2 class="tour-completion-title" id="tourCompletionTitle">You're Ready to Explore</h2>
+      <p class="tour-completion-desc" id="tourCompletionDesc">
+        You now know how the Library, Videos, Games, and Checklists work together to save setup time and give your staff consistent, on-demand access. Take your time testing each sector—you can replay this tour anytime from the <strong>TOUR</strong> button in the top bar.
+      </p>
+
+      <button type="button" class="intro-hint-button tour-completion-cta interactive-tactile" id="tourCompletionDoneBtn">
+        Start Exploring &rarr;
+      </button>
+    </div>
+  </aside>
+
+  <!-- =====================================================================
+       STAGE FOUR: FIVE-MINUTE DEMO FOLLOW-UP NOTIFICATION
+       ===================================================================== -->
+  <aside
+    class="demo-followup-toast paper-surface-elevated"
+    id="demoFollowupToast"
+    hidden
+    role="region"
+    aria-label="Demo follow-up options">
+    <div class="demo-followup__header">
+      <div class="demo-followup__badge-wrap">
+        <span class="demo-followup__dot" aria-hidden="true"></span>
+        <span class="demo-followup__eyebrow">DEMO CHECK-IN</span>
+      </div>
+      <button
+        type="button"
+        class="demo-followup__dismiss interactive-tactile"
+        id="demoFollowupDismissBtn"
+        aria-label="Dismiss notification">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <h3 class="demo-followup__title" id="demoFollowupTitle">Ready to Bring This to Your Team?</h3>
+    <p class="demo-followup__body" id="demoFollowupBody">
+      You've had a few minutes to explore the Online Training Workspace demo. Visit our website to see the full platform, or reach out to our team with any questions.
+    </p>
+
+    <p class="demo-followup__notice" id="demoFollowupNotice" hidden role="status"></p>
+
+    <div class="demo-followup__actions">
+      <a
+        href="./Engage"
+        class="demo-followup__btn-primary interactive-tactile"
+        id="demoVisitWebsiteBtn"
+        target="_blank"
+        rel="noopener noreferrer">
+        Visit Website &nearr;
+      </a>
+      <a
+        href="#contact"
+        class="demo-followup__btn-secondary interactive-tactile"
+        id="demoContactBtn">
+        Get In Touch
+      </a>
+    </div>
+  </aside>
 
   <script src="script.js"></script>
 </body>

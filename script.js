@@ -53,9 +53,12 @@ const APP_CONFIG = Object.freeze({
       subtitle: "",
     },
     intro: {
-      title: "Ongoing Training Hub",
-      subtitle: "On demand access to training resources, videos, and checklists for your team",
-      action: "Enter Workspace \u2192",
+      eyebrow: "Ongoing Training Hub",
+      title: "Your Team's Training Hub, Ready in Minutes",
+      subtitle:
+        "Save hours creating and storing staff training resources—then give your team instant, pain-free access to manuals, videos, interactive practice, and checklists in one consistent place.",
+      startTourAction: "Take the Tour \u2192",
+      action: "Skip to Workspace",
     },
     sectors: {
       library: {
@@ -123,6 +126,129 @@ const APP_CONFIG = Object.freeze({
     floatingMotifsKey: "training_workspace_animations_v1",
   },
 });
+
+/**
+ * =========================================================================
+ * ONBOARDING & DEMO FOLLOW-UP CONFIGURATION (ONBOARDING_CONFIG)
+ * Edit tutorial behavior, five-minute demo timer, and CTA destinations here.
+ * =========================================================================
+ */
+const ONBOARDING_CONFIG = Object.freeze({
+  // Set to false when deploying outside demo mode to disable the 5-minute follow-up.
+  demoMode: true,
+
+  // Automatically show the welcome screen to first-time visitors.
+  autoStartTutorial: true,
+
+  // Allow users to replay the guided tour from the top bar "TOUR" button.
+  allowReplay: true,
+
+  // Delay before showing the demo follow-up notification (300000 ms = 5 minutes).
+  demoNotificationDelayMs: 300000,
+
+  // Destinations for the five-minute demo follow-up buttons.
+  // websiteUrl reuses APP_CONFIG.website.url ("./Engage") by default.
+  websiteUrl: APP_CONFIG.website.url,
+  // Set contactUrl to your contact page or mailto link (e.g., "mailto:team@example.com").
+  // Leave empty ("") until configured; the UI handles empty values safely without errors.
+  contactUrl: "",
+
+  // Application-specific storage namespace to avoid collisions on shared domains.
+  storageNamespace: "training_workspace_onboarding_v1",
+});
+
+/**
+ * =========================================================================
+ * GUIDED TOUR STEP DEFINITIONS (DATA-DRIVEN)
+ * Edit, add, remove, or reorder steps here without touching engine logic.
+ * =========================================================================
+ */
+const TOUR_STEPS = Object.freeze([
+  {
+    id: "workspace-stage",
+    selector: '[data-tour="workspace-stage"]',
+    badge: "CENTRAL HUB",
+    accent: "#3E5B42",
+    preferredPosition: "right",
+    padding: 10,
+    radius: 26,
+    title: "One Hub for Every Training Format",
+    body: "This four-quadrant workspace keeps all of your team's training materials in one predictable place—no more digging through shared drives, email threads, or chat attachments.",
+    benefit: "Manager benefit: Set up your structure once so staff always know exactly where to find what they need.",
+  },
+  {
+    id: "library",
+    selector: '[data-tour="library"]',
+    badge: "01 • LIBRARY",
+    accent: "#3E5B42",
+    preferredPosition: "right",
+    padding: 8,
+    radius: 20,
+    title: "Store Manuals & Guides Once",
+    body: "Keep handbooks, SOPs, onboarding packets, and reference documents organized in the Library. Update a file once and everyone immediately sees the current version.",
+    benefit: "Saves time: Eliminate duplicate handouts and stop answering the same procedural questions.",
+  },
+  {
+    id: "videos",
+    selector: '[data-tour="videos"]',
+    badge: "02 • VIDEOS",
+    accent: "#963E35",
+    preferredPosition: "left",
+    padding: 8,
+    radius: 20,
+    title: "Show Procedures With Training Videos",
+    body: "Provide step-by-step video walkthroughs, equipment demos, and onboarding clips that staff can watch—and rewatch—whenever they need a refresher.",
+    benefit: "Consistent quality: Every new hire receives the exact same demonstration without pulling a manager off the floor.",
+  },
+  {
+    id: "games",
+    selector: '[data-tour="games"]',
+    badge: "03 • GAMES",
+    accent: "#6E5614",
+    preferredPosition: "right",
+    padding: 8,
+    radius: 20,
+    title: "Build Confidence With Interactive Practice",
+    body: "Turn passive reading into hands-on learning with scenario simulations and quick knowledge games tailored to real workplace decisions.",
+    benefit: "Better retention: Staff practice safely before they're on the job, reducing costly mistakes.",
+  },
+  {
+    id: "checklists",
+    selector: '[data-tour="checklists"]',
+    badge: "04 • CHECKLISTS",
+    accent: "#2A4365",
+    preferredPosition: "left",
+    padding: 8,
+    radius: 20,
+    title: "Standardize Daily & Safety Protocols",
+    body: "Turn opening routines, safety inspections, and quality assurance steps into clear, repeatable checklists that teams can follow on every shift.",
+    benefit: "Pain-free compliance: Keep standards consistent across every shift, role, and location.",
+  },
+  {
+    id: "center-core",
+    selector: '[data-tour="center-core"]',
+    badge: "PORTAL CORE",
+    accent: "#3E5B42",
+    preferredPosition: "bottom",
+    padding: 12,
+    radius: 999,
+    title: "Direct Link to Your Main Portal",
+    body: "The center disc connects directly to your organization's primary website or broader company portal, keeping your branding front and center.",
+    benefit: "Seamless flow: Staff can jump straight to external company resources with a single tap.",
+  },
+  {
+    id: "masthead-controls",
+    selector: '[data-tour="masthead-controls"]',
+    badge: "ACCESS & CONTROLS",
+    accent: "#2A4365",
+    preferredPosition: "bottom",
+    padding: 8,
+    radius: 18,
+    title: "Consistent Access, Online or Installed",
+    body: "Check live connection status, install the workspace onto any phone or desktop when supported, toggle background motifs, or replay this tour anytime.",
+    benefit: "Always available: Fast, dependable access for staff at a desk, on the floor, or in the field.",
+  },
+]);
 
 /* --------------------------------------------------------------------------
    FLOATING TRAINING MOTIF SVGS (EMBOSSED PAPER STATIONERY STYLE)
@@ -463,7 +589,6 @@ function registerServiceWorker() {
             newWorker.state === "installed" &&
             navigator.serviceWorker.controller
           ) {
-            // New version is ready; activate immediately
             newWorker.postMessage({ type: "SKIP_WAITING" });
           }
         });
@@ -524,6 +649,661 @@ function initInstallPrompt() {
   });
 }
 
+/* ==========================================================================
+   IMMERSIVE ONBOARDING, SPOTLIGHT TOUR & DEMO FOLLOW-UP SYSTEM
+   ========================================================================== */
+const OnboardingSystem = (() => {
+  const NS = ONBOARDING_CONFIG.storageNamespace;
+  const KEYS = {
+    status: `${NS}_status`,           // "completed" | "skipped"
+    enteredAt: `${NS}_entered_at`,    // timestamp ms when user entered app
+    followupDone: `${NS}_followup`,   // "shown" | "dismissed"
+  };
+
+  let activeSteps = [];
+  let currentStepIndex = 0;
+  let isTourActive = false;
+  let activeTargetEl = null;
+  let demoTimerId = null;
+  let repositionRafId = null;
+  let previousFocusEl = null;
+
+  const prefersReducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Cached DOM references
+  let els = {};
+
+  /* --- Storage Helpers --- */
+  function readStorage(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function writeStorage(key, value) {
+    try {
+      localStorage.setItem(key, String(value));
+    } catch (_) {
+      // Storage resilience
+    }
+  }
+
+  /* --- Step Filtering (Graceful Handling of Missing/Hidden Elements) --- */
+  function resolveAvailableSteps() {
+    return TOUR_STEPS.filter((step) => {
+      const target = document.querySelector(step.selector);
+      if (!target) return false;
+      const rect = target.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+  }
+
+  /* --- Stage 1: Welcome Screen Controls --- */
+  function showWelcome() {
+    document.body.classList.add("intro-active");
+    if (els.introStartTourBtn) {
+      window.setTimeout(() => els.introStartTourBtn.focus({ preventScroll: true }), 80);
+    }
+  }
+
+  function hideWelcome() {
+    document.body.classList.remove("intro-active");
+    try {
+      sessionStorage.setItem(APP_CONFIG.storage.visitedIntroKey, "true");
+    } catch (_) {
+      // Storage resilience
+    }
+  }
+
+  function skipOnboardingFromWelcome() {
+    triggerHapticPulse();
+    hideWelcome();
+    writeStorage(KEYS.status, "skipped");
+    enterApplicationSession();
+  }
+
+  /* --- Stage 2: Guided Tour Engine --- */
+  function startTour() {
+    triggerHapticPulse();
+    previousFocusEl = document.activeElement;
+    hideWelcome();
+
+    activeSteps = resolveAvailableSteps();
+    if (activeSteps.length === 0) {
+      completeTour();
+      return;
+    }
+
+    currentStepIndex = 0;
+    isTourActive = true;
+
+    if (els.tourOverlay) {
+      els.tourOverlay.hidden = false;
+      els.tourOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    renderStep(currentStepIndex);
+
+    if (els.tourNextBtn) {
+      els.tourNextBtn.focus({ preventScroll: true });
+    }
+  }
+
+  function clearActiveTarget() {
+    if (activeTargetEl) {
+      activeTargetEl.classList.remove("tour-target-active");
+      activeTargetEl = null;
+    }
+  }
+
+  function renderStep(index) {
+    if (!isTourActive || index < 0 || index >= activeSteps.length) return;
+
+    const step = activeSteps[index];
+    const target = document.querySelector(step.selector);
+
+    if (!target) {
+      // Skip missing element gracefully
+      if (index + 1 < activeSteps.length) {
+        currentStepIndex = index + 1;
+        renderStep(currentStepIndex);
+      } else {
+        completeTour();
+      }
+      return;
+    }
+
+    clearActiveTarget();
+    activeTargetEl = target;
+    activeTargetEl.classList.add("tour-target-active");
+
+    // Subtle transition state on panel content
+    if (els.tourPanel) {
+      els.tourPanel.classList.add("is-transitioning");
+      els.tourPanel.style.setProperty("--tour-accent", step.accent || "#3E5B42");
+    }
+    if (els.tourSpotlightRing) {
+      els.tourSpotlightRing.style.setProperty("--tour-accent", step.accent || "#3E5B42");
+    }
+
+    // Visual companion reaction
+    if (els.tourCompanion && !prefersReducedQuery.matches) {
+      els.tourCompanion.classList.remove("is-reacting");
+      void els.tourCompanion.offsetWidth;
+      els.tourCompanion.classList.add("is-reacting");
+      window.setTimeout(() => {
+        if (els.tourCompanion) els.tourCompanion.classList.remove("is-reacting");
+      }, 460);
+    }
+
+    // Update text & progress
+    const total = activeSteps.length;
+    const stepNum = String(index + 1).padStart(2, "0");
+    const totalNum = String(total).padStart(2, "0");
+
+    if (els.tourStepCounter) els.tourStepCounter.textContent = `${stepNum} / ${totalNum}`;
+    if (els.tourStepBadge) els.tourStepBadge.textContent = step.badge;
+    if (els.tourProgressFill) {
+      els.tourProgressFill.style.width = `${((index + 1) / total) * 100}%`;
+    }
+    if (els.tourStepTitle) els.tourStepTitle.textContent = step.title;
+    if (els.tourStepBody) els.tourStepBody.textContent = step.body;
+    if (els.tourStepBenefit) els.tourStepBenefit.textContent = step.benefit;
+
+    if (els.tourBackBtn) {
+      els.tourBackBtn.disabled = index === 0;
+    }
+    if (els.tourNextBtn) {
+      els.tourNextBtn.textContent = index === total - 1 ? "Finish Tour \u2192" : "Next \u2192";
+    }
+
+    // Smoothly scroll target into view if needed, then position spotlight & panel
+    const rect = target.getBoundingClientRect();
+    const isOffscreen =
+      rect.top < 12 ||
+      rect.bottom > window.innerHeight - 12 ||
+      rect.left < 12 ||
+      rect.right > window.innerWidth - 12;
+
+    if (isOffscreen && typeof target.scrollIntoView === "function") {
+      target.scrollIntoView({
+        behavior: prefersReducedQuery.matches ? "auto" : "smooth",
+        block: "center",
+        inline: "center",
+      });
+      window.setTimeout(() => positionSpotlightAndPanel(step, target), prefersReducedQuery.matches ? 20 : 320);
+    } else {
+      positionSpotlightAndPanel(step, target);
+    }
+
+    window.setTimeout(() => {
+      if (els.tourPanel) els.tourPanel.classList.remove("is-transitioning");
+    }, 90);
+  }
+
+  function positionSpotlightAndPanel(step, target) {
+    if (!isTourActive || !target) return;
+
+    const rect = target.getBoundingClientRect();
+    const pad = step.padding ?? 8;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const spotX = Math.max(4, rect.left - pad);
+    const spotY = Math.max(4, rect.top - pad);
+    const spotW = Math.min(vw - spotX - 4, rect.width + pad * 2);
+    const spotH = Math.min(vh - spotY - 4, rect.height + pad * 2);
+    const radius = Math.min(step.radius ?? 16, Math.min(spotW, spotH) / 2);
+
+    // Update SVG cutout mask
+    if (els.tourMaskCutout) {
+      els.tourMaskCutout.setAttribute("x", spotX.toFixed(1));
+      els.tourMaskCutout.setAttribute("y", spotY.toFixed(1));
+      els.tourMaskCutout.setAttribute("width", Math.max(0, spotW).toFixed(1));
+      els.tourMaskCutout.setAttribute("height", Math.max(0, spotH).toFixed(1));
+      els.tourMaskCutout.setAttribute("rx", radius.toFixed(1));
+      els.tourMaskCutout.setAttribute("ry", radius.toFixed(1));
+    }
+
+    // Update illuminated ring
+    if (els.tourSpotlightRing) {
+      els.tourSpotlightRing.style.left = `${spotX.toFixed(1)}px`;
+      els.tourSpotlightRing.style.top = `${spotY.toFixed(1)}px`;
+      els.tourSpotlightRing.style.width = `${Math.max(0, spotW).toFixed(1)}px`;
+      els.tourSpotlightRing.style.height = `${Math.max(0, spotH).toFixed(1)}px`;
+      els.tourSpotlightRing.style.borderRadius = `${radius.toFixed(1)}px`;
+    }
+
+    // Position information panel intelligently
+    if (!els.tourPanel) return;
+
+    const panelRect = els.tourPanel.getBoundingClientRect();
+    const panelW = panelRect.width || Math.min(370, vw - 24);
+    const panelH = panelRect.height || 240;
+    const gap = 16;
+    const margin = 12;
+
+    // Mobile layout: place at bottom or top so spotlight remains visible
+    if (vw <= 640) {
+      const spaceBelow = vh - (spotY + spotH) - margin;
+      const spaceAbove = spotY - margin;
+
+      let topPos;
+      if (spaceBelow >= panelH + 10 || spaceBelow >= spaceAbove) {
+        topPos = Math.min(vh - panelH - margin, spotY + spotH + 12);
+      } else {
+        topPos = Math.max(margin, spotY - panelH - 12);
+      }
+      topPos = Math.max(margin, Math.min(topPos, vh - panelH - margin));
+      els.tourPanel.style.top = `${topPos.toFixed(1)}px`;
+      els.tourPanel.style.left = "10px";
+      return;
+    }
+
+    // Desktop / Tablet: evaluate candidate placements and pick best non-overlapping fit
+    const candidates = [];
+    const pref = step.preferredPosition || "bottom";
+    const order = [pref, "right", "left", "bottom", "top"].filter(
+      (v, i, a) => a.indexOf(v) === i
+    );
+
+    order.forEach((pos) => {
+      let x = 0;
+      let y = 0;
+      if (pos === "right") {
+        x = spotX + spotW + gap;
+        y = spotY + spotH / 2 - panelH / 2;
+      } else if (pos === "left") {
+        x = spotX - panelW - gap;
+        y = spotY + spotH / 2 - panelH / 2;
+      } else if (pos === "bottom") {
+        x = spotX + spotW / 2 - panelW / 2;
+        y = spotY + spotH + gap;
+      } else if (pos === "top") {
+        x = spotX + spotW / 2 - panelW / 2;
+        y = spotY - panelH - gap;
+      }
+
+      const clampedX = Math.max(margin, Math.min(x, vw - panelW - margin));
+      const clampedY = Math.max(margin, Math.min(y, vh - panelH - margin));
+
+      // Compute overlap area with spotlight box
+      const overlapW = Math.max(0, Math.min(clampedX + panelW, spotX + spotW) - Math.max(clampedX, spotX));
+      const overlapH = Math.max(0, Math.min(clampedY + panelH, spotY + spotH) - Math.max(clampedY, spotY));
+      const overlapArea = overlapW * overlapH;
+
+      // Also penalize if clamping pushed it away from ideal side
+      const clampShift = Math.abs(clampedX - x) + Math.abs(clampedY - y);
+      candidates.push({ x: clampedX, y: clampedY, score: overlapArea * 10 + clampShift });
+    });
+
+    candidates.sort((a, b) => a.score - b.score);
+    const best = candidates[0];
+    els.tourPanel.style.left = `${best.x.toFixed(1)}px`;
+    els.tourPanel.style.top = `${best.y.toFixed(1)}px`;
+  }
+
+  function nextStep() {
+    triggerHapticPulse();
+    if (!isTourActive) return;
+    if (currentStepIndex + 1 < activeSteps.length) {
+      currentStepIndex += 1;
+      renderStep(currentStepIndex);
+    } else {
+      completeTour();
+    }
+  }
+
+  function prevStep() {
+    triggerHapticPulse();
+    if (!isTourActive || currentStepIndex <= 0) return;
+    currentStepIndex -= 1;
+    renderStep(currentStepIndex);
+  }
+
+  function closeTour(reason = "skipped") {
+    triggerHapticPulse();
+    isTourActive = false;
+    clearActiveTarget();
+
+    if (els.tourOverlay) {
+      els.tourOverlay.hidden = true;
+      els.tourOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    if (reason === "skipped") {
+      const existing = readStorage(KEYS.status);
+      if (existing !== "completed") {
+        writeStorage(KEYS.status, "skipped");
+      }
+      enterApplicationSession();
+    }
+
+    if (previousFocusEl && typeof previousFocusEl.focus === "function") {
+      previousFocusEl.focus({ preventScroll: true });
+    }
+  }
+
+  /* --- Stage 3: Tour Completion Experience --- */
+  function spawnConfetti() {
+    if (!els.tourConfettiStage || prefersReducedQuery.matches) return;
+    els.tourConfettiStage.innerHTML = "";
+    const colors = ["#3E5B42", "#963E35", "#6E5614", "#2A4365", "#A4B99C"];
+    for (let i = 0; i < 22; i++) {
+      const piece = document.createElement("span");
+      piece.className = "tour-confetti-piece";
+      piece.style.left = `${5 + Math.random() * 90}%`;
+      piece.style.backgroundColor = colors[i % colors.length];
+      piece.style.animationDelay = `${(Math.random() * 0.45).toFixed(2)}s`;
+      piece.style.animationDuration = `${(1.3 + Math.random() * 0.8).toFixed(2)}s`;
+      els.tourConfettiStage.appendChild(piece);
+    }
+  }
+
+  function completeTour() {
+    isTourActive = false;
+    clearActiveTarget();
+
+    if (els.tourOverlay) {
+      els.tourOverlay.hidden = true;
+      els.tourOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    writeStorage(KEYS.status, "completed");
+
+    if (els.tourCompletionOverlay) {
+      els.tourCompletionOverlay.hidden = false;
+      spawnConfetti();
+      if (els.tourCompletionDoneBtn) {
+        window.setTimeout(() => els.tourCompletionDoneBtn.focus({ preventScroll: true }), 80);
+      }
+    } else {
+      enterApplicationSession();
+    }
+  }
+
+  function dismissCompletionModal() {
+    triggerHapticPulse();
+    if (els.tourCompletionOverlay) {
+      els.tourCompletionOverlay.hidden = true;
+    }
+    enterApplicationSession();
+  }
+
+  /* --- Stage 4: Five-Minute Demo Follow-Up Timer --- */
+  function enterApplicationSession() {
+    if (!ONBOARDING_CONFIG.demoMode) return;
+
+    const followupState = readStorage(KEYS.followupDone);
+    if (followupState === "shown" || followupState === "dismissed") {
+      return;
+    }
+
+    // Record entry timestamp once so replays do not reset or duplicate timers
+    let enteredAt = Number(readStorage(KEYS.enteredAt));
+    if (!enteredAt || Number.isNaN(enteredAt)) {
+      enteredAt = Date.now();
+      writeStorage(KEYS.enteredAt, enteredAt);
+    }
+
+    scheduleDemoFollowup(enteredAt);
+  }
+
+  function scheduleDemoFollowup(enteredAt) {
+    if (!ONBOARDING_CONFIG.demoMode) return;
+    if (demoTimerId !== null) return; // Never create duplicate timers
+
+    const followupState = readStorage(KEYS.followupDone);
+    if (followupState === "shown" || followupState === "dismissed") return;
+
+    const elapsed = Date.now() - enteredAt;
+    const remaining = Math.max(0, ONBOARDING_CONFIG.demoNotificationDelayMs - elapsed);
+
+    demoTimerId = window.setTimeout(() => {
+      demoTimerId = null;
+      showDemoFollowup();
+    }, remaining);
+  }
+
+  function showDemoFollowup() {
+    if (!ONBOARDING_CONFIG.demoMode) return;
+    if (isTourActive || document.body.classList.contains("intro-active")) {
+      // Wait until user is actually in the app
+      return;
+    }
+
+    const followupState = readStorage(KEYS.followupDone);
+    if (followupState === "shown" || followupState === "dismissed") return;
+
+    writeStorage(KEYS.followupDone, "shown");
+
+    if (els.demoVisitWebsiteBtn) {
+      const url = (ONBOARDING_CONFIG.websiteUrl || "").trim();
+      if (url) {
+        els.demoVisitWebsiteBtn.href = url;
+        els.demoVisitWebsiteBtn.hidden = false;
+      } else {
+        els.demoVisitWebsiteBtn.hidden = true;
+      }
+    }
+
+    if (els.demoContactBtn) {
+      const contactUrl = (ONBOARDING_CONFIG.contactUrl || "").trim();
+      if (contactUrl) {
+        els.demoContactBtn.href = contactUrl;
+        if (/^https?:\/\//i.test(contactUrl)) {
+          els.demoContactBtn.target = "_blank";
+          els.demoContactBtn.rel = "noopener noreferrer";
+        }
+      } else {
+        els.demoContactBtn.href = "#contact-unconfigured";
+      }
+    }
+
+    if (els.demoFollowupToast) {
+      els.demoFollowupToast.hidden = false;
+    }
+  }
+
+  function dismissDemoFollowup() {
+    triggerHapticPulse();
+    writeStorage(KEYS.followupDone, "dismissed");
+    if (els.demoFollowupToast) {
+      els.demoFollowupToast.hidden = true;
+    }
+  }
+
+  /* --- Replay Functionality --- */
+  function replayTour() {
+    if (!ONBOARDING_CONFIG.allowReplay) return;
+    triggerHapticPulse();
+    if (els.tourCompletionOverlay) {
+      els.tourCompletionOverlay.hidden = true;
+    }
+    startTour();
+  }
+
+  /* --- Viewport & Keyboard Event Wiring --- */
+  function handleViewportChange() {
+    if (!isTourActive || !activeSteps[currentStepIndex]) return;
+    if (repositionRafId !== null) window.cancelAnimationFrame(repositionRafId);
+    repositionRafId = window.requestAnimationFrame(() => {
+      repositionRafId = null;
+      const step = activeSteps[currentStepIndex];
+      const target = document.querySelector(step.selector);
+      if (target) positionSpotlightAndPanel(step, target);
+    });
+  }
+
+  function handleKeydown(e) {
+    // Handle Welcome Screen keys
+    if (document.body.classList.contains("intro-active")) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        skipOnboardingFromWelcome();
+      }
+      return;
+    }
+
+    // Handle Completion Modal keys
+    if (els.tourCompletionOverlay && !els.tourCompletionOverlay.hidden) {
+      if (e.key === "Escape" || e.key === "Enter") {
+        e.preventDefault();
+        dismissCompletionModal();
+      }
+      return;
+    }
+
+    // Handle Active Guided Tour keys
+    if (isTourActive) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeTour("skipped");
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextStep();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevStep();
+      }
+    }
+  }
+
+  /* --- Initialization --- */
+  function init() {
+    els = {
+      introScreen: document.getElementById("introScreen"),
+      introEyebrow: document.getElementById("introEyebrow"),
+      introTitle: document.getElementById("introTitle"),
+      introSubtitle: document.getElementById("introSubtitle"),
+      introStartTourBtn: document.getElementById("introStartTourBtn"),
+      introDismissBtn: document.getElementById("introDismissBtn"),
+      replayTourBtn: document.getElementById("replayTourBtn"),
+
+      tourOverlay: document.getElementById("tourOverlay"),
+      tourBackdropSvg: document.getElementById("tourBackdropSvg"),
+      tourMaskCutout: document.getElementById("tourMaskCutout"),
+      tourSpotlightRing: document.getElementById("tourSpotlightRing"),
+      tourPanel: document.getElementById("tourPanel"),
+      tourCompanion: document.getElementById("tourCompanion"),
+      tourStepCounter: document.getElementById("tourStepCounter"),
+      tourStepBadge: document.getElementById("tourStepBadge"),
+      tourProgressFill: document.getElementById("tourProgressFill"),
+      tourStepTitle: document.getElementById("tourStepTitle"),
+      tourStepBody: document.getElementById("tourStepBody"),
+      tourStepBenefit: document.getElementById("tourStepBenefit"),
+      tourBackBtn: document.getElementById("tourBackBtn"),
+      tourNextBtn: document.getElementById("tourNextBtn"),
+      tourSkipBtn: document.getElementById("tourSkipBtn"),
+      tourCloseBtn: document.getElementById("tourCloseBtn"),
+
+      tourCompletionOverlay: document.getElementById("tourCompletionOverlay"),
+      tourConfettiStage: document.getElementById("tourConfettiStage"),
+      tourCompletionDoneBtn: document.getElementById("tourCompletionDoneBtn"),
+
+      demoFollowupToast: document.getElementById("demoFollowupToast"),
+      demoFollowupDismissBtn: document.getElementById("demoFollowupDismissBtn"),
+      demoVisitWebsiteBtn: document.getElementById("demoVisitWebsiteBtn"),
+      demoContactBtn: document.getElementById("demoContactBtn"),
+      demoFollowupNotice: document.getElementById("demoFollowupNotice"),
+    };
+
+    // Hydrate welcome copy from APP_CONFIG
+    if (els.introEyebrow) els.introEyebrow.textContent = APP_CONFIG.content.intro.eyebrow;
+    if (els.introTitle) els.introTitle.textContent = APP_CONFIG.content.intro.title;
+    if (els.introSubtitle) els.introSubtitle.textContent = APP_CONFIG.content.intro.subtitle;
+    if (els.introStartTourBtn) els.introStartTourBtn.textContent = APP_CONFIG.content.intro.startTourAction;
+    if (els.introDismissBtn) els.introDismissBtn.textContent = APP_CONFIG.content.intro.action;
+
+    if (els.replayTourBtn && !ONBOARDING_CONFIG.allowReplay) {
+      els.replayTourBtn.hidden = true;
+    }
+
+    // Wire Welcome buttons
+    if (els.introStartTourBtn) {
+      els.introStartTourBtn.addEventListener("click", startTour);
+    }
+    if (els.introDismissBtn) {
+      els.introDismissBtn.addEventListener("click", skipOnboardingFromWelcome);
+    }
+    if (els.introScreen) {
+      els.introScreen.addEventListener("click", (e) => {
+        if (e.target === els.introScreen) skipOnboardingFromWelcome();
+      });
+    }
+
+    // Wire Tour controls
+    if (els.tourNextBtn) els.tourNextBtn.addEventListener("click", nextStep);
+    if (els.tourBackBtn) els.tourBackBtn.addEventListener("click", prevStep);
+    if (els.tourSkipBtn) els.tourSkipBtn.addEventListener("click", () => closeTour("skipped"));
+    if (els.tourCloseBtn) els.tourCloseBtn.addEventListener("click", () => closeTour("skipped"));
+    if (els.tourBackdropSvg) {
+      els.tourBackdropSvg.addEventListener("click", () => closeTour("skipped"));
+    }
+
+    // Wire Completion & Replay controls
+    if (els.tourCompletionDoneBtn) {
+      els.tourCompletionDoneBtn.addEventListener("click", dismissCompletionModal);
+    }
+    if (els.replayTourBtn) {
+      els.replayTourBtn.addEventListener("click", replayTour);
+    }
+
+    // Wire Demo Follow-up controls
+    if (els.demoFollowupDismissBtn) {
+      els.demoFollowupDismissBtn.addEventListener("click", dismissDemoFollowup);
+    }
+    if (els.demoContactBtn) {
+      els.demoContactBtn.addEventListener("click", (e) => {
+        const contactUrl = (ONBOARDING_CONFIG.contactUrl || "").trim();
+        if (!contactUrl) {
+          e.preventDefault();
+          if (els.demoFollowupNotice) {
+            els.demoFollowupNotice.textContent =
+              "Contact link is not yet configured in ONBOARDING_CONFIG.contactUrl.";
+            els.demoFollowupNotice.hidden = false;
+          }
+        }
+      });
+    }
+
+    // Global listeners
+    window.addEventListener("resize", handleViewportChange, { passive: true });
+    window.addEventListener("orientationchange", handleViewportChange, { passive: true });
+    window.addEventListener("keydown", handleKeydown);
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && ONBOARDING_CONFIG.demoMode) {
+        const status = readStorage(KEYS.status);
+        const enteredAt = Number(readStorage(KEYS.enteredAt));
+        if ((status === "completed" || status === "skipped") && enteredAt) {
+          if (Date.now() - enteredAt >= ONBOARDING_CONFIG.demoNotificationDelayMs) {
+            showDemoFollowup();
+          }
+        }
+      }
+    });
+
+    // Determine initial onboarding state
+    const savedStatus = readStorage(KEYS.status);
+    if (savedStatus === "completed" || savedStatus === "skipped" || !ONBOARDING_CONFIG.autoStartTutorial) {
+      hideWelcome();
+      enterApplicationSession();
+    } else {
+      showWelcome();
+    }
+  }
+
+  return {
+    init,
+    startTour,
+    replayTour,
+    closeTour,
+  };
+})();
+
 /* --------------------------------------------------------------------------
    APPLICATION RUNTIME CONTROLLER
    -------------------------------------------------------------------------- */
@@ -533,10 +1313,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initInstallPrompt();
 
   // DOM References
-  const introScreen = document.getElementById("introScreen");
-  const introDismissBtn = document.getElementById("introDismissBtn");
-  const introTitle = document.getElementById("introTitle");
-  const introSubtitle = document.getElementById("introSubtitle");
   const pageEyebrowSlot = document.getElementById("pageEyebrowSlot");
   const pageTitleSlot = document.getElementById("pageTitleSlot");
   const pageSubtitleSlot = document.getElementById("pageSubtitleSlot");
@@ -554,10 +1330,6 @@ document.addEventListener("DOMContentLoaded", () => {
   /* --- 1. CONFIGURATION HYDRATION --- */
   function hydrateAppFromConfig() {
     document.title = APP_CONFIG.identity.appName;
-
-    if (introTitle) introTitle.textContent = APP_CONFIG.content.intro.title;
-    if (introSubtitle) introSubtitle.textContent = APP_CONFIG.content.intro.subtitle;
-    if (introDismissBtn) introDismissBtn.textContent = APP_CONFIG.content.intro.action;
 
     if (pageEyebrowSlot) pageEyebrowSlot.textContent = APP_CONFIG.content.headers.eyebrow;
     if (pageTitleSlot) pageTitleSlot.textContent = APP_CONFIG.content.headers.title;
@@ -634,41 +1406,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { once: true });
   }
 
-  /* --- 3. INTRO SCREEN DISMISSAL --- */
-  function dismissIntro() {
-    triggerHapticPulse();
-    if (!document.body.classList.contains("intro-active")) return;
-    document.body.classList.remove("intro-active");
-    try {
-      sessionStorage.setItem(APP_CONFIG.storage.visitedIntroKey, "true");
-    } catch (_) {
-      // Storage access resilience
-    }
-  }
-
-  const hasVisited = (() => {
-    try {
-      return sessionStorage.getItem(APP_CONFIG.storage.visitedIntroKey) === "true";
-    } catch (_) {
-      return false;
-    }
-  })();
-
-  if (hasVisited || prefersReduced) {
-    document.body.classList.remove("intro-active");
-  } else {
-    if (introDismissBtn) introDismissBtn.addEventListener("click", dismissIntro);
-    if (introScreen) {
-      introScreen.addEventListener("click", (e) => {
-        if (e.target === introScreen) dismissIntro();
-      });
-    }
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
-        dismissIntro();
-      }
-    }, { once: true });
-  }
+  /* --- 3. INITIALIZE IMMERSIVE ONBOARDING & TOUR SYSTEM --- */
+  OnboardingSystem.init();
 
   /* --- 4. RESPONSIVE VINYL SIZING --- */
   function getDimensions() {
@@ -829,6 +1568,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* --- 8. ACCESSIBLE KEYBOARD GRID NAVIGATION --- */
   window.addEventListener("keydown", (e) => {
+    if (document.body.classList.contains("intro-active")) return;
+    const tourOverlay = document.getElementById("tourOverlay");
+    if (tourOverlay && !tourOverlay.hidden) return;
+
     const activeEl = document.activeElement;
     const currentIndex = tiles.indexOf(activeEl);
 
