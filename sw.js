@@ -5,7 +5,7 @@
  * =========================================================================
  */
 
-const CACHE_VERSION = "training-workspace-v1";
+const CACHE_VERSION = "training-workspace-v2";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -13,8 +13,8 @@ const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./style.css",
-  "./script.js",
+  "./style.css?v=2",
+  "./script.js?v=2",
   "./manifest.json",
   "./logo.png",
 ];
@@ -73,8 +73,9 @@ self.addEventListener("activate", (event) => {
 /**
  * Fetch:
  * - Same-origin GET requests only
- * - Navigations: Network-First with cache fallback (and ./index.html fallback)
- * - Static assets: Stale-While-Revalidate
+ * - Navigations & code/config assets (.html, .css, .js, .json, .webmanifest):
+ *   Network-First with cache fallback so HTML, CSS, and JS never drift out of sync
+ * - Static media/icons: Stale-While-Revalidate
  */
 self.addEventListener("fetch", (event) => {
   const { request } = event;
@@ -89,6 +90,12 @@ self.addEventListener("fetch", (event) => {
 
   if (request.mode === "navigate") {
     event.respondWith(handleNavigationRequest(request));
+    return;
+  }
+
+  const isCodeOrConfig = /\.(html|css|js|json|webmanifest)$/i.test(url.pathname);
+  if (isCodeOrConfig) {
+    event.respondWith(handleNetworkFirstAsset(request));
     return;
   }
 
@@ -116,6 +123,21 @@ async function handleNavigationRequest(request) {
       statusText: "Service Unavailable",
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
+  }
+}
+
+async function handleNetworkFirstAsset(request) {
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse && networkResponse.status === 200) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (_) {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    return new Response("", { status: 504, statusText: "Offline" });
   }
 }
 

@@ -580,6 +580,10 @@ function registerServiceWorker() {
         { scope: "./" }
       );
 
+      if (typeof registration.update === "function") {
+        registration.update().catch(() => {});
+      }
+
       registration.addEventListener("updatefound", () => {
         const newWorker = registration.installing;
         if (!newWorker) return;
@@ -746,6 +750,14 @@ const OnboardingSystem = (() => {
 
     renderStep(currentStepIndex);
 
+    window.requestAnimationFrame(() => {
+      if (isTourActive && activeSteps[currentStepIndex]) {
+        const step = activeSteps[currentStepIndex];
+        const target = document.querySelector(step.selector);
+        if (target) positionSpotlightAndPanel(step, target);
+      }
+    });
+
     if (els.tourNextBtn) {
       els.tourNextBtn.focus({ preventScroll: true });
     }
@@ -881,7 +893,7 @@ const OnboardingSystem = (() => {
 
     const panelRect = els.tourPanel.getBoundingClientRect();
     const panelW = panelRect.width || Math.min(370, vw - 24);
-    const panelH = panelRect.height || 240;
+    const panelH = Math.min(panelRect.height || 240, vh - 24);
     const gap = 16;
     const margin = 12;
 
